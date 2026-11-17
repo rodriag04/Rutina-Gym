@@ -6,7 +6,11 @@ import { readFileSync } from 'node:fs';
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
 
+// En GitHub Pages la app vive en /Rutina-Gym/; en Netlify o Vercel, en la raíz.
+const base = process.env.BASE || '/';
+
 export default defineConfig({
+  base,
   define: { __VERSION__: JSON.stringify(pkg.version) },
   plugins: [
     preact(),
@@ -19,8 +23,8 @@ export default defineConfig({
         short_name: 'Rutina',
         description: 'Registro de entrenamiento y progresión.',
         lang: 'es-ES',
-        start_url: '/',
-        scope: '/',
+        start_url: './',
+        scope: './',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#121315',
@@ -33,7 +37,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2,json}'],
-        navigateFallback: '/index.html',
+        navigateFallback: 'index.html',
         cleanupOutdatedCaches: true
       }
     })

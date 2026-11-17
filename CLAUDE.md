@@ -5,6 +5,7 @@ Exportado el 17 nov 2026 desde el proyecto "Rutina Gym" de Claude. Ese proyecto 
 ## Estado del repositorio (17 nov 2026)
 
 - App nueva: PWA con Vite + Preact + TypeScript, sin backend. Datos en IndexedDB del móvil (copia mínima en localStorage). Ver `README.md`.
+- Publicada en https://rodriag04.github.io/Rutina-Gym/ (GitHub Pages). Cada push a la rama principal la vuelve a publicar con `.github/workflows/publicar.yml`.
 - Comandos: `npm run dev`, `npm test` (motor de progresión e importación), `npm run build` (sale en `dist/`). `lab.html` en dev muestra todas las figuras animadas.
 - Código: `src/data/rutina.ts` (ejercicios, días, músculos, técnica, cambios), `src/data/musculos.ts`, `src/lib/progresion.ts` (reglas de peso y reps), `src/lib/analisis.ts` (avisos, descarga, saltos, series semanales), `src/components/animaciones.tsx` (figuras), `src/components/MapaMuscular.tsx`.
 - Del paquete original solo llegó este archivo. `app-actual/`, `imagenes/`, `memoria-proyecto/`, `rutina/` y `datos/plan-*.json` no están. `datos/sesiones.json` y `datos/series.csv` se reconstruyeron desde el historial de abajo (13 sesiones, 244 series; lo comprueban los tests y la app al importar).

@@ -19,7 +19,9 @@ Importa `datos/sesiones.json` (13 sesiones, 244 series) y lo comprueba. El resul
 
 ## Instalar en el iPhone
 
-1. Abre la URL de Netlify o Vercel en **Safari**.
+Dirección: **https://rodriag04.github.io/Rutina-Gym/**
+
+1. Ábrela en **Safari** (desde Chrome en iPhone no se instala igual).
 2. Compartir → **Añadir a pantalla de inicio**.
 3. Ábrela desde el icono. A partir de ahí funciona sin conexión.
 
@@ -27,10 +29,9 @@ Los datos viven en ese iPhone. Haz una copia JSON de vez en cuando (la app avisa
 
 ## Desplegar
 
-Netlify o Vercel, conectando este repositorio de GitHub. La configuración ya está en `netlify.toml` y `vercel.json`:
+Cada push a la rama principal se publica solo en GitHub Pages (`.github/workflows/publicar.yml`): pasa los tests, compila con `BASE=/Rutina-Gym/` y sube `dist/` a la rama `gh-pages`. La app avisa dentro cuando hay versión nueva.
 
-- Comando: `npm run build`
-- Carpeta: `dist`
+Si algún día prefieres Netlify o Vercel, la configuración ya está en `netlify.toml` y `vercel.json` (comando `npm run build`, carpeta `dist`). Cambiar de dirección es cambiar de almacén: antes exporta la copia JSON y luego impórtala.
 
 ## Desarrollo
 
