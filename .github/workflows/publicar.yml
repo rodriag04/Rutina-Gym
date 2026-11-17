@@ -1,8 +1,9 @@
 name: Publicar en GitHub Pages
 
-# Pendiente de la confirmación de Rodrigo: de momento solo se lanza a mano.
-# Cuando confirme, se añadirá el disparo automático en cada push a la rama principal.
+# Se publica en cada push a la rama principal del repositorio (ahora la rama de trabajo; main cuando exista).
 on:
+  push:
+    branches: [main, claude/gym-routine-app-optimized-7fw3i3]
   workflow_dispatch:
 
 permissions:
