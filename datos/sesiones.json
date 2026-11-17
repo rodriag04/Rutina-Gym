@@ -1,0 +1,105 @@
+[
+  {"id": "2026-10-26-lun", "fecha": "2026-10-26", "dia": "lun", "gym": "sevilla", "gymConfirmado": false, "notas": "", "guardado": "2026-10-26T20:00:00.000Z", "origen": "importado", "ex": {
+    "lun-1": [{"kg": 26, "reps": 9}, {"kg": 26, "reps": 7}, {"kg": 24, "reps": 10}],
+    "lun-2": [{"kg": 52, "reps": 11}, {"kg": 48, "reps": 8}, {"kg": 45, "reps": 11}],
+    "lun-3": [{"kg": 59, "reps": 10}, {"kg": 59, "reps": 9}, {"kg": 57, "reps": 12}],
+    "lun-4": [{"kg": 9, "reps": 12}, {"kg": 9, "reps": 14}, {"kg": 9, "reps": 10, "drop": {"kg": 6.5, "reps": 4}}],
+    "lun-5": [{"kg": 32, "reps": 12}, {"kg": 32, "reps": 12}, {"kg": 32, "reps": 10}],
+    "lun-6": [{"kg": 41, "reps": 11}, {"kg": 34, "reps": 12}, {"kg": 32, "reps": 14}]
+  }},
+  {"id": "2026-10-27-mar", "fecha": "2026-10-27", "dia": "mar", "gym": "sevilla", "gymConfirmado": false, "notas": "", "guardado": "2026-10-27T20:00:00.000Z", "origen": "importado", "ex": {
+    "mar-1": [{"kg": 60, "reps": 12}, {"kg": 70, "reps": 8}, {"kg": 65, "reps": 9, "drop": {"kg": 60, "reps": 3}}],
+    "mar-2": [{"kg": 55, "reps": 10}, {"kg": 55, "reps": 10}],
+    "mar-3": [{"kg": 40, "reps": 10}, {"kg": 45, "reps": 10}, {"kg": 45, "reps": 12}],
+    "mar-4": [{"kg": 65, "reps": 12}, {"kg": 70, "reps": 10}, {"kg": 63, "reps": 11}],
+    "mar-5": [{"kg": 12, "reps": 11}, {"kg": 12, "reps": 9}, {"kg": 12, "reps": 10}],
+    "mar-6": [{"kg": 12, "reps": 9}, {"kg": 12, "reps": 9, "drop": {"kg": 10, "reps": 5}}, {"kg": 12, "reps": 6, "drop": {"kg": 10, "reps": 8}}]
+  }},
+  {"id": "2026-10-29-jue", "fecha": "2026-10-29", "dia": "jue", "gym": "otro", "gymConfirmado": true, "notas": "Otro gimnasio. Predicador 9×12 y fondos 45×12 eran calentamientos.", "guardado": "2026-10-29T20:00:00.000Z", "origen": "importado", "ex": {
+    "jue-1": [{"kg": 9, "reps": 12, "calentamiento": true}, {"kg": 32, "reps": 12}, {"kg": 36, "reps": 10}, {"kg": 32, "reps": 11}],
+    "jue-2": [{"kg": 45, "reps": 12, "calentamiento": true}, {"kg": 59, "reps": 12}, {"kg": 64, "reps": 11}, {"kg": 64, "reps": 10}],
+    "jue-3a": [{"kg": 14, "reps": 14}, {"kg": 14, "reps": 13}],
+    "jue-3b": [{"kg": 32, "reps": 12}, {"kg": 32, "reps": 15}, {"kg": 32, "reps": 13}],
+    "jue-4a": [{"kg": 9, "reps": 14}, {"kg": 9, "reps": 12}, {"kg": 9, "reps": 9, "drop": {"kg": 7, "reps": 6}}, {"kg": 7, "reps": 14}],
+    "jue-4b": [{"kg": 45, "reps": 12}, {"kg": 45, "reps": 12}, {"kg": 39, "reps": 13}]
+  }},
+  {"id": "2026-11-01-dom", "fecha": "2026-11-01", "dia": "dom", "gym": "sevilla", "gymConfirmado": false, "notas": "", "guardado": "2026-11-01T20:00:00.000Z", "origen": "importado", "ex": {
+    "dom-1a": [{"kg": 36, "reps": 7, "drop": {"kg": 32, "reps": 5}}, {"kg": 32, "reps": 13}, {"kg": 32, "reps": 11, "drop": {"kg": 27, "reps": 1}}],
+    "dom-1b": [{"kg": 32, "reps": 15}, {"kg": 36, "reps": 13}, {"kg": 32, "reps": 13}],
+    "dom-2": [{"kg": 66, "reps": 12}, {"kg": 73, "reps": 11}, {"kg": 66, "reps": 11}, {"kg": 66, "reps": 10}],
+    "dom-3": [{"kg": 52, "reps": 12}, {"kg": 59, "reps": 12}, {"kg": 59, "reps": 10}, {"kg": 52, "reps": 11}],
+    "dom-4": [{"kg": 39, "reps": 12}, {"kg": 39, "reps": 13}, {"kg": 39, "reps": 12}],
+    "dom-5": [{"kg": 45, "reps": 13}, {"kg": 45, "reps": 12}, {"kg": 45, "reps": 11}],
+    "dom-6b": [{"kg": 45, "reps": 15}, {"kg": 52, "reps": 12}, {"kg": 52, "reps": 12}]
+  }},
+  {"id": "2026-11-02-mar", "fecha": "2026-11-02", "dia": "mar", "gym": "otro", "gymConfirmado": true, "notas": "Hago espalda el lunes porque prefiero que en el press inclinado me ayude mi compañero a subir las mancuernas. Otro gimnasio. Pullover: seguro mal.", "guardado": "2026-11-02T20:00:00.000Z", "origen": "importado", "ex": {
+    "mar-1": [{"kg": 66, "reps": 9}, {"kg": 66, "reps": 7}, {"kg": 59, "reps": 10}, {"kg": 59, "reps": 9}],
+    "mar-2": [{"kg": 54.5, "reps": 11}, {"kg": 54.5, "reps": 10}, {"kg": 54.5, "reps": 9}],
+    "mar-3": [{"kg": 45, "reps": 10}, {"kg": 45, "reps": 12}, {"kg": 52, "reps": 11}],
+    "mar-4": [{"kg": 45, "reps": 12}, {"kg": 45, "reps": 10}, {"kg": 45, "reps": 11}],
+    "mar-5": [{"kg": 12, "reps": 11}, {"kg": 12, "reps": 9, "drop": {"kg": 10, "reps": 2}}, {"kg": 12, "reps": 6, "drop": {"kg": 10, "reps": 4}}],
+    "mar-6": [{"kg": 12, "reps": 6, "drop": {"kg": 10, "reps": 4}}, {"kg": 10, "reps": 12}, {"kg": 10, "reps": 12}]
+  }},
+  {"id": "2026-11-03-jue", "fecha": "2026-11-03", "dia": "jue", "gym": null, "gymConfirmado": false, "notas": "Fondos ocupados, hice extensión de tríceps con cuerda. Trasnuca a dos manos. (Nota original: \"otro gym\"; luego dije que los pesos eran de Sevilla. Por confirmar.)", "sustituto": {"jue-2": "Extensión de tríceps con cuerda (fondos ocupados)"}, "guardado": "2026-11-03T20:00:00.000Z", "origen": "importado", "ex": {
+    "jue-1": [{"kg": 35, "reps": 11}, {"kg": 35, "reps": 6, "drop": {"kg": 30, "reps": 4}}, {"kg": 35, "reps": 4, "drop": {"kg": 30, "reps": 4}}],
+    "jue-2": [{"kg": 45, "reps": 14}, {"kg": 50, "reps": 9}, {"kg": 50, "reps": 8}, {"kg": 45, "reps": 12}],
+    "jue-3a": [{"kg": 25, "reps": 12}, {"kg": 25, "reps": 10}, {"kg": 20, "reps": 13}],
+    "jue-3b": [{"kg": 55, "reps": 12}, {"kg": 60, "reps": 12}, {"kg": 60, "reps": 11}],
+    "jue-4a": [{"kg": 15, "reps": 8, "drop": {"kg": 10, "reps": 7}}, {"kg": 10, "reps": 15}, {"kg": 10, "reps": 15}],
+    "jue-4b": [{"kg": 40, "reps": 9}, {"kg": 40, "reps": 10, "drop": {"kg": 35, "reps": 2}}, {"kg": 35, "reps": 9, "drop": {"kg": 30, "reps": 4}}]
+  }},
+  {"id": "2026-11-05-lun", "fecha": "2026-11-05", "dia": "lun", "gym": "sevilla", "gymConfirmado": false, "notas": "Llego muy fatigado al tríceps (había hecho brazo 48 h antes).", "guardado": "2026-11-05T20:00:00.000Z", "origen": "importado", "ex": {
+    "lun-1": [{"kg": 26, "reps": 10}, {"kg": 26, "reps": 8}, {"kg": 24, "reps": 9}, {"kg": 24, "reps": 8}],
+    "lun-2": [{"kg": 54.5, "reps": 7}, {"kg": 54.5, "reps": 7}, {"kg": 54.5, "reps": 6}],
+    "lun-3": [{"kg": 59, "reps": 12}, {"kg": 59, "reps": 10}, {"kg": 52, "reps": 10}],
+    "lun-4": [{"kg": 9, "reps": 15}, {"kg": 9, "reps": 14}, {"kg": 9, "reps": 13}, {"kg": 9, "reps": 12}],
+    "lun-5": [{"kg": 32, "reps": 7, "drop": {"kg": 27, "reps": 5}}, {"kg": 27, "reps": 13}, {"kg": 27, "reps": 12}],
+    "lun-6": [{"kg": 36, "reps": 11}, {"kg": 36, "reps": 7, "drop": {"kg": 32, "reps": 4}}, {"kg": 32, "reps": 11}]
+  }},
+  {"id": "2026-11-08-dom", "fecha": "2026-11-08", "dia": "dom", "gym": "sevilla", "gymConfirmado": false, "notas": "Dominadas: 8, 6 y 7 con mi peso (antes no hacía ninguna).", "guardado": "2026-11-08T20:00:00.000Z", "origen": "importado", "ex": {
+    "dom-1a": [{"kg": 34.5, "reps": 12}, {"kg": 34.5, "reps": 11}, {"kg": 34.5, "reps": 10}],
+    "dom-1b": [{"kg": 36, "reps": 14}, {"kg": 41, "reps": 15}, {"kg": 41, "reps": 14}],
+    "dom-2": [{"kg": 66, "reps": 12}, {"kg": 73, "reps": 8}, {"kg": 66, "reps": 11}, {"kg": 66, "reps": 10}],
+    "dom-3": [{"kg": 61.5, "reps": 12}, {"kg": 61.5, "reps": 11}, {"kg": 61.5, "reps": 10}, {"kg": 61.5, "reps": 10}],
+    "dom-4": [{"kg": 39, "reps": 14}, {"kg": 39, "reps": 13}, {"kg": 39, "reps": 12}]
+  }},
+  {"id": "2026-11-09-lun", "fecha": "2026-11-09", "dia": "lun", "gym": "sevilla", "gymConfirmado": false, "notas": "No hice laterales.", "guardado": "2026-11-09T20:00:00.000Z", "origen": "importado", "ex": {
+    "lun-1": [{"kg": 28, "reps": 7}, {"kg": 26, "reps": 9}, {"kg": 24, "reps": 10}, {"kg": 24, "reps": 9}],
+    "lun-2": [{"kg": 54.5, "reps": 9}, {"kg": 54.5, "reps": 8}, {"kg": 54.5, "reps": 6}],
+    "lun-3": [{"kg": 59, "reps": 12}, {"kg": 59, "reps": 10}, {"kg": 59, "reps": 7, "drop": {"kg": 52, "reps": 3}}],
+    "lun-5": [{"kg": 32, "reps": 11}, {"kg": 32, "reps": 5, "drop": {"kg": 27, "reps": 5}}, {"kg": 27, "reps": 12}],
+    "lun-6": [{"kg": 36, "reps": 11}, {"kg": 36, "reps": 11}, {"kg": 34.5, "reps": 13}]
+  }},
+  {"id": "2026-11-11-mar", "fecha": "2026-11-11", "dia": "mar", "gym": "sevilla", "gymConfirmado": false, "notas": "", "guardado": "2026-11-11T20:00:00.000Z", "origen": "importado", "ex": {
+    "mar-1": [{"kg": 70, "reps": 6}, {"kg": 66, "reps": 8}, {"kg": 66, "reps": 7}, {"kg": 61.5, "reps": 9}],
+    "mar-2": [{"kg": 54.5, "reps": 12}, {"kg": 54.5, "reps": 11}, {"kg": 54.5, "reps": 10}],
+    "mar-3": [{"kg": 50, "reps": 10}, {"kg": 50, "reps": 10}, {"kg": 50, "reps": 10}],
+    "mar-4": [{"kg": 45, "reps": 12}, {"kg": 50, "reps": 7}, {"kg": 45, "reps": 9}],
+    "mar-5": [{"kg": 12, "reps": 12}, {"kg": 12, "reps": 9}, {"kg": 12, "reps": 7}],
+    "mar-6": [{"kg": 12, "reps": 7, "drop": {"kg": 10, "reps": 4}}, {"kg": 12, "reps": 6, "drop": {"kg": 10, "reps": 4}}, {"kg": 12, "reps": 7, "drop": {"kg": 10, "reps": 3}}]
+  }},
+  {"id": "2026-11-12-jue", "fecha": "2026-11-12", "dia": "jue", "gym": "sevilla", "gymConfirmado": true, "notas": "Trasnuca con agarre a dos manos. En el gym de Sevilla.", "guardado": "2026-11-12T20:00:00.000Z", "origen": "importado", "ex": {
+    "jue-1": [{"kg": 35, "reps": 12}, {"kg": 35, "reps": 10}, {"kg": 35, "reps": 9}],
+    "jue-2": [{"kg": 50, "reps": 12}, {"kg": 50, "reps": 10}, {"kg": 45, "reps": 10}],
+    "jue-3a": [{"kg": 25, "reps": 10}, {"kg": 20, "reps": 14}, {"kg": 20, "reps": 13}],
+    "jue-3b": [{"kg": 60, "reps": 12}, {"kg": 55, "reps": 12}, {"kg": 55, "reps": 11}],
+    "jue-4a": [{"kg": 15, "reps": 15}, {"kg": 15, "reps": 14}, {"kg": 15, "reps": 13}],
+    "jue-4b": [{"kg": 45, "reps": 11}, {"kg": 40, "reps": 10}, {"kg": 40, "reps": 7, "drop": {"kg": 35, "reps": 4}}]
+  }},
+  {"id": "2026-11-16-lun", "fecha": "2026-11-16", "dia": "lun", "gym": "sevilla", "gymConfirmado": false, "notas": "Llego muy fatigado al tríceps (el lunes anterior no hice hombro).", "guardado": "2026-11-16T20:00:00.000Z", "origen": "importado", "ex": {
+    "lun-1": [{"kg": 28, "reps": 8}, {"kg": 26, "reps": 10}, {"kg": 26, "reps": 8}, {"kg": 24, "reps": 10}],
+    "lun-2": [{"kg": 54.5, "reps": 10}, {"kg": 54.5, "reps": 8}, {"kg": 54.5, "reps": 7}],
+    "lun-3": [{"kg": 59, "reps": 12}, {"kg": 59, "reps": 11}, {"kg": 59, "reps": 8, "drop": {"kg": 52, "reps": 3}}],
+    "lun-4": [{"kg": 9, "reps": 15}, {"kg": 11.5, "reps": 12}, {"kg": 11.5, "reps": 11}],
+    "lun-5": [{"kg": 27, "reps": 11}, {"kg": 27, "reps": 12}, {"kg": 27, "reps": 12}],
+    "lun-6": [{"kg": 36, "reps": 8, "drop": {"kg": 32, "reps": 4}}, {"kg": 34.5, "reps": 11}, {"kg": 34.5, "reps": 11, "drop": {"kg": 32, "reps": 3}}]
+  }},
+  {"id": "2026-11-17-mar", "fecha": "2026-11-17", "dia": "mar", "gym": "sevilla", "gymConfirmado": false, "notas": "", "guardado": "2026-11-17T20:00:00.000Z", "origen": "importado", "ex": {
+    "mar-1": [{"kg": 66, "reps": 9}, {"kg": 66, "reps": 8}, {"kg": 66, "reps": 7}, {"kg": 66, "reps": 7}],
+    "mar-2": [{"kg": 59, "reps": 11}, {"kg": 59, "reps": 10}, {"kg": 59, "reps": 10}],
+    "mar-3": [{"kg": 50, "reps": 11}, {"kg": 50, "reps": 10}, {"kg": 50, "reps": 10}],
+    "mar-4": [{"kg": 45, "reps": 12}, {"kg": 45, "reps": 11}, {"kg": 45, "reps": 9}],
+    "mar-5": [{"kg": 12, "reps": 10}, {"kg": 12, "reps": 9}, {"kg": 12, "reps": 8}],
+    "mar-6": [{"kg": 10, "reps": 12}, {"kg": 10, "reps": 12}, {"kg": 10, "reps": 11}]
+  }}
+]

@@ -1,0 +1,30 @@
+/* Figuras animadas */
+.anim { position: relative; }
+.anim svg { display: block; width: 100%; height: auto; touch-action: manipulation; }
+.fig { stroke: var(--fig); stroke-linecap: round; fill: var(--fig); }
+.fig-cabeza { fill: var(--fig); }
+.fig-torso { fill: var(--fig); stroke: var(--fig); stroke-width: 7; stroke-linejoin: round; }
+.fig-lejos .fig { stroke: var(--fig-lejos); fill: var(--fig-lejos); }
+.fig-musculo { stroke: var(--accent); stroke-linecap: round; }
+.fig-musculo-c { fill: var(--accent); }
+.eq { stroke: var(--eq); fill: var(--eq); stroke-linecap: round; }
+.eq-hueco { fill: var(--surface); }
+.eq-fino { stroke: var(--eq); stroke-width: 3; stroke-linecap: round; }
+.eq-suave { fill: var(--eq-suave); }
+.eq-suave-l { stroke: var(--eq-suave); stroke-width: 10; stroke-linecap: round; }
+.eq-suelo { stroke: var(--line-2); stroke-width: 2; stroke-linecap: round; }
+.cable { stroke: var(--cable); stroke-width: 1.5; stroke-dasharray: none; }
+.anim-pie { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+.anim-fase { font-size: 13px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.anim-fase-sube { color: var(--accent); }
+
+/* Mapa muscular */
+.mapa { display: block; width: 100%; height: auto; max-width: 300px; margin: 0 auto; }
+.mapa-compacto { max-width: 150px; }
+.mm-base { fill: var(--mm-base); }
+.mm-pelo { fill: var(--mm-n); }
+.mm-n { fill: var(--mm-n); stroke: var(--mm-base); stroke-width: 0.8; }
+.mm-s { fill: var(--accent-2); stroke: var(--mm-base); stroke-width: 0.8; }
+.mm-p { fill: var(--accent); stroke: var(--mm-base); stroke-width: 0.8; }
+.mm-tit { fill: var(--text-3); font-size: 10px; font-family: var(--font); }
+.fig-borde { stroke: var(--fig-fondo, var(--surface)); stroke-linecap: round; }
