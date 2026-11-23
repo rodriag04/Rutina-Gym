@@ -16,7 +16,8 @@ export const ESCALONES_POR_DEFECTO: Record<Carga, number[]> = {
   'polea-lb': conMedias(PILA_LB),
   'polea-kg': rango(2.5, 120, 2.5),
   barra: rango(5, 80, 2.5),
-  lastre: rango(0, 40, 2.5)
+  lastre: rango(0, 40, 2.5),
+  corporal: [0, 2.5, 5, 7.5, 10, 12.5, 15, 20]
 };
 
 export const NOMBRE_CARGA: Record<Carga, string> = {
@@ -24,7 +25,8 @@ export const NOMBRE_CARGA: Record<Carga, string> = {
   'polea-lb': 'Poleas y máquinas de placas (≈4,5 kg + placa de 2,3)',
   'polea-kg': 'Poleas y máquinas en kg (2,5 en 2,5)',
   barra: 'Barras (2,5 en 2,5)',
-  lastre: 'Lastre de dominadas'
+  lastre: 'Lastre de dominadas',
+  corporal: 'Ejercicios con tu peso (disco opcional)'
 };
 
 export class Escalera {
@@ -51,3 +53,6 @@ export class Escalera {
     return lista.sort((a, b) => a - b);
   }
 }
+
+/** Con peso corporal: el kg apuntado es lo que se añade (lastre o disco). */
+export const conPesoCorporal = (c: Carga) => c === 'lastre' || c === 'corporal';

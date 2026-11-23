@@ -1,7 +1,9 @@
 // Almacenamiento local: IndexedDB (con copia mínima en localStorage si IndexedDB falla).
+import { PERFIL } from '../data/rutina';
 import type { Sesion } from './tipos';
 
-const NOMBRE = 'rutina-rodrigo';
+// Una base de datos por persona: las dos apps comparten dominio (github.io).
+const NOMBRE = `rutina-${PERFIL.id}`;
 const VERSION = 1;
 let dbp: Promise<IDBDatabase> | null = null;
 
@@ -33,7 +35,7 @@ async function tienda(nombre: 'sesiones' | 'kv', modo: IDBTransactionMode) {
   return db.transaction(nombre, modo).objectStore(nombre);
 }
 
-const LS = 'rutina-respaldo:';
+const LS = PERFIL.id === 'rodrigo' ? 'rutina-respaldo:' : `rutina-respaldo-${PERFIL.id}:`;
 const lsGet = <T>(k: string): T | undefined => {
   try {
     const v = localStorage.getItem(LS + k);

@@ -1,9 +1,11 @@
-// Genera los PNG de iconos a partir de public/iconos/favicon.svg (requiere Playwright).
+// Genera los PNG de iconos a partir de public/<carpeta>/favicon.svg (requiere Playwright).
+// Uso: node scripts/iconos.mjs [carpeta]   (por defecto "iconos"; Mari Carmen: "iconos/maricarmen")
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
-const svg = readFileSync(new URL('../public/iconos/favicon.svg', import.meta.url), 'utf8');
+const carpeta = process.argv[2] || 'iconos';
+const svg = readFileSync(new URL(`../public/${carpeta}/favicon.svg`, import.meta.url), 'utf8');
 const salidas = [
   ['icon-192.png', 192, false],
   ['icon-512.png', 512, false],
@@ -19,7 +21,7 @@ for (const [nombre, t, completo] of salidas) {
     : `<body style="margin:0;background:transparent">${svg.replace('<svg ', `<svg width="${t}" height="${t}" `)}</body>`;
   await p.setViewportSize({ width: t, height: t });
   await p.setContent(html);
-  await p.screenshot({ path: new URL(`../public/iconos/${nombre}`, import.meta.url).pathname, omitBackground: !completo });
+  await p.screenshot({ path: new URL(`../public/${carpeta}/${nombre}`, import.meta.url).pathname, omitBackground: !completo });
   console.log('ok', nombre);
 }
 await b.close();

@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks';
 import { Chispa, Grafica } from '../components/Grafica';
 import { IcoDcha } from '../components/Iconos';
-import { DIAS, EJERCICIOS, ejercicio, type Ejercicio } from '../data/rutina';
+import { DIAS, EJERCICIOS, PERFIL, ejercicio, type Ejercicio } from '../data/rutina';
 import { avisos, seriesSemana } from '../lib/analisis';
 import { ajustes, medidas, pesoCorporal, sesiones, setMedidas } from '../lib/estado';
 import { fechaCorta, hoyISO, kg as fkg, lunesDe, sumarDias } from '../lib/formato';
@@ -19,13 +19,12 @@ export function serie(ex: Ejercicio, pc: number) {
   }).filter((p) => p.valor > 0);
 }
 
-const BRAZO = ['jue-1', 'mar-5', 'jue-3a', 'mar-6', 'dom-1a', 'jue-2', 'lun-5', 'jue-3b', 'lun-6', 'dom-1b'];
 
 export function Progreso() {
   const pc = pesoCorporal.value;
   const hoy = hoyISO();
   const [semana, setSemana] = useState(lunesDe(hoy));
-  const press = ejercicio('lun-1')!;
+  const press = ejercicio(PERFIL.destacado.id)!;
   const pp = serie(press, pc);
   const primero = pp[0];
   const ultimo = pp[pp.length - 1];
@@ -40,30 +39,30 @@ export function Progreso() {
         <div key={a.id} class="aviso aviso-info"><div><strong>{a.titulo}</strong><p>{a.texto}</p></div></div>
       ))}
 
-      <section class="tarjeta tarjeta-hero" style={{ '--dia': 'var(--lun)' }}>
-        <button class="hero-cab" onClick={() => ir({ v: 'ejercicio', id: 'lun-1' })}>
+      <section class="tarjeta tarjeta-hero" style={{ '--dia': DIAS.find((d) => d.id === press.dia)?.color }}>
+        <button class="hero-cab" onClick={() => ir({ v: 'ejercicio', id: press.id })}>
           <span>
-            <span class="hero-tit">Press inclinado con mancuernas</span>
-            <span class="hero-sub">Estancado en 26 kg desde febrero hasta el 9 nov</span>
+            <span class="hero-tit">{press.nombre}</span>
+            <span class="hero-sub">{PERFIL.destacado.sub}</span>
           </span>
           <IcoDcha size={18} />
         </button>
         {ultimo && (
           <div class="hero-cifras">
-            <div><span class="hero-num">{ultimo.etiqueta}</span><span>serie pesada · {fechaCorta(ultimo.fecha)}</span></div>
+            <div><span class="hero-num">{ultimo.etiqueta}</span><span>mejor serie · {fechaCorta(ultimo.fecha)}</span></div>
             <div><span class="hero-num-s num">{fkg(ultimo.valor)} kg</span><span>1RM est.</span></div>
             {primero && primero !== ultimo && (
               <div><span class="hero-num-s num">{ultimo.valor >= primero.valor ? '+' : ''}{fkg(Math.round((ultimo.valor - primero.valor) * 10) / 10)} kg</span><span>desde {fechaCorta(primero.fecha)}</span></div>
             )}
           </div>
         )}
-        <Grafica puntos={pp} titulo="Progreso del press inclinado" />
+        {pp.length ? <Grafica puntos={pp} titulo={`Progreso de ${press.nombre}`} /> : <p class="vacio">La gráfica sale cuando guardes la primera sesión.</p>}
       </section>
 
       <section class="tarjeta">
-        <h2 class="tarjeta-tit">Brazos</h2>
+        <h2 class="tarjeta-tit">{PERFIL.grupo.titulo}</h2>
         <div class="mini-lista">
-          {BRAZO.map((id) => {
+          {PERFIL.grupo.ids.map((id) => {
             const ex = ejercicio(id)!;
             const p = serie(ex, pc);
             const u = p[p.length - 1];
@@ -113,7 +112,7 @@ export function Progreso() {
         <h2 class="tarjeta-tit">Todos los ejercicios</h2>
         {DIAS.map((d) => (
           <div key={d.id} class="todos-dia">
-            <p class="todos-tit" style={{ '--dia': `var(--${d.id})` }}>{d.nombre}</p>
+            <p class="todos-tit" style={{ '--dia': d.color }}>{d.nombre}</p>
             {d.bloques.flat().map((id) => {
               const ex = ejercicio(id)!;
               const p = serie(ex, pc);
@@ -127,7 +126,7 @@ export function Progreso() {
             })}
           </div>
         ))}
-        <p class="todos-tit">Retirados</p>
+        {EJERCICIOS.some((e) => e.retirado) && <p class="todos-tit">Retirados</p>}
         {EJERCICIOS.filter((e) => e.retirado).map((ex) => (
           <button key={ex.id} class="mini-fila" onClick={() => ir({ v: 'ejercicio', id: ex.id })}>
             <span class="mini-txt"><strong>{ex.corto}</strong><span>{ex.retirado!.motivo}</span></span>
@@ -157,7 +156,7 @@ function Medidas() {
   return (
     <section class="tarjeta">
       <h2 class="tarjeta-tit">Medidas</h2>
-      <p class="nota-pie">Próxima revisión: 26 nov. Brazo contraído, cintura a la altura del ombligo, peso en ayunas.</p>
+      <p class="nota-pie">{PERFIL.textoMedidas}</p>
       <div class="medidas-form">
         <label>Fecha<input class="campo" type="date" value={f.fecha} onInput={(e) => setF({ ...f, fecha: (e.target as HTMLInputElement).value })} /></label>
         <label>Peso (kg)<input class="campo num" inputMode="decimal" value={f.peso ?? ''} onInput={(e) => setF({ ...f, peso: num((e.target as HTMLInputElement).value) })} /></label>

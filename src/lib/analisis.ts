@@ -1,4 +1,4 @@
-import { DIAS, EJERCICIOS, dia as getDia, ejercicio, type DiaId, type Ejercicio } from '../data/rutina';
+import { DIAS, EJERCICIOS, ORDEN_SEMANA, PERFIL, dia as getDia, ejercicio, equivalente, type DiaId, type Ejercicio } from '../data/rutina';
 import { ZONAS_SEMANALES } from '../data/musculos';
 import { diasEntre, fechaCorta, kg as fkg, lunesDe, sumarDias } from './formato';
 import { e1rm, gymCompatible, limpias, ordenarSesiones, rendimiento } from './progresion';
@@ -87,7 +87,7 @@ export function avisos(sesiones: Sesion[], hoy: string, extra: { ultimaCopia?: s
 
   // 2. Dos lunes seguidos bajando en los presses → quitar el tríceps del domingo.
   const lunes = ord.filter((s) => s.dia === 'lun');
-  if (lunes.length >= 3) {
+  if (PERFIL.reglaLunes && lunes.length >= 3) {
     const [a, b, c] = lunes.slice(-3);
     const bajaPress = (x: Sesion, y: Sesion) => {
       const ids = ['lun-1', 'lun-2'].filter((id) => x.ex[id]?.length && y.ex[id]?.length);
@@ -119,18 +119,26 @@ export function avisos(sesiones: Sesion[], hoy: string, extra: { ultimaCopia?: s
     }
   }
 
-  // 4. Medidas: revisión del 26 nov.
-  const revision = '2026-11-26';
-  const medido = extra.medidas.some((m) => m.fecha >= revision);
-  if (!medido && diasEntre(hoy, revision) <= 3) {
+  // 4. Semana suave fija (cada N semanas).
+  if (PERFIL.descargaCada && semanaSuave(sesiones, hoy, PERFIL.descargaCada)) {
     out.push({
-      id: 'medidas', nivel: diasEntre(hoy, revision) <= 0 ? 'atencion' : 'info',
-      titulo: diasEntre(hoy, revision) <= 0 ? 'Toca medir' : `Medidas el ${fechaCorta(revision)}`,
-      texto: 'Brazo contraído, cintura a la altura del ombligo y peso en ayunas. Apúntalo en Progreso.'
+      id: 'semana-suave', nivel: 'atencion', titulo: 'Esta semana toca suave',
+      texto: `Llevas ${PERFIL.descargaCada - 1} semanas entrenando. Esta semana, la mitad de series y sin apurar. La app ya lo ha ajustado.`
     });
   }
 
-  // 5. Copia de seguridad.
+  // 5. Medidas: revisión programada.
+  const revision = PERFIL.revisionMedidas;
+  const medido = !revision || extra.medidas.some((m) => m.fecha >= revision);
+  if (revision && !medido && diasEntre(hoy, revision) <= 3) {
+    out.push({
+      id: 'medidas', nivel: diasEntre(hoy, revision) <= 0 ? 'atencion' : 'info',
+      titulo: diasEntre(hoy, revision) <= 0 ? 'Toca medir' : `Medidas el ${fechaCorta(revision)}`,
+      texto: `${PERFIL.textoMedidas} Apúntalo en Progreso.`
+    });
+  }
+
+  // 6. Copia de seguridad.
   const nuevas = sesiones.filter((s) => s.origen === 'app' && (!extra.ultimaCopia || s.guardado > extra.ultimaCopia)).length;
   const dias = extra.ultimaCopia ? diasEntre(extra.ultimaCopia.slice(0, 10), hoy) : 99;
   if (nuevas >= 3 && dias >= 7) {
@@ -151,9 +159,10 @@ export function huecos(sesiones: Sesion[], hoy: string): { semana: string; falta
   const out: { semana: string; faltan: DiaId[] }[] = [];
   for (let l = primera; l < estaSemana; l = sumarDias(l, 7)) {
     const fin = sumarDias(l, 6);
-    const hechos = new Set(ord.filter((s) => s.fecha >= l && s.fecha <= fin).map((s) => s.dia));
-    if (hechos.has('alt')) hechos.add('dom');
-    const faltan = (['lun', 'mar', 'jue', 'dom'] as DiaId[]).filter((d) => !hechos.has(d));
+    const delaSemana = ord.filter((s) => s.fecha >= l && s.fecha <= fin);
+    const hechos = new Set(delaSemana.map((s) => equivalente(s.dia)));
+    // Con días sin fijar (p. ej. 2 por semana), lo que cuenta es el número de sesiones.
+    const faltan = ORDEN_SEMANA.filter((d) => !hechos.has(d)).slice(0, Math.max(0, ORDEN_SEMANA.length - delaSemana.length));
     // La primera semana empieza a mitad: solo cuenta desde el primer día registrado.
     if (l === primera) continue;
     if (faltan.length) out.push({ semana: l, faltan });
@@ -221,11 +230,28 @@ export function seriesSemana(sesiones: Sesion[], lunes: string) {
 /** Qué día toca: el primero de la semana que no se ha hecho. */
 export function diaSugerido(sesiones: Sesion[], hoy: string): DiaId {
   const l = lunesDe(hoy);
-  const hechos = new Set(sesiones.filter((s) => s.fecha >= l && s.fecha <= hoy).map((s) => (s.dia === 'alt' ? 'dom' : s.dia)));
-  const pendientes = (['lun', 'mar', 'jue', 'dom'] as DiaId[]).filter((d) => !hechos.has(d as 'lun'));
-  return pendientes[0] ?? 'lun';
+  const hechos = new Set(sesiones.filter((s) => s.fecha >= l && s.fecha <= hoy).map((s) => equivalente(s.dia)));
+  const pendientes = ORDEN_SEMANA.filter((d) => !hechos.has(d));
+  if (pendientes.length) return pendientes[0];
+  // Semana completa: el que hace más tiempo que no se hace.
+  const ultima = (d: DiaId) => ordenarSesiones(sesiones).filter((s) => equivalente(s.dia) === d).at(-1)?.fecha ?? '';
+  return [...ORDEN_SEMANA].sort((a, b) => ultima(a).localeCompare(ultima(b)))[0];
 }
 
 export function textoSeries(series: Serie[]): string {
   return series.map((x) => `${fkg(x.kg)}×${x.reps}${x.drop ? `+${fkg(x.drop.kg)}×${x.drop.reps}` : ''}`).join(' · ');
+}
+
+/**
+ * Semana suave fija: tras (cada − 1) semanas con entrenos desde la última semana suave, la siguiente va con la mitad de series.
+ * Si esta semana ya hay una sesión suave, sigue siéndolo hasta el domingo.
+ */
+export function semanaSuave(sesiones: Sesion[], hoy: string, cada: number): boolean {
+  const lunesHoy = lunesDe(hoy);
+  if (sesiones.some((s) => s.descarga && s.fecha >= lunesHoy && s.fecha <= sumarDias(lunesHoy, 6))) return true;
+  const ultimaSuave = sesiones.filter((s) => s.descarga && s.fecha < lunesHoy).map((s) => lunesDe(s.fecha)).sort().at(-1);
+  const semanas = new Set(
+    sesiones.filter((s) => s.fecha < lunesHoy && (!ultimaSuave || lunesDe(s.fecha) > ultimaSuave)).map((s) => lunesDe(s.fecha))
+  );
+  return semanas.size >= cada - 1;
 }

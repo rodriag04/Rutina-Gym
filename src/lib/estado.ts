@@ -1,25 +1,22 @@
 import { computed, signal } from '@preact/signals';
-import historial from '../../datos/sesiones.json';
-import { EJERCICIOS, type DiaId } from '../data/rutina';
+import { EJERCICIOS, PERFIL, type DiaId } from '../data/rutina';
 import { ESCALONES_POR_DEFECTO, Escalera } from './cargas';
+import { semanaSuave } from './analisis';
 import { db, pedirPersistencia } from './db';
 import { hoyISO } from './formato';
 import type { Carga } from '../data/rutina';
 import type { Ajustes, EntradaDiario, Medida, Serie, Sesion } from './tipos';
 
-export const HISTORIAL_ORIGINAL = historial as unknown as Sesion[];
+export const HISTORIAL_ORIGINAL: Sesion[] = PERFIL.historial;
 
 export const AJUSTES_POR_DEFECTO: Ajustes = {
-  gimnasios: [
-    { id: 'sevilla', nombre: 'Basic-Fit Sevilla' },
-    { id: 'otro', nombre: 'Otro gimnasio' }
-  ],
-  gymPorDefecto: 'sevilla',
-  pesoCorporal: 72,
+  gimnasios: PERFIL.gimnasios,
+  gymPorDefecto: PERFIL.gymPorDefecto,
+  pesoCorporal: PERFIL.pesoCorporal,
   sonido: true,
   pantallaEncendida: true,
   descarga: false,
-  escalones: { ...ESCALONES_POR_DEFECTO }
+  escalones: { ...ESCALONES_POR_DEFECTO, ...PERFIL.escalones }
 };
 
 /** Sesión en curso (se guarda en cada toque por si iOS cierra la app). */
@@ -50,7 +47,7 @@ export const notasEjercicio = signal<Record<string, string>>({});
 export const borrador = signal<Borrador | null>(null);
 export const verificacion = signal<{ sesiones: number; series: number } | null>(null);
 
-export const escalera = (c: Carga) => new Escalera(ajustes.value.escalones[c] ?? ESCALONES_POR_DEFECTO[c]);
+export const escalera = (c: Carga) => new Escalera(ajustes.value.escalones[c] ?? PERFIL.escalones?.[c] ?? ESCALONES_POR_DEFECTO[c]);
 export const pesoCorporal = computed(() => {
   const conPeso = [...medidas.value].filter((m) => m.peso).sort((a, b) => a.fecha.localeCompare(b.fecha));
   return conPeso.at(-1)?.peso ?? ajustes.value.pesoCorporal;
@@ -77,14 +74,16 @@ export async function iniciar() {
     lista = await db.sesiones();
     await db.set('meta', { importado: new Date().toISOString() });
   }
-  const ids = new Set(HISTORIAL_ORIGINAL.map((s) => s.id));
-  const imp = lista.filter((s) => ids.has(s.id));
-  verificacion.value = { sesiones: imp.length, series: contarSeries(imp) };
+  if (HISTORIAL_ORIGINAL.length) {
+    const ids = new Set(HISTORIAL_ORIGINAL.map((s) => s.id));
+    const imp = lista.filter((s) => ids.has(s.id));
+    verificacion.value = { sesiones: imp.length, series: contarSeries(imp) };
+  }
 
   sesiones.value = lista;
   ajustes.value = { ...AJUSTES_POR_DEFECTO, ...((await db.get<Ajustes>('ajustes')) ?? {}) };
   diario.value = (await db.get<EntradaDiario[]>('diario')) ?? [];
-  medidas.value = (await db.get<Medida[]>('medidas')) ?? [{ fecha: '2026-10-01', peso: 72 }];
+  medidas.value = (await db.get<Medida[]>('medidas')) ?? PERFIL.medidasIniciales;
   notasEjercicio.value = (await db.get<Record<string, string>>('notasEjercicio')) ?? notasIniciales();
   borrador.value = (await db.get<Borrador>('borrador')) ?? null;
   cargado.value = true;
@@ -129,8 +128,13 @@ export function nuevoBorrador(dia: DiaId, gym?: string): Borrador {
     pesos: {},
     extra: {},
     exNotas: {},
-    descarga: ajustes.value.descarga
+    descarga: descargaActiva()
   };
+}
+
+/** Descarga manual (Ajustes) o semana suave fija del perfil. */
+export function descargaActiva(): boolean {
+  return ajustes.value.descarga || (!!PERFIL.descargaCada && semanaSuave(sesiones.value, hoyISO(), PERFIL.descargaCada));
 }
 
 /** Abre una sesión guardada para editarla con la misma pantalla de entrenar. */

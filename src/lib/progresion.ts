@@ -1,5 +1,5 @@
 import type { Ejercicio } from '../data/rutina';
-import { Escalera } from './cargas';
+import { conPesoCorporal, Escalera } from './cargas';
 import { kg as fkg } from './formato';
 import type { Serie, Sesion } from './tipos';
 
@@ -51,7 +51,7 @@ export const gymCompatible = (s: Sesion, gym: string | null) => !gym || s.gym ==
 /** Series válidas para calcular: sin calentamientos ni series < 75 % del peso máximo. */
 export function limpias(series: Serie[], ex?: Pick<Ejercicio, 'carga'>): Serie[] {
   const v = series.filter((s) => !s.calentamiento && s.reps > 0);
-  if (ex?.carga === 'lastre' || v.length === 0) return v;
+  if ((ex && conPesoCorporal(ex.carga)) || v.length === 0) return v;
   const max = Math.max(...v.map((s) => s.kg));
   return v.filter((s) => s.kg >= 0.75 * max);
 }
@@ -88,7 +88,7 @@ function pesoModa(series: Serie[]): number {
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
 export function planificar(ex: Ejercicio, ctx: ContextoPlan): Plan {
-  const carga = (k: number) => (ex.carga === 'lastre' ? ctx.pesoCorporal + k : k);
+  const carga = (k: number) => (conPesoCorporal(ex.carga) ? ctx.pesoCorporal + k : k);
   const rmDe = (s: Serie) => e1rm(carga(s.kg), s.reps);
   /** Reps equivalentes de una serie si se hubiera hecho con otro peso. */
   const equiv = (s: Serie, k: number) => (Math.abs(s.kg - k) < 0.01 ? s.reps : Math.floor(repsCon(rmDe(s), carga(k))));
@@ -99,15 +99,15 @@ export function planificar(ex: Ejercicio, ctx: ContextoPlan): Plan {
   if (r) {
     refSeries = limpias(r.s.ex[ex.id], ex);
     refInfo = { fecha: r.s.fecha, gym: r.s.gym, series: r.s.ex[ex.id] };
-  } else if (ex.id === 'alt-1') {
-    // Dominadas: solo constan en las notas del 8 nov.
-    refSeries = [{ kg: 0, reps: 8 }, { kg: 0, reps: 6 }, { kg: 0, reps: 7 }];
-    refInfo = { fecha: '2026-11-08', gym: 'sevilla', series: refSeries, inicial: true };
+  } else if (ex.refInicial) {
+    // Registros que solo constan en notas (dominadas del 8 nov).
+    refSeries = ex.refInicial.series;
+    refInfo = { fecha: ex.refInicial.fecha, gym: null, series: refSeries, inicial: true };
   }
 
   if (!refSeries || !refSeries.length) {
     return {
-      series: Array.from({ length: ex.series }, () => ({ kg: 0, reps: ex.max })),
+      series: Array.from({ length: ex.series }, () => ({ kg: 0, reps: Math.round((ex.min + ex.max) / 2) })),
       decision: 'nuevo',
       motivo: `Sin registros. Elige un peso con el que hagas ${ex.min}-${ex.max} dejando ${ex.rir} en recámara; la próxima vez ya calcula la app.`
     };
@@ -166,7 +166,9 @@ export function planificar(ex: Ejercicio, ctx: ContextoPlan): Plan {
 
   const listo = q[0] >= ex.max && (q.length < 2 || q[1] >= ex.max - 1);
   if (listo && sig > W0) {
-    if (predSig >= ex.min || q[0] >= extendido) {
+    // Salto grande = más del 10 %: solo entonces se exige llegar al mínimo con el peso nuevo.
+    const grande = (sig - W0) / W0 > 0.1;
+    if (!grande || predSig >= ex.min || q[0] >= extendido) {
       const t1 = clamp(predSig, ex.min, ex.min + 2);
       const t = [t1];
       for (let i = 1; i < n; i++) t.push(Math.max(ex.min, t[i - 1] - 1));
@@ -262,5 +264,5 @@ export function rendimiento(series: Serie[] | undefined, ex: Ejercicio, pesoCorp
   if (!series?.length) return 0;
   const c = limpias(series, ex);
   if (!c.length) return 0;
-  return Math.max(...c.map((s) => e1rm(ex.carga === 'lastre' ? pesoCorporal + s.kg : s.kg, s.reps)));
+  return Math.max(...c.map((s) => e1rm(conPesoCorporal(ex.carga) ? pesoCorporal + s.kg : s.kg, s.reps)));
 }

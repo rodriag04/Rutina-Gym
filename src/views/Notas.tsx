@@ -49,7 +49,7 @@ export function Notas() {
       <section class="tarjeta tarjeta-accion">
         <strong>Informe para Claude</strong>
         <p class="nota-pie">
-          Junta las sesiones de las 2 últimas semanas, los avisos, {pendientes} nota{pendientes === 1 ? '' : 's'} sin revisar, tus correcciones y las medidas. Pégalo en el proyecto “Rutina Gym”.
+          Junta las sesiones de las 2 últimas semanas, los avisos, {pendientes} nota{pendientes === 1 ? '' : 's'} sin revisar, tus correcciones y las medidas. Pégalo en Claude para revisar la rutina.
         </p>
         <div class="fila-btns">
           <button class="btn btn-prim" onClick={async () => setCopiado(await copiar(informeClaude(datos())))}><IcoCopiar size={18} /> {copiado ? 'Copiado' : 'Copiar informe'}</button>

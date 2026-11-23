@@ -4,7 +4,7 @@ import { Grafica } from '../components/Grafica';
 import { IcoAtras, IcoVideo } from '../components/Iconos';
 import { MapaMuscular } from '../components/MapaMuscular';
 import { GRUPOS, MUSCULOS } from '../data/musculos';
-import { dia as getDia, ejercicio, etiquetas } from '../data/rutina';
+import { PERFIL, dia as getDia, ejercicio, etiquetas } from '../data/rutina';
 import { textoSeries } from '../lib/analisis';
 import { ajustes, notasEjercicio, pesoCorporal, sesiones, setNota } from '../lib/estado';
 import { fechaCorta, mmss } from '../lib/formato';
@@ -12,7 +12,6 @@ import { gymCompatible, sesionesDe } from '../lib/progresion';
 import { serie } from './Progreso';
 import { volver } from '../lib/ruta';
 
-const COLOR = { lun: 'var(--lun)', mar: 'var(--mar)', jue: 'var(--jue)', dom: 'var(--dom)', alt: 'var(--alt)' };
 
 export function Ficha({ id }: { id: string }) {
   const ex = ejercicio(id);
@@ -28,7 +27,7 @@ export function Ficha({ id }: { id: string }) {
   const d = getDia(ex.dia);
 
   return (
-    <div class="vista vista-ficha" style={{ '--dia': COLOR[ex.dia] }}>
+    <div class="vista vista-ficha" style={{ '--dia': d.color }}>
       <header class="cab-sub">
         <button class="btn-icono" onClick={() => volver()} aria-label="Volver"><IcoAtras /></button>
         <span class="cab-sub-tit">{d.nombre} · {etiquetas(ex.dia).get(id) ?? 'retirado'}</span>
@@ -83,8 +82,8 @@ export function Ficha({ id }: { id: string }) {
         </ul>
         <p class="error"><span>Error típico</span>{ex.error}</p>
         <dl class="datos num">
-          <div><dt>Series</dt><dd>{ex.series} × {ex.min}-{ex.max}</dd></div>
-          <div><dt>RIR</dt><dd>{ex.rir}</dd></div>
+          <div><dt>Series</dt><dd>{ex.series} × {ex.min}-{ex.max}{ex.porLado ? ' por lado' : ''}</dd></div>
+          <div><dt>{PERFIL.sencillo ? 'Te sobran' : 'RIR'}</dt><dd>{ex.rir}</dd></div>
           <div><dt>Descanso</dt><dd>{mmss(ex.descanso)}</dd></div>
           <div><dt>Tempo</dt><dd>sube {ex.tempo.sube} s · baja {ex.tempo.baja} s</dd></div>
         </dl>

@@ -1,4 +1,4 @@
-import { dia as getDia, ejercicio, EJERCICIOS, etiquetas } from '../data/rutina';
+import { dia as getDia, ejercicio, EJERCICIOS, etiquetas, PERFIL } from '../data/rutina';
 import { avisos, resumenSesion, textoSeries } from './analisis';
 import { fechaCorta, fechaLarga, hoyISO, kg as fkg, sumarDias } from './formato';
 import { ordenarSesiones } from './progresion';
@@ -105,7 +105,7 @@ export function informeClaude(d: {
   const desde = sumarDias(hoy, -14);
   const l: string[] = [];
   l.push(`Informe de entrenamiento · ${fechaLarga(hoy)}`);
-  l.push(`Rodrigo, 1,81 m. Objetivo: músculo y fuerza, prioridad brazos. Rutina lun/mar/jue/dom.`);
+  l.push(PERFIL.informe);
   if (d.ajustes.descarga) l.push('Semana de descarga activada.');
   l.push('');
   l.push('## Sesiones de las 2 últimas semanas');

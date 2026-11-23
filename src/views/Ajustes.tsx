@@ -1,7 +1,7 @@
 import { useRef, useState } from 'preact/hooks';
 import { IcoDescarga, IcoSubir } from '../components/Iconos';
-import { CAMBIOS_RUTINA, type Carga } from '../data/rutina';
-import { ESCALONES_POR_DEFECTO, NOMBRE_CARGA } from '../lib/cargas';
+import { CAMBIOS_RUTINA, EJERCICIOS, PERFIL, type Carga } from '../data/rutina';
+import { conPesoCorporal, ESCALONES_POR_DEFECTO, NOMBRE_CARGA } from '../lib/cargas';
 import {
   ajustes, borrarTodo, diario, importarCopia, medidas, notasEjercicio, restaurarOriginal, sesiones, setAjustes, verificacion, contarSeries
 } from '../lib/estado';
@@ -38,7 +38,7 @@ export function Ajustes({ actualizar }: { actualizar?: () => void }) {
       <section class="tarjeta">
         <h2 class="tarjeta-tit">Entrenamiento</h2>
         <label class="interruptor">
-          <span><strong>Semana de descarga</strong><span>Mismos pesos, mitad de series, nada al fallo. Actívala solo cuando la app lo avise.</span></span>
+          <span><strong>{PERFIL.sencillo ? 'Semana suave' : 'Semana de descarga'}</strong><span>{PERFIL.descargaCada ? `Mismos pesos y la mitad de series. La app la pone sola cada ${PERFIL.descargaCada} semanas; esto es para forzarla.` : 'Mismos pesos, mitad de series, nada al fallo. Actívala solo cuando la app lo avise.'}</span></span>
           <input type="checkbox" checked={a.descarga} onChange={() => setAjustes({ descarga: !a.descarga })} />
         </label>
         <label class="interruptor">
@@ -49,13 +49,13 @@ export function Ajustes({ actualizar }: { actualizar?: () => void }) {
           <span><strong>Pantalla encendida durante la sesión</strong><span>Para ver el descanso sin desbloquear.</span></span>
           <input type="checkbox" checked={a.pantallaEncendida} onChange={() => setAjustes({ pantallaEncendida: !a.pantallaEncendida })} />
         </label>
-        <label class="campo-etq">Peso corporal para dominadas (kg)
+        {EJERCICIOS.some((e) => !e.retirado && conPesoCorporal(e.carga)) && <label class="campo-etq">Tu peso corporal (kg), para los ejercicios sin peso
           <input class="campo num" inputMode="decimal" value={fkg(a.pesoCorporal)} onChange={(e) => {
             const n = parseFloat((e.target as HTMLInputElement).value.replace(',', '.'));
             if (n > 30 && n < 200) setAjustes({ pesoCorporal: n });
           }} />
           <span class="nota-pie">Si apuntas el peso en Medidas, se usa ese.</span>
-        </label>
+        </label>}
       </section>
 
       <section class="tarjeta">
@@ -89,9 +89,9 @@ export function Ajustes({ actualizar }: { actualizar?: () => void }) {
 
       <section class="tarjeta">
         <h2 class="tarjeta-tit">Datos</h2>
-        {v && (
-          <p class={`verif ${v.sesiones === 13 && v.series === 244 ? 'ok' : 'mal'}`}>
-            Historial original: {v.sesiones} de 13 sesiones y {v.series} de 244 series {v.sesiones === 13 && v.series === 244 ? '✓' : '(revisa)'}
+        {v && PERFIL.verificacion && (
+          <p class={`verif ${v.sesiones === PERFIL.verificacion.sesiones && v.series === PERFIL.verificacion.series ? 'ok' : 'mal'}`}>
+            Historial original: {v.sesiones} de {PERFIL.verificacion.sesiones} sesiones y {v.series} de {PERFIL.verificacion.series} series {v.sesiones === PERFIL.verificacion.sesiones && v.series === PERFIL.verificacion.series ? '✓' : '(revisa)'}
           </p>
         )}
         <p class="nota-pie">
@@ -105,12 +105,12 @@ export function Ajustes({ actualizar }: { actualizar?: () => void }) {
         <button class="btn btn-ancho" onClick={() => fichero.current?.click()}><IcoSubir size={18} /> Importar copia JSON</button>
         <input ref={fichero} type="file" accept="application/json,.json" class="oculto" onChange={(e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (f) importar(f); }} />
         {msg && <p class="nota-pie">{msg}</p>}
-        <button class="btn-texto" onClick={async () => { await restaurarOriginal(); setMsg('Historial original restaurado (no borra lo nuevo).'); }}>Volver a importar el historial original</button>
+        {PERFIL.historial.length > 0 && <button class="btn-texto" onClick={async () => { await restaurarOriginal(); setMsg('Historial original restaurado (no borra lo nuevo).'); }}>Volver a importar el historial original</button>}
         <button class="btn-texto btn-texto-peligro" onClick={() => confirm('¿Borrar TODOS los datos de este móvil? Haz antes una copia.') && confirm('Seguro. No se puede deshacer.') && borrarTodo()}>Borrar todos los datos</button>
       </section>
 
       <section class="tarjeta">
-        <h2 class="tarjeta-tit">Cambios en la rutina</h2>
+        <h2 class="tarjeta-tit">{PERFIL.id === 'rodrigo' ? 'Cambios en la rutina' : 'Cómo se ha adaptado tu tabla'}</h2>
         {CAMBIOS_RUTINA.map((c) => (
           <div key={c.titulo} class="cambio">
             <strong>{c.titulo}</strong>
@@ -123,13 +123,7 @@ export function Ajustes({ actualizar }: { actualizar?: () => void }) {
       <section class="tarjeta">
         <h2 class="tarjeta-tit">Cómo calcula los pesos</h2>
         <ol class="reglas">
-          <li>Un solo peso para todas las series. Las series por debajo del 75 % del peso máximo cuentan como calentamiento y las reps de las bajadas no cuentan.</li>
-          <li>Subes al siguiente escalón cuando la 1.ª serie llega al máximo del rango y la 2.ª se queda a 1. Vuelves a reps mínimo a mínimo+2.</li>
-          <li>Si el siguiente peso es un salto grande y no llegarías al mínimo, antes sube reps hasta 3 por encima del rango.</li>
-          <li>Si la 1.ª queda 3 o más por debajo del mínimo, baja un escalón. Si no, mismo peso y una rep más por serie.</li>
-          <li>Press inclinado: 1.ª serie pesada (T); la 2.ª con T si la 1.ª llega a 8 (si no, T−2); 3.ª y 4.ª con T−2. La 1.ª sube al hacer 10 limpias.</li>
-          <li>Compara solo con sesiones del mismo gimnasio (o sin confirmar).</li>
-          <li>Descarga: si en 2 sesiones seguidas bajas en 2 o más ejercicios. Si dos lunes seguidos bajas en los presses, avisa para quitar el tríceps del domingo.</li>
+          {PERFIL.reglas.map((r) => <li key={r}>{r}</li>)}
         </ol>
       </section>
 
@@ -138,7 +132,7 @@ export function Ajustes({ actualizar }: { actualizar?: () => void }) {
           <button class="btn btn-ancho" onClick={actualizar}>Buscar actualización</button>
         </section>
       )}
-      <p class="nota-pie centro">Rutina · v{__VERSION__} · los datos solo se guardan en este dispositivo</p>
+      <p class="nota-pie centro">Rutina de {PERFIL.nombre} · v{__VERSION__} · los datos solo se guardan en este dispositivo</p>
     </div>
   );
 }

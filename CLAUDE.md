@@ -6,6 +6,10 @@ Exportado el 17 nov 2026 desde el proyecto "Rutina Gym" de Claude. Ese proyecto 
 
 - App nueva: PWA con Vite + Preact + TypeScript, sin backend. Datos en IndexedDB del móvil (copia mínima en localStorage). Ver `README.md`.
 - Publicada en https://rodriag04.github.io/Rutina-Gym/ (GitHub Pages). Cada push a la rama principal la vuelve a publicar con `.github/workflows/publicar.yml`.
+- Varias personas, una app por persona: `src/perfiles/<id>/` (`index.ts` con rutina, textos y reglas; `app.json` con nombre e iconos). Se elige al compilar con `PERFIL` (alias `@perfil`). Cada una tiene su base de datos (`rutina-<id>`).
+  - `rodrigo` (por defecto): /Rutina-Gym/.
+  - `maricarmen` (su madre, 53 años, 2 días/semana, ~45-50 min, prioridad piernas y glúteo): /Rutina-Gym/maricarmen/. Adaptada de su tabla "The Natural Way · Liberto Level I" (A/B/C a 3 días). Sin historial: la primera vez elige ella los pesos. Semana suave fija cada 4 semanas. Textos sencillos (sin "RIR").
+  - `npm run dev:maricarmen` para verla en local; `npm run build:pages` compila las dos como en GitHub Pages.
 - Comandos: `npm run dev`, `npm test` (motor de progresión e importación), `npm run build` (sale en `dist/`). `lab.html` en dev muestra todas las figuras animadas.
 - Código: `src/data/rutina.ts` (ejercicios, días, músculos, técnica, cambios), `src/data/musculos.ts`, `src/lib/progresion.ts` (reglas de peso y reps), `src/lib/analisis.ts` (avisos, descarga, saltos, series semanales), `src/components/animaciones.tsx` (figuras), `src/components/MapaMuscular.tsx`.
 - Del paquete original solo llegó este archivo. `app-actual/`, `imagenes/`, `memoria-proyecto/`, `rutina/` y `datos/plan-*.json` no están. `datos/sesiones.json` y `datos/series.csv` se reconstruyeron desde el historial de abajo (13 sesiones, 244 series; lo comprueban los tests y la app al importar).
@@ -60,7 +64,7 @@ Cambios del 17 nov (app nueva, hechos como entrenador; motivo en una línea):
 - Aductores + abductores en superserie: ahorra ~5 min; el 8 nov se saltaron.
 - Alt: remo con barra de pie → polea baja supino (la bisagra cargada está vetada).
 - Ejercicios a 2 RIR sin botón de bajada (martillo y curl inclinado acababan con bajadas).
-- Progresión: subir exige 1.ª serie en el máximo y 2.ª a 1; si el siguiente peso es un salto grande y no llegarías al mínimo, antes se suben reps hasta máximo+3. Las series de prueba con más peso cuentan (convertidas con Epley); las de menos peso se ignoran.
+- Progresión: subir exige 1.ª serie en el máximo y 2.ª a 1; si el siguiente peso es un salto grande (más del 10 %) y no llegarías al mínimo, antes se suben reps hasta máximo+3. Las series de prueba con más peso cuentan (convertidas con Epley); las de menos peso se ignoran.
 - Descarga: "perder reps" = mismo peso y 2 reps menos en total, o 1RM estimado un 6 % peor si cambió el peso.
 
 ## Reglas de progresión (las que usa la app actual)

@@ -24,9 +24,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
-      - run: npm run build
-        env:
-          BASE: /Rutina-Gym/
+      # Rodrigo en /Rutina-Gym/ y Mari Carmen en /Rutina-Gym/maricarmen/
+      - run: npm run build:pages
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

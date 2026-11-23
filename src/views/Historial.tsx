@@ -9,8 +9,6 @@ import { ordenarSesiones } from '../lib/progresion';
 import { ir, volver } from '../lib/ruta';
 import type { Sesion } from '../lib/tipos';
 
-const COLOR = { lun: 'var(--lun)', mar: 'var(--mar)', jue: 'var(--jue)', dom: 'var(--dom)', alt: 'var(--alt)' };
-const NOMBRE_DIA = { lun: 'lunes', mar: 'martes', jue: 'jueves', dom: 'domingo', alt: 'alternativo' };
 
 export function Historial() {
   const lista = ordenarSesiones(sesiones.value).reverse();
@@ -22,6 +20,7 @@ export function Historial() {
     const l = lunesDe(s.fecha);
     semanas.set(l, [...(semanas.get(l) ?? []), s]);
   }
+  const varios = ajustes.value.gimnasios.length > 1;
   const gymCorto = (g: string | null) => (g == null ? '¿gimnasio?' : g === 'sevilla' ? 'Sevilla' : ajustes.value.gimnasios.find((x) => x.id === g)?.nombre ?? g);
 
   return (
@@ -62,7 +61,7 @@ export function Historial() {
           <section key={lunes} class="semana">
             <h2 class="semana-tit">
               {fechaCorta(lunes)} – {fechaCorta(sumarDias(lunes, 6))}
-              {h && <span class="semana-falta">Falta: {h.faltan.map((d) => NOMBRE_DIA[d]).join(', ')}</span>}
+              {h && <span class="semana-falta">Falta: {h.faltan.map((d) => getDia(d).nombre.toLowerCase()).join(', ')}</span>}
             </h2>
             {ss.map((s) => {
               const r = resumenSesion(s, sesiones.value);
@@ -70,12 +69,12 @@ export function Historial() {
               const suben = [...cmp.values()].filter((v) => v > 0.02).length;
               const bajan = [...cmp.values()].filter((v) => v < -0.02).length;
               return (
-                <button key={s.id} class="sesion-fila" style={{ '--dia': COLOR[s.dia] }} onClick={() => ir({ v: 'sesion', id: s.id })}>
+                <button key={s.id} class="sesion-fila" style={{ '--dia': getDia(s.dia).color }} onClick={() => ir({ v: 'sesion', id: s.id })}>
                   <span class="sesion-barra" />
                   <span class="sesion-txt">
                     <strong>{fechaLarga(s.fecha)} · {getDia(s.dia).titulo}</strong>
                     <span>
-                      {r.hechas}/{r.previstas} series · {gymCorto(s.gym)}
+                      {r.hechas}/{r.previstas} series{varios ? ` · ${gymCorto(s.gym)}` : ''}{s.descarga ? ' · suave' : ''}
                       {suben ? ` · ↑${suben}` : ''}{bajan ? ` · ↓${bajan}` : ''}
                       {r.records.length ? ` · ${r.records.length} récord${r.records.length > 1 ? 's' : ''}` : ''}
                     </span>
@@ -87,6 +86,7 @@ export function Historial() {
           </section>
         );
       })}
+      {lista.length === 0 && <p class="vacio">Todavía no hay sesiones. Aparecerán aquí al guardar la primera.</p>}
       <button class="btn btn-ancho" onClick={() => ir({ v: 'entrenar' })}>Apuntar una sesión pasada: empieza el día y cambia la fecha al terminar</button>
     </div>
   );
@@ -104,7 +104,7 @@ export function DetalleSesion({ id }: { id: string }) {
   const ids = [...new Set([...d.bloques.flat(), ...Object.keys(s.ex)])];
 
   return (
-    <div class="vista" style={{ '--dia': COLOR[s.dia] }}>
+    <div class="vista" style={{ '--dia': d.color }}>
       <header class="cab-sub">
         <button class="btn-icono" onClick={() => volver({ v: 'historial' })} aria-label="Volver"><IcoAtras /></button>
         <span class="cab-sub-tit">{d.nombre}</span>

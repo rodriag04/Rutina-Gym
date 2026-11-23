@@ -86,6 +86,7 @@ body.sin-scroll { overflow: hidden; }
 .bloque { display: flex; flex-direction: column; gap: 8px; }
 .bloque-super { padding-left: 10px; border-left: 2px dashed var(--dia); margin-left: 2px; }
 .bloque-tit { font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-3); padding: 4px 0 0; }
+.bloque-tit:first-letter { text-transform: uppercase; }
 
 .ej {
   background: var(--surface);
@@ -462,3 +463,9 @@ body.sin-scroll { overflow: hidden; }
   .hoja, .hoja-fondo { animation: none; }
   .serie-ok, .pie-barra span { transition: none; }
 }
+
+/* ── Bienvenida (primer uso) ── */
+.bienvenida { gap: 6px; }
+.bienvenida strong { font-size: 17px; }
+.bienvenida p { font-size: 15px; color: var(--text-2); }
+.bienvenida p:last-child { color: var(--text); }

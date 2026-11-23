@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks';
 import { Hoja } from '../components/Hoja';
 import { IcoCompartir, IcoCopiar } from '../components/Iconos';
-import { dia as getDia } from '../data/rutina';
+import { PERFIL, dia as getDia } from '../data/rutina';
 import { resumenSesion } from '../lib/analisis';
 import { ajustes, guardarSesion, sesiones, setBorrador, type Borrador } from '../lib/estado';
 import { compartir, copiar, textoSesion } from '../lib/exportar';
@@ -11,7 +11,7 @@ import { mantenerPantalla } from '../lib/sonido';
 import type { Sesion } from '../lib/tipos';
 
 const ENERGIA = ['Floja', 'Normal', 'Buena', 'Muy buena'];
-const MOLESTIAS = ['Muñeca izq.', 'Hombro', 'Codo', 'Lumbar', 'Rodilla'];
+const MOLESTIAS = PERFIL.molestias;
 
 export function sesionDesde(b: Borrador): Sesion {
   const ex: Sesion['ex'] = {};
@@ -103,17 +103,18 @@ export function Terminar({ b, onCerrar, onGuardado }: { b: Borrador; onCerrar: (
       {r.piramides.length > 0 && <p class="consejo">Pirámide en {r.piramides.map((e) => e.corto).join(', ')}: la próxima vez, un solo peso para todas.</p>}
       {r.calentamientos.length > 0 && <p class="consejo">Parece que apuntaste un calentamiento en {r.calentamientos.map((e) => e.corto).join(', ')}. No cuenta para calcular.</p>}
       {r.bajadasRir.length > 0 && <p class="consejo">{r.bajadasRir.map((e) => e.corto).join(', ')} va a 2 RIR: sin bajadas.</p>}
+      {b.descarga && <p class="consejo">Sesión de semana suave: no cuenta para subir pesos.</p>}
 
       <label class="campo-etq">Fecha
         <input class="campo" type="date" value={b.fecha} onInput={(e) => upd({ fecha: (e.target as HTMLInputElement).value })} />
       </label>
-      <div class="campo-etq">Gimnasio
+      {ajustes.value.gimnasios.length > 1 && <div class="campo-etq">Gimnasio
         <div class="chips">
           {ajustes.value.gimnasios.map((g) => (
             <button key={g.id} class={`chip ${b.gym === g.id ? 'activo' : ''}`} onClick={() => upd({ gym: g.id })}>{g.nombre}</button>
           ))}
         </div>
-      </div>
+      </div>}
       <div class="campo-etq">¿Qué tal?
         <div class="chips">
           {ENERGIA.map((t, i) => (

@@ -1,8 +1,8 @@
 import type { VNode } from 'preact';
 import { desde, type Articulaciones, type ArticulacionesF, type P, type PoseFrente, type PoseLado } from './figura';
 
-export type Resalte = 'brazo-del' | 'brazo-tras' | 'antebrazo' | 'pecho' | 'espalda' | 'hombro' | 'muslo-del' | 'muslo-tras' | 'gemelo' | 'gluteo';
-export type ResalteF = 'hombro' | 'pecho' | 'dorsal' | 'aductor' | 'gluteo-lado';
+export type Resalte = 'brazo-del' | 'brazo-tras' | 'antebrazo' | 'pecho' | 'espalda' | 'hombro' | 'muslo-del' | 'muslo-tras' | 'gemelo' | 'gluteo' | 'abdomen';
+export type ResalteF = 'hombro' | 'pecho' | 'dorsal' | 'aductor' | 'gluteo-lado' | 'abdomen';
 
 export interface DefLado {
   vista: 'lado';
@@ -493,6 +493,127 @@ export const ANIMACIONES: Record<string, DefAnim> = {
       </g>
     ),
     frente: (j) => <Disco m={j.mano} r={6} />
+  },
+  crunch: {
+    vista: 'lado',
+    A: { cadera: [124, 166], tronco: 180, cabeza: 0, brazo: { h: -8, c: -6 }, pierna: { m: -52, t: 58, p: 0 } },
+    B: { cadera: [124, 166], tronco: 212, cabeza: -14, brazo: { h: -18, c: -16 }, pierna: { m: -52, t: 58, p: 0 } },
+    musculo: ['abdomen'],
+    fondo: () => <Pad a={[36, 176]} b={[196, 176]} w={4} />
+  },
+  hack: {
+    vista: 'lado',
+    A: { cadera: [140, 120], tronco: -112, cabeza: 8, brazo: { h: 70, c: -84 }, pierna: { pie: [160, 166], flex: 1, p: -12 } },
+    B: { cadera: [130, 94], tronco: -112, cabeza: 8, brazo: { h: 70, c: -84 }, pierna: { pie: [160, 166], flex: 1, p: -12 } },
+    musculo: ['muslo-del', 'gluteo'],
+    fondo: (j) => (
+      <g>
+        <line class="eq-suave-l" x1="152" y1="150" x2="92" y2="0" />
+        <Pad a={desde(desde(j.cadera, 158, 11), 68, 8)} b={desde(desde(j.hombro, 158, 11), -112, 8)} w={8} />
+        <Pad a={[146, 172]} b={[184, 162]} w={6} />
+      </g>
+    )
+  },
+  rumano: {
+    vista: 'lado',
+    A: { cadera: [100, 100], tronco: -14, cabeza: -10, brazo: { h: 92, c: 90 }, pierna: { pie: [116, 174], flex: -1, p: 0 } },
+    B: { cadera: [114, 96], tronco: -90, cabeza: 0, brazo: { h: 92, c: 90 }, pierna: { pie: [116, 174], flex: -1, p: 0 } },
+    musculo: ['muslo-tras', 'gluteo'],
+    frente: (j) => <Disco m={j.mano} r={6} />
+  },
+  hiperextension: {
+    vista: 'lado',
+    A: { cadera: [122, 92], tronco: 78, cabeza: -18, brazo: { h: 238, c: 93 }, pierna: { m: 135, t: 135, p: 100 } },
+    B: { cadera: [122, 92], tronco: -42, cabeza: 0, brazo: { h: 118, c: -27 }, pierna: { m: 135, t: 135, p: 100 } },
+    musculo: ['gluteo', 'muslo-tras'],
+    fondo: () => (
+      <g>
+        <Pad a={[123, 108]} b={[138, 93]} w={10} />
+        <line class="eq-fino" x1="131" y1="101" x2="131" y2={SUELO} />
+        <line class="eq-fino" x1="131" y1="150" x2="64" y2="160" />
+        <Pad a={[58, 160]} b={[70, 146]} w={6} />
+        <line class="eq-fino" x1="64" y1="153" x2="64" y2={SUELO} />
+      </g>
+    )
+  },
+  'remo-mancuerna': {
+    vista: 'lado',
+    A: { cadera: [100, 98], tronco: -4, cabeza: -6, brazo: { h: 90, c: 90 }, brazo2: { mano: [154, 140], flex: 1 }, pierna: { pie: [104, 174], flex: -1, p: 0 }, pierna2: { m: 90, t: 180, p: 180 } },
+    B: { cadera: [100, 98], tronco: -4, cabeza: -6, brazo: { h: 196, c: 92 }, brazo2: { mano: [154, 140], flex: 1 }, pierna: { pie: [104, 174], flex: -1, p: 0 }, pierna2: { m: 90, t: 180, p: 180 } },
+    musculo: ['espalda'],
+    fondo: () => (
+      <g>
+        <Pad a={[52, 145]} b={[168, 145]} />
+        <Pata x={62} y={145} />
+        <Pata x={158} y={145} />
+      </g>
+    ),
+    frente: (j) => <Disco m={j.mano} r={6} />
+  },
+  'gemelos-pie': {
+    vista: 'lado',
+    A: { cadera: [115.9, 94.9], tronco: -90, brazo: { h: 106, c: -64 }, pierna: { m: 90, t: 90, p: -22 } },
+    B: { cadera: [117.8, 82], tronco: -90, brazo: { h: 106, c: -64 }, pierna: { m: 90, t: 90, p: 38 } },
+    musculo: ['gemelo'],
+    fondo: (j) => (
+      <g>
+        <rect class="eq-suave" x="74" y="8" width="14" height={SUELO - 8} rx="3" />
+        <line class="eq-fino" x1="88" y1={j.hombro[1] - 8} x2={j.hombro[0] - 6} y2={j.hombro[1] - 8} />
+        <rect class="eq" x="118" y="171" width="34" height="6" rx="2" />
+      </g>
+    ),
+    frente: (j) => <Pad a={[j.hombro[0] - 10, j.hombro[1] - 8]} b={[j.hombro[0] + 10, j.hombro[1] - 8]} w={8} />
+  },
+  'femoral-tumbado': {
+    vista: 'lado',
+    A: { cadera: [110, 128], tronco: 0, cabeza: -8, brazo: { h: 100, c: 50 }, pierna: { m: 180, t: 180, p: 100 } },
+    B: { cadera: [110, 128], tronco: 0, cabeza: -8, brazo: { h: 100, c: 50 }, pierna: { m: 180, t: 296, p: 216 } },
+    musculo: ['muslo-tras'],
+    fondo: () => (
+      <g>
+        <Pad a={[64, 141]} b={[190, 141]} />
+        <Pata x={80} y={141} />
+        <Pata x={176} y={141} />
+      </g>
+    ),
+    frente: (j) => (
+      <g>
+        <Palanca de={[j.rodilla[0], j.rodilla[1] - 10]} a={desde(j.tobillo, j.angPierna + 90, 7)} w={4} />
+        <Rodillo m={desde(j.tobillo, j.angPierna + 90, 7)} />
+      </g>
+    )
+  },
+  woodchop: {
+    vista: 'frente',
+    A: { cx: 124, cadera: 132, bi: { mano: [92, 52], flex: 1 }, bd: { mano: [98, 50], flex: -1 }, arrodillado: true },
+    B: { cx: 124, cadera: 132, bi: { mano: [144, 124], flex: 1 }, bd: { mano: [150, 122], flex: -1 }, arrodillado: true },
+    musculo: ['abdomen'],
+    fondo: () => (
+      <g>
+        <Torre x={34} />
+        <Pad a={[96, 176]} b={[152, 176]} w={5} />
+      </g>
+    ),
+    frente: (j) => (
+      <g>
+        <Cable de={[40, 22]} a={[(j.manoI[0] + j.manoD[0]) / 2, (j.manoI[1] + j.manoD[1]) / 2]} />
+        <Asa m={[(j.manoI[0] + j.manoD[0]) / 2, (j.manoI[1] + j.manoD[1]) / 2]} />
+      </g>
+    )
+  },
+  'press-hombro-maquina': {
+    vista: 'lado',
+    A: { cadera: [104, 130], tronco: -90, brazo: { codo: [96, 96], mano: [100, 70] }, pierna: { m: 4, t: 92, p: 0 } },
+    B: { cadera: [104, 130], tronco: -90, brazo: { codo: [106, 50], mano: [108, 22] }, pierna: { m: 4, t: 92, p: 0 } },
+    musculo: ['hombro'],
+    fondo: (j) => (
+      <g>
+        <Pad a={[90, 138]} b={[86, 60]} w={8} />
+        <Asiento x1={86} x2={126} y={139} />
+        <Palanca de={[70, 112]} a={j.mano} w={4} />
+      </g>
+    ),
+    frente: (j) => <Asa m={j.mano} />
   },
   'press-frances': {
     vista: 'lado',

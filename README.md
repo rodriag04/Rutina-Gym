@@ -1,6 +1,13 @@
 # Rutina
 
-App de entrenamiento de Rodrigo. Funciona sin conexión, se instala en el iPhone y guarda los datos en el propio móvil.
+App de entrenamiento. Funciona sin conexión, se instala en el móvil y guarda los datos en el propio móvil.
+
+| Persona | Dirección |
+|---|---|
+| Rodrigo | https://rodriag04.github.io/Rutina-Gym/ |
+| Mari Carmen | https://rodriag04.github.io/Rutina-Gym/maricarmen/ |
+
+Cada persona tiene su propia app (rutina, textos, icono y datos aparte), compilada desde el mismo código con un perfil distinto: `src/perfiles/<id>/`.
 
 ## Qué hace
 
@@ -21,7 +28,7 @@ Importa `datos/sesiones.json` (13 sesiones, 244 series) y lo comprueba. El resul
 
 Dirección: **https://rodriag04.github.io/Rutina-Gym/**
 
-1. Ábrela en **Safari** (desde Chrome en iPhone no se instala igual).
+1. Ábrela en **Safari** (desde Chrome en iPhone no se instala igual). En Android: Chrome → menú ⋮ → **Instalar aplicación**.
 2. Compartir → **Añadir a pantalla de inicio**.
 3. Ábrela desde el icono. A partir de ahí funciona sin conexión.
 
@@ -29,7 +36,7 @@ Los datos viven en ese iPhone. Haz una copia JSON de vez en cuando (la app avisa
 
 ## Desplegar
 
-Cada push a la rama principal se publica solo en GitHub Pages (`.github/workflows/publicar.yml`): pasa los tests, compila con `BASE=/Rutina-Gym/` y sube `dist/` a la rama `gh-pages`. La app avisa dentro cuando hay versión nueva.
+Cada push a la rama principal se publica solo en GitHub Pages (`.github/workflows/publicar.yml`): pasa los tests, compila las dos apps (`npm run build:pages`) y sube `dist/` a la rama `gh-pages`. La app avisa dentro cuando hay versión nueva.
 
 Si algún día prefieres Netlify o Vercel, la configuración ya está en `netlify.toml` y `vercel.json` (comando `npm run build`, carpeta `dist`). Cambiar de dirección es cambiar de almacén: antes exporta la copia JSON y luego impórtala.
 
@@ -38,16 +45,18 @@ Si algún día prefieres Netlify o Vercel, la configuración ya está en `netlif
 ```bash
 npm install
 npm run dev      # http://localhost:5173  (lab.html: todas las figuras animadas)
+npm run dev:maricarmen   # la app de Mari Carmen
 npm test         # motor de progresión, importación y avisos
 npm run build    # comprueba tipos y genera dist/ con el service worker
-npm run iconos   # regenera los PNG de public/iconos (necesita Playwright)
+npm run iconos   # regenera los PNG de public/iconos (necesita Playwright); para otra persona: node scripts/iconos.mjs iconos/maricarmen
 ```
 
 ## Estructura
 
 ```
 datos/                 historial original (JSON y CSV)
-src/data/rutina.ts     ejercicios, días, superseries, técnica, cambios de rutina
+src/perfiles/<id>/     rutina de cada persona (ejercicios, días, textos, reglas) y su app.json
+src/data/rutina.ts     acceso a la rutina del perfil compilado
 src/data/musculos.ts   grupos y partes de cada músculo
 src/lib/progresion.ts  cálculo de peso y reps
 src/lib/analisis.ts    avisos, descarga, saltos, series semanales

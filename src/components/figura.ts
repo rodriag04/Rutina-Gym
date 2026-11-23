@@ -49,6 +49,8 @@ export interface PoseFrente {
   sentado?: { abre: number };
   /** Colgado (dominadas): rodillas dobladas hacia atrás. */
   colgado?: boolean;
+  /** De rodillas: las rodillas en el suelo y las espinillas hacia atrás (no se ven). */
+  arrodillado?: boolean;
 }
 
 export interface Articulaciones {
@@ -143,6 +145,11 @@ export function resolverFrente(p: PoseFrente): ArticulacionesF {
     rodillaD = [p.cx + LF.caderas + a, p.cadera + 9];
     pieI = [rodillaI[0] + 2, rodillaI[1] + LF.pierna];
     pieD = [rodillaD[0] - 2, rodillaD[1] + LF.pierna];
+  } else if (p.arrodillado) {
+    rodillaI = [caderaI[0] - 1, p.cadera + LF.muslo];
+    rodillaD = [caderaD[0] + 1, p.cadera + LF.muslo];
+    pieI = [rodillaI[0], rodillaI[1] + 1];
+    pieD = [rodillaD[0], rodillaD[1] + 1];
   } else if (p.colgado) {
     rodillaI = [caderaI[0] + 1, p.cadera + LF.muslo];
     rodillaD = [caderaD[0] - 1, p.cadera + LF.muslo];

@@ -2,10 +2,11 @@ import { useMemo, useState } from 'preact/hooks';
 import { MapaMuscular } from '../components/MapaMuscular';
 import { Hoja } from '../components/Hoja';
 import { IcoAviso, IcoBaja, IcoCheck, IcoDcha, IcoIgual, IcoMas, IcoMenos, IcoSube, IcoX } from '../components/Iconos';
-import { DIAS, bloqueDe, dia as getDia, duracionEstimada, ejercicio, etiquetas, type DiaId, type Ejercicio } from '../data/rutina';
+import { DIAS, PERFIL, bloqueDe, dia as getDia, duracionEstimada, ejercicio, etiquetas, type DiaId, type Ejercicio } from '../data/rutina';
+import { conPesoCorporal } from '../lib/cargas';
 import { avisos, diaSugerido, textoSeries } from '../lib/analisis';
 import {
-  ajustes, borrador, escalera, medidas, notasEjercicio, nuevoBorrador, pesoCorporal, seriesHechas, sesiones, setBorrador, type Borrador
+  ajustes, borrador, descargaActiva, escalera, medidas, notasEjercicio, nuevoBorrador, pesoCorporal, seriesHechas, sesiones, setBorrador, type Borrador
 } from '../lib/estado';
 import { fechaCorta, fechaLarga, hoyISO, kg as fkg, lunesDe, mmss } from '../lib/formato';
 import { calentamientoGenerico, e1rm, planificar, repsCon, resolverAlt, type Plan } from '../lib/progresion';
@@ -14,7 +15,7 @@ import { mantenerPantalla, prepararAudio } from '../lib/sonido';
 import type { Serie } from '../lib/tipos';
 import { Terminar } from './Terminar';
 
-const COLOR: Record<DiaId, string> = { lun: 'var(--lun)', mar: 'var(--mar)', jue: 'var(--jue)', dom: 'var(--dom)', alt: 'var(--alt)' };
+const rirTexto = (rir: string) => (PERFIL.sencillo ? `te sobran ${rir}` : `RIR ${rir}`);
 
 interface Fila { kg: number; reps: number; hecha?: Serie; alt?: string }
 
@@ -26,8 +27,8 @@ function fila(ex: Ejercicio, plan: Plan, b: Borrador | null, i: number, pc: numb
   const alt = base.alt && b?.ex[ex.id]?.[0] == null ? `Si la 1.ª no llega a 8: ${fkg(base.alt.kg)} kg × ${base.alt.reps}` : undefined;
   const elegido = b?.pesos[ex.id]?.[i];
   if (elegido != null && Math.abs(elegido - kg) > 0.01) {
-    const carga = (k: number) => (ex.carga === 'lastre' ? pc + k : k);
-    reps = kg > 0 || ex.carga === 'lastre'
+    const carga = (k: number) => (conPesoCorporal(ex.carga) ? pc + k : k);
+    reps = kg > 0 || conPesoCorporal(ex.carga)
       ? Math.max(1, Math.min(ex.max + 3, Math.floor(repsCon(e1rm(carga(kg), reps), carga(elegido)))))
       : reps;
     kg = elegido;
@@ -47,7 +48,7 @@ export function Entrenar() {
   const diaId = b?.dia ?? diaElegido;
   const d = getDia(diaId);
   const gym = b?.gym ?? ajustes.value.gymPorDefecto;
-  const descarga = b?.descarga ?? ajustes.value.descarga;
+  const descarga = b?.descarga ?? descargaActiva();
   const pc = pesoCorporal.value;
   const et = etiquetas(diaId);
 
@@ -93,7 +94,7 @@ export function Entrenar() {
       guardar(nb);
       return;
     }
-    if (f.kg <= 0 && ex.carga !== 'lastre') {
+    if (f.kg <= 0 && !conPesoCorporal(ex.carga)) {
       setPesoAbierto({ ex, i, kg: 0 });
       return;
     }
@@ -180,18 +181,18 @@ export function Entrenar() {
   const minutos = b && hechas ? Math.round((Date.now() - new Date(b.inicio).getTime()) / 60000) : 0;
 
   return (
-    <div class="vista vista-entrenar" style={{ '--dia': COLOR[diaId] }}>
+    <div class="vista vista-entrenar" style={{ '--dia': d.color }}>
       <header class="cab">
         <div class="cab-fila">
           <span class="cab-fecha">{b?.editando ? `Editando · ${fechaLarga(b.fecha)}` : fechaLarga(b?.fecha ?? hoy)}</span>
-          <button class="chip chip-gym" onClick={cambiarGym} aria-label="Cambiar gimnasio">{nombreGym}</button>
+          {ajustes.value.gimnasios.length > 1 && <button class="chip chip-gym" onClick={cambiarGym} aria-label="Cambiar gimnasio">{nombreGym}</button>}
         </div>
-        <nav class="dias" aria-label="Día de rutina">
+        <nav class="dias" aria-label="Día de rutina" style={{ gridTemplateColumns: `repeat(${DIAS.length}, 1fr)` }}>
           {DIAS.map((x) => (
             <button
               key={x.id}
               class={`dia-btn ${x.id === diaId ? 'activo' : ''}`}
-              style={{ '--c': COLOR[x.id] }}
+              style={{ '--c': x.color }}
               onClick={() => elegirDia(x.id)}
               aria-pressed={x.id === diaId}
             >
@@ -203,11 +204,17 @@ export function Entrenar() {
         </nav>
         <h1 class="dia-titulo">{d.titulo}</h1>
         <p class="dia-meta">
-          {d.bloques.flat().length} ejercicios · {totalSeries} series · ~{duracionEstimada(diaId)} min
+          {d.bloques.flat().length} ejercicios · {totalSeries} series · ~{duracionEstimada(diaId, descarga)} min
           {!d.cuentaSemanal && ' · no cuenta en las series semanales'}
         </p>
-        {descarga && <p class="banda banda-descarga">Semana de descarga: mismos pesos, mitad de series, nada al fallo.</p>}
+        {descarga && <p class="banda banda-descarga">{PERFIL.sencillo ? 'Semana suave: mismos pesos, la mitad de series y sin apurar.' : 'Semana de descarga: mismos pesos, mitad de series, nada al fallo.'}</p>}
       </header>
+
+      {PERFIL.bienvenida && sesiones.value.length === 0 && !hechas && (
+        <section class="tarjeta tarjeta-accion bienvenida">
+          {PERFIL.bienvenida.map((t, i) => (i === 0 ? <strong key={i}>{t}</strong> : <p key={i}>{t}</p>))}
+        </section>
+      )}
 
       {lista.length > 0 && !b?.editando && (
         <section class="avisos">
@@ -227,7 +234,9 @@ export function Entrenar() {
         <section key={bi} class={`bloque ${bloque.length > 1 ? 'bloque-super' : ''}`}>
           {bloque.length > 1 && (
             <p class="bloque-tit">
-              Superserie · {bloque.map((id) => et.get(id)).join(' + ')} sin descanso entre medias
+              {PERFIL.sencillo
+                ? `Por parejas: haz el ${et.get(bloque[0])} y enseguida el ${et.get(bloque[1])}; descansa al acabar los dos`
+                : `Superserie · ${bloque.map((id) => et.get(id)).join(' + ')} sin descanso entre medias`}
             </p>
           )}
           {bloque.map((id) => {
@@ -250,8 +259,9 @@ export function Entrenar() {
                   <IcoDcha size={18} />
                 </button>
                 <p class="ej-meta num">
-                  {descarga ? Math.ceil(ex.series / 2) : ex.series} × {ex.min}-{ex.max} · RIR {ex.rir} · {mmss(ex.descanso)}
+                  {descarga ? Math.ceil(ex.series / 2) : ex.series} × {ex.min}-{ex.max}{ex.porLado ? ' por lado' : ''} · {rirTexto(ex.rir)} · {mmss(ex.descanso)}
                   {ex.carga === 'lastre' && ' · kg = lastre'}
+                  {ex.carga === 'corporal' && ' · kg = disco opcional'}
                 </p>
                 <Decision plan={plan} gym={gym} />
                 {calent && calent.length > 0 && (
@@ -262,10 +272,10 @@ export function Entrenar() {
                     <div key={i} class={`serie ${f.hecha ? 'hecha' : ''}`} role="listitem">
                       <span class="serie-n num">{i + 1}</span>
                       <button class="serie-kg" onClick={() => setPesoAbierto({ ex, i, kg: f.kg })} aria-label={`Peso serie ${i + 1}`}>
-                        {f.kg > 0 || ex.carga === 'lastre' ? (
+                        {f.kg > 0 || conPesoCorporal(ex.carga) ? (
                           <>
-                            <span class="num grande">{ex.carga === 'lastre' && f.kg === 0 ? 'Peso' : fkg(f.kg)}</span>
-                            <span class="ud">{ex.carga === 'lastre' && f.kg === 0 ? 'corporal' : 'kg'}</span>
+                            <span class="num grande">{conPesoCorporal(ex.carga) && f.kg === 0 ? (ex.carga === 'lastre' ? 'Peso' : 'Sin') : fkg(f.kg)}</span>
+                            <span class="ud">{conPesoCorporal(ex.carga) && f.kg === 0 ? (ex.carga === 'lastre' ? 'corporal' : 'peso') : 'kg'}</span>
                           </>
                         ) : (
                           <span class="serie-elegir">Elegir peso</span>
@@ -360,11 +370,14 @@ export function Entrenar() {
 
 function Decision({ plan, gym }: { plan: Plan; gym: string }) {
   const Ico = plan.decision === 'subir' ? IcoSube : plan.decision === 'bajar' ? IcoBaja : IcoIgual;
-  const txt = { subir: 'Sube', bajar: 'Baja', mantener: 'Mantén', nuevo: 'Nuevo', descarga: 'Descarga' }[plan.decision];
+  const txt = { subir: 'Sube', bajar: 'Baja', mantener: 'Mantén', nuevo: PERFIL.sencillo ? 'Primera vez' : 'Nuevo', descarga: PERFIL.sencillo ? 'Semana suave' : 'Descarga' }[plan.decision];
+  const motivo = plan.decision === 'nuevo' && PERFIL.sencillo
+    ? 'Toca el peso y elige uno con el que hagas las repeticiones y te sobren 2. La próxima vez la app te dice cuál poner.'
+    : plan.motivo;
   return (
     <div class={`decision decision-${plan.decision}`}>
       <span class="decision-tag"><Ico size={14} /> {txt}</span>
-      <span class="decision-motivo">{plan.motivo}</span>
+      <span class="decision-motivo">{motivo}</span>
       {plan.ref && (
         <span class="decision-ref num">
           {plan.ref.inicial ? 'Notas' : 'Último'} · {fechaCorta(plan.ref.fecha)}{plan.otroGym ? ' (otro gimnasio)' : ''}: {textoSeries(plan.ref.series)}
@@ -377,7 +390,7 @@ function Decision({ plan, gym }: { plan: Plan; gym: string }) {
 
 function SelectorPeso({ ex, kg, onElegir, onCerrar }: { ex: Ejercicio; kg: number; onElegir: (kg: number) => void; onCerrar: () => void }) {
   const esc = escalera(ex.carga);
-  const ref = kg > 0 || ex.carga === 'lastre' ? kg : esc.ajustar(ex.carga === 'mancuerna' ? 10 : 30);
+  const ref = kg > 0 || conPesoCorporal(ex.carga) ? kg : esc.ajustar(PERFIL.pesosIniciales?.[ex.carga] ?? (ex.carga === 'mancuerna' ? 10 : 30));
   const [valor, setValor] = useState(String(ref).replace('.', ','));
   const opciones = esc.alrededor(ref, 4);
   return (

@@ -39,6 +39,7 @@ function Lado({ def, j }: { def: DefLado; j: Articulaciones }) {
       {r.has('pecho') && <Franja a={j.cadera} b={j.hombro} lado={1} off={4.5} w={8} de={0.55} a2={0.92} />}
       {r.has('espalda') && <Franja a={j.cadera} b={j.hombro} lado={-1} off={4.5} w={8} de={0.35} a2={0.9} />}
       {r.has('gluteo') && <Franja a={j.cadera} b={j.hombro} lado={-1} off={5} w={9} de={-0.06} a2={0.14} />}
+      {r.has('abdomen') && <Franja a={j.cadera} b={j.hombro} lado={1} off={4.5} w={8} de={0.12} a2={0.5} />}
       <Seg a={j.cadera} b={j.rodilla} w={13} />
       <Seg a={j.rodilla} b={j.tobillo} w={10} />
       <Seg a={j.tobillo} b={j.punta} w={5.5} />
@@ -92,6 +93,12 @@ function Frente({ def, j }: { def: DefFrente; j: ArticulacionesF }) {
         <g>
           <line class="fig-musculo" x1={j.hombroI[0] + 5} y1={sy + 9} x2={j.caderaI[0] + 3} y2={hy - 16} stroke-width="6" />
           <line class="fig-musculo" x1={j.hombroD[0] - 5} y1={sy + 9} x2={j.caderaD[0] - 3} y2={hy - 16} stroke-width="6" />
+        </g>
+      )}
+      {r.has('abdomen') && (
+        <g>
+          <line class="fig-musculo" x1={j.cx - 5} y1={sy + 22} x2={j.cx - 5} y2={hy - 8} stroke-width="7" />
+          <line class="fig-musculo" x1={j.cx + 5} y1={sy + 22} x2={j.cx + 5} y2={hy - 8} stroke-width="7" />
         </g>
       )}
       {r.has('gluteo-lado') && (

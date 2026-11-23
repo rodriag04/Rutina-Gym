@@ -82,7 +82,10 @@ export const ZONAS_SEMANALES: ZonaSemanal[] = [
   { id: 'espalda-alta', nombre: 'Espalda alta', musculos: ['trap-medio'] },
   { id: 'lateral', nombre: 'Hombro lateral', musculos: ['delt-lat'] },
   { id: 'posterior', nombre: 'Hombro posterior', musculos: ['delt-post'] },
+  { id: 'hombro-del', nombre: 'Hombro delantero', musculos: ['delt-ant'] },
+  { id: 'gluteo', nombre: 'Glúteo', musculos: ['gluteo-mayor', 'gluteo-medio'] },
   { id: 'cuadriceps', nombre: 'Cuádriceps', musculos: ['cuad-rf', 'cuad-vl', 'cuad-vm'] },
   { id: 'isquios', nombre: 'Isquios', musculos: ['isq-bf', 'isq-semi'] },
-  { id: 'gemelos', nombre: 'Gemelo', musculos: ['gemelo'] }
+  { id: 'gemelos', nombre: 'Gemelo', musculos: ['gemelo'] },
+  { id: 'core', nombre: 'Abdomen', musculos: ['abdomen', 'oblicuos'] }
 ];
