@@ -79,8 +79,8 @@ export function candidatos(ctx: Contexto): { r: Receta; peso: number }[] {
     const et = r.etiquetas ?? [];
     if (slot === 'desayuno') {
       if (cfg.desayunoCasa ? !et.includes('casa') : !et.includes('bocadillo')) continue;
-      // Lunes antes de la compra: embutido que aguanta toda la semana o huevos.
-      if (lunesAntesCompra && r.familia === 'pavo') continue;
+      // Lunes antes de la compra: el bocadillo es con lo que haya en casa.
+      if (!cfg.desayunoCasa && lunesAntesCompra !== (r.id === 'boc-casa')) continue;
     }
     if (lunesAntesCompra && slot === 'comida' && !et.includes('despensa')) continue;
     if (viernesCenaDespensa && !et.includes('despensa')) continue;
@@ -220,6 +220,7 @@ function valida(e: Eleccion | undefined, h: Hueco, cfg: ConfigDia, i: number, se
   const et = r.etiquetas ?? [];
   if (h.slot === 'desayuno' && (cfg.desayunoCasa ? !et.includes('casa') : !et.includes('bocadillo'))) return false;
   if (h.noBatido && et.includes('batido')) return false;
+  if (h.slot === 'desayuno' && !cfg.desayunoCasa && (i === 0) !== (r.id === 'boc-casa')) return false;
   if (i === 0 && h.slot === 'comida') {
     if (semana.taper !== (r.id === 'taper-mama')) return false;
     if (!semana.taper && !et.includes('despensa')) return false;

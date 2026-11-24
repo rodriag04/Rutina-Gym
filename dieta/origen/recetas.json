@@ -1,0 +1,1009 @@
+{
+  "bocadillo_pavo": {
+    "time": "3 min",
+    "img": {
+      "scene": "board",
+      "fill": "pavo"
+    },
+    "steps": [
+      "Abre el pan integral por la mitad.",
+      "Reparte las lonchas de pavo por todo el pan.",
+      "Envuélvelo en papel de aluminio la noche antes y guárdalo en la nevera."
+    ],
+    "tip": "Busca uno con un 90 % de carne o más. Los más baratos llevan menos pavo y más relleno."
+  },
+  "bocadillo_lomo": {
+    "time": "3 min",
+    "img": {
+      "scene": "board",
+      "fill": "lomo"
+    },
+    "steps": [
+      "Abre el pan integral por la mitad.",
+      "Reparte 60 g de lomo embuchado (unas 10-12 lonchas finas).",
+      "Envuélvelo en papel de aluminio la noche antes."
+    ],
+    "tip": "El lomo embuchado es de los embutidos con más proteína y menos grasa, pero lleva mucha sal. Una vez por semana está bien."
+  },
+  "bocadillo_pollo": {
+    "time": "3 min",
+    "img": {
+      "scene": "board",
+      "fill": "pollo"
+    },
+    "steps": [
+      "Abre el pan integral por la mitad.",
+      "Reparte las lonchas de pechuga de pollo asada.",
+      "Envuélvelo en papel de aluminio la noche antes y guárdalo en la nevera."
+    ],
+    "tip": "Busca la pechuga asada en lonchas con más del 90 % de carne. Es igual de magra que el pavo y cambia el sabor."
+  },
+  "bocadillo_jamon": {
+    "time": "3 min",
+    "img": {
+      "scene": "board",
+      "fill": "jamon"
+    },
+    "steps": [
+      "Abre el pan integral por la mitad.",
+      "Reparte las lonchas de jamón por todo el pan. Mira el peso en el sobre para no pasarte.",
+      "Envuélvelo en papel de aluminio la noche antes."
+    ],
+    "tip": "Si le untas un poco de tomate triturado por dentro, queda más jugoso y casi no suma calorías."
+  },
+  "platano": {
+    "time": "1 min",
+    "img": {
+      "scene": "banana"
+    },
+    "steps": [
+      "Cómetelo entre 30 y 45 minutos antes de entrenar.",
+      "Si notas pesadez en el gym, prueba con medio."
+    ],
+    "tip": "Si un día no tienes plátano: 40 g de pan con 2 lonchas de pavo, o 3 tortitas de maíz con 1 cucharada rasa de miel."
+  },
+  "desayuno_huevos": {
+    "time": "8 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "huevos",
+          -0.18,
+          -0.1,
+          0.46
+        ],
+        [
+          "tostada",
+          0.42,
+          -0.22,
+          0.28
+        ],
+        [
+          "arandanos",
+          0.32,
+          0.42,
+          0.2
+        ]
+      ]
+    },
+    "steps": [
+      "Saca los arándanos del congelador al levantarte, o dales 40 segundos de micro.",
+      "Bate los 2 huevos con una pizca de sal.",
+      "Sartén antiadherente a fuego medio-bajo con unas gotas de aceite. Echa los huevos y remueve con la espátula sin parar 2 minutos. Apágalo cuando aún estén un poco jugosos.",
+      "Tuesta el pan y sírvelo todo junto."
+    ],
+    "tip": "Desayunando 2 horas antes del gym te da tiempo de sobra a digerir los huevos. El pan es lo que te da energía para entrenar."
+  },
+  "pollo_patata_air": {
+    "time": "20 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "patata",
+          0.36,
+          -0.34,
+          0.34
+        ],
+        [
+          "revuelto",
+          0.36,
+          0.36,
+          0.32
+        ],
+        [
+          "pollo",
+          -0.3,
+          -0.12,
+          0.42,
+          -0.45
+        ],
+        [
+          "pollo",
+          -0.12,
+          0.3,
+          0.36,
+          0.35
+        ]
+      ]
+    },
+    "steps": [
+      "Patatas al micro el tiempo del paquete.",
+      "Aplana un poco la pechuga para que tenga el mismo grosor. Sal, pimienta y la cucharadita de aceite por encima.",
+      "Airfryer precalentada a 180 ºC, 14-18 minutos, dándole la vuelta a mitad. Déjala reposar 3 minutos antes de cortarla.",
+      "Mientras, saltea una ración de verduras.",
+      "De postre, el yogur."
+    ],
+    "tip": "Es la cena de después del gym: proteína y patata para recuperar."
+  },
+  "taper_madre": {
+    "time": "3 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "patata",
+          0.36,
+          -0.34,
+          0.34
+        ],
+        [
+          "revuelto",
+          0.36,
+          0.36,
+          0.32
+        ],
+        [
+          "pollo",
+          -0.3,
+          -0.12,
+          0.42,
+          -0.45
+        ],
+        [
+          "pollo",
+          -0.12,
+          0.3,
+          0.36,
+          0.35
+        ]
+      ]
+    },
+    "steps": [
+      "Saca del táper tu ración: unos 200 g de pollo (como dos palmas de tu mano) y unos 350 g de patata.",
+      "Caliéntalo 2-3 minutos en el micro, removiendo a la mitad.",
+      "Si quieres la patata crujiente, pásala después 5 minutos por la airfryer a 200 ºC."
+    ],
+    "tip": "Las calorías del táper son aproximadas porque no sabemos el aceite que lleva. Lo importante es que las raciones de pollo y patata se parezcan a estas."
+  },
+  "batido_platano": {
+    "time": "2 min",
+    "img": {
+      "scene": "glass",
+      "col": "#E8D7BE",
+      "banana": true
+    },
+    "steps": [
+      "Echa 300 ml de agua fría en el shaker.",
+      "Añade el cacito de proteína (30 g) y agita 20 segundos.",
+      "Tómate el plátano y las nueces al lado."
+    ],
+    "tip": "Es tu comida de después del gym: tómatela en cuanto llegues a casa."
+  },
+  "batido_arandanos": {
+    "time": "3 min",
+    "img": {
+      "scene": "glass",
+      "col": "#8C5B9A"
+    },
+    "steps": [
+      "Echa en la batidora 250 ml de agua fría, el cacito de proteína (30 g) y los 100 g de arándanos congelados.",
+      "Bate 30 segundos, hasta que no queden trozos.",
+      "Las nueces, aparte."
+    ],
+    "tip": "Si no tienes batidora, toma el batido en el shaker y los arándanos aparte. Aporta lo mismo."
+  },
+  "batido_platano_arandanos": {
+    "time": "3 min",
+    "img": {
+      "scene": "glass",
+      "col": "#A77AA8",
+      "banana": true
+    },
+    "steps": [
+      "Echa en la batidora 250 ml de agua fría, el cacito de proteína (30 g), el plátano y los 100 g de arándanos congelados.",
+      "Bate 30 segundos.",
+      "Las nueces, aparte."
+    ],
+    "tip": "El plátano le da cuerpo y lo endulza. Es el batido del día de brazos, el que más hidratos lleva."
+  },
+  "yogur_arandanos": {
+    "time": "2 min",
+    "img": {
+      "scene": "bowl",
+      "top": "berry"
+    },
+    "steps": [
+      "Saca los arándanos del congelador la noche antes y déjalos en la nevera. Si se te olvida, 40 segundos en el micro.",
+      "Echa los 2 yogures en un bol, pon los arándanos encima y las nueces troceadas."
+    ],
+    "tip": "Échale canela por encima. Da sabor dulce sin azúcar."
+  },
+  "yogur_platano": {
+    "time": "2 min",
+    "img": {
+      "scene": "bowl",
+      "top": "banana"
+    },
+    "steps": [
+      "Echa los 2 yogures en un bol.",
+      "Corta el plátano en rodajas, ponlo encima y añade las nueces troceadas."
+    ],
+    "tip": "Con un poco de canela parece un postre."
+  },
+  "solomillo_arroz": {
+    "time": "20 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "arroz",
+          0.36,
+          -0.26,
+          0.36
+        ],
+        [
+          "revuelto",
+          0.36,
+          0.38,
+          0.3
+        ],
+        [
+          "medallones",
+          -0.28,
+          0,
+          0.46
+        ]
+      ]
+    },
+    "steps": [
+      "Al llegar de la compra, corta el solomillo por la mitad. Una mitad al congelador para el jueves.",
+      "Corta la otra mitad en medallones de 2-3 cm. Sécalos, échales sal y pimienta y píntalos con la cucharadita de aceite.",
+      "Precalienta la airfryer 3 minutos a 200 ºC. Medallones en una sola capa, 8-10 minutos, dándoles la vuelta a mitad.",
+      "Mientras, calienta los 2 vasitos de arroz en el micro y una ración de verduras.",
+      "Deja reposar la carne 3 minutos antes de cortarla. De postre, el yogur."
+    ],
+    "tip": "El solomillo de cerdo es tan magro como la pechuga de pollo. Si por dentro queda un poco rosado, está en su punto (63 ºC) y no se seca."
+  },
+  "bolonesa": {
+    "time": "20 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "bolo",
+          0,
+          0.02,
+          0.72
+        ]
+      ]
+    },
+    "steps": [
+      "La carne picada es la que sacaste del congelador el domingo por la noche.",
+      "Pon agua a hervir con sal y cuece los 110 g de pasta el tiempo del paquete.",
+      "En una sartén sin aceite, dora la carne picada 5 minutos deshaciéndola con la cuchara. Si suelta mucha grasa, quítala con papel de cocina.",
+      "Añade las verduras y el tomate triturado, con sal, pimienta y orégano. 5 minutos a fuego bajo.",
+      "Escurre la pasta y mézclala con la salsa en la misma sartén."
+    ],
+    "tip": "Si el tomate queda ácido: 5 minutos más a fuego bajo. Si sigue ácido, una pizca de bicarbonato (lo que cabe en la punta de un cuchillo)."
+  },
+  "salmon_patata": {
+    "time": "15 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "patata",
+          0.34,
+          -0.34,
+          0.34
+        ],
+        [
+          "revuelto",
+          0.34,
+          0.38,
+          0.32
+        ],
+        [
+          "salmon",
+          -0.3,
+          0.02,
+          0.38,
+          0.2
+        ]
+      ]
+    },
+    "steps": [
+      "Patatas al micro el tiempo del paquete.",
+      "Seca el salmón y échale sal. Sin aceite: ya tiene su grasa.",
+      "Airfryer precalentada a 180 ºC, 9-11 minutos, con la piel hacia abajo y sin darle la vuelta.",
+      "Saltea las verduras y emplata. De postre, el yogur."
+    ],
+    "tip": "Lo compraste ayer, así que va directo de la nevera. Está hecho cuando se separa en láminas con el tenedor."
+  },
+  "bowl_salmon": {
+    "time": "15 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "arroz",
+          0.34,
+          -0.22,
+          0.38
+        ],
+        [
+          "revuelto",
+          0.3,
+          0.4,
+          0.3
+        ],
+        [
+          "salmon",
+          -0.3,
+          0.02,
+          0.38,
+          -0.2
+        ]
+      ]
+    },
+    "steps": [
+      "El martes por la noche, pasa el salmón del congelador a la nevera.",
+      "Sécalo, échale sal y ponlo con la piel hacia abajo. Airfryer precalentada a 180 ºC, 9-11 minutos, sin darle la vuelta.",
+      "Calienta el vasito de arroz y saltea las verduras.",
+      "Monta el bol: arroz, verduras, el salmón en trozos y un chorrito de soja por encima.",
+      "De postre, la onza de chocolate."
+    ],
+    "tip": "Está hecho cuando se separa en láminas al apretarlo con el tenedor. Si te pasas de tiempo, queda seco."
+  },
+  "huevos_revuelto": {
+    "time": "8 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "huevos",
+          -0.14,
+          0,
+          0.52
+        ],
+        [
+          "tostada",
+          0.5,
+          -0.05,
+          0.3
+        ]
+      ]
+    },
+    "steps": [
+      "Calienta en una sartén la ración de verduras con la cucharadita de aceite, 2 minutos.",
+      "Bate los 3 huevos con una pizca de sal y échalos encima.",
+      "A fuego medio-bajo, remueve con la espátula sin parar 2-3 minutos. Apágalo cuando aún esté un poco jugoso: termina de cuajarse solo.",
+      "Tuesta el pan y sírvelo al lado. De postre, el yogur."
+    ],
+    "tip": "Es la forma más fácil de hacer huevos: no hay que darles la vuelta ni que queden bonitos."
+  },
+  "gnocchi_atun": {
+    "time": "12 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "gnocchi",
+          0,
+          0.02,
+          0.72
+        ],
+        [
+          "atun",
+          0.04,
+          0,
+          0.42
+        ]
+      ]
+    },
+    "steps": [
+      "Mira el paquete: si los gnocchi se pueden hacer en sartén, échalos directamente. Si no, hiérvelos hasta que floten (unos 2 minutos) y escúrrelos.",
+      "Sartén con la cucharada de aceite a fuego medio-alto. Dora los gnocchi 4-5 minutos, moviéndolos.",
+      "Añade las verduras y el tomate triturado. 2 minutos más.",
+      "Apaga el fuego, echa el atún escurrido y mézclalo sin romperlo mucho."
+    ],
+    "tip": "El atún va al final y con el fuego apagado. Si lo cocinas, se seca."
+  },
+  "solomillo_patata": {
+    "time": "15 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "patata",
+          0.36,
+          -0.3,
+          0.34
+        ],
+        [
+          "revuelto",
+          0.36,
+          0.38,
+          0.3
+        ],
+        [
+          "medallones",
+          -0.28,
+          0,
+          0.46
+        ]
+      ]
+    },
+    "steps": [
+      "El martes por la noche, pasa la mitad del solomillo del congelador a la nevera.",
+      "Patatas al micro el tiempo del paquete.",
+      "Medallones de 2-3 cm con sal, pimentón, ajo en polvo y la cucharadita de aceite. Airfryer a 200 ºC, 8-10 minutos, vuelta a mitad. Mete las patatas al lado los últimos 5 minutos para que se tuesten.",
+      "Saltea las verduras y emplata. De postre, el yogur."
+    ],
+    "tip": "El pimentón y el ajo en polvo le dan mucho sabor sin sumar calorías. Si por dentro queda un poco rosado, está en su punto."
+  },
+  "burger_pan": {
+    "time": "15 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "revuelto",
+          -0.2,
+          -0.04,
+          0.52
+        ],
+        [
+          "bun",
+          -0.2,
+          -0.04,
+          0.44
+        ],
+        [
+          "patata",
+          0.42,
+          0.14,
+          0.28
+        ]
+      ]
+    },
+    "steps": [
+      "El jueves por la noche, pasa la carne picada del congelador a la nevera.",
+      "Patatas al micro el tiempo del paquete.",
+      "Sal y pimienta a la carne y haz una hamburguesa de 1,5 cm de grosor, un poco más ancha que el pan. Hazle un hoyo con el pulgar en el centro.",
+      "Airfryer precalentada a 190 ºC: 10-12 minutos, vuelta a mitad. Mete las patatas al lado los últimos 5 minutos.",
+      "Tuesta el pan 1 minuto y monta: pan, hamburguesa, las verduras calientes encima y el cottage como salsa."
+    ],
+    "tip": "El hoyo del centro evita que se hinche como una pelota y hace que se cocine igual por todas partes."
+  },
+  "lubina_arroz": {
+    "time": "12 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "arroz",
+          0.36,
+          -0.26,
+          0.36
+        ],
+        [
+          "revuelto",
+          0.36,
+          0.38,
+          0.3
+        ],
+        [
+          "lubina",
+          -0.3,
+          0.02,
+          0.4,
+          -0.25
+        ]
+      ]
+    },
+    "steps": [
+      "La noche anterior, pasa la lubina del congelador a la nevera.",
+      "Sécala bien, échale sal y una cucharadita de aceite por encima.",
+      "Airfryer precalentada a 180 ºC, 8-10 minutos, con la piel hacia abajo sobre un papel recortado a su tamaño. Sin darle la vuelta.",
+      "Calienta el arroz y saltea las verduras. Échale al pescado unas gotas de limón y la otra cucharadita de aceite en crudo.",
+      "De postre, el yogur."
+    ],
+    "tip": "El papel, solo debajo y recortado. Si sube por las paredes, corta el aire y el pescado no se dora."
+  },
+  "huevos_patatas": {
+    "time": "12 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "patata",
+          0.3,
+          -0.34,
+          0.3
+        ],
+        [
+          "huevos",
+          -0.18,
+          0.06,
+          0.46
+        ],
+        [
+          "tostada",
+          0.46,
+          0.3,
+          0.24
+        ]
+      ]
+    },
+    "steps": [
+      "Patatas al micro el tiempo del paquete. Córtalas en trozos.",
+      "Sartén a fuego medio con la cucharadita de aceite. Echa las patatas y la ración de verduras y dóralas 3 minutos.",
+      "Bate los 3 huevos con una pizca de sal, échalos encima y remueve con la espátula 2-3 minutos. Apágalo cuando aún esté un poco jugoso.",
+      "Sírvelo con el pan. De postre, el yogur, y bebe medio litro de agua con la cena."
+    ],
+    "tip": "Después de entrenar o de jugar al fútbol, el músculo necesita hidratos para recargarse. Por eso lleva patata además del pan."
+  },
+  "bocadillo_casa": {
+    "time": "3 min",
+    "img": {
+      "scene": "board",
+      "fill": "jamon"
+    },
+    "steps": [
+      "Usa el pan y el embutido que tengas en casa o que te traigas de Cabra: pavo, jamón o lomo.",
+      "Unos 80 g de pan y, de embutido, 100 g si es pavo, 80 g si es jamón o 60 g si es lomo.",
+      "Hazlo el domingo por la noche y guárdalo en la nevera envuelto en papel de aluminio."
+    ],
+    "tip": "Si no tienes nada en casa, cómprate un bocadillo de pavo o de jamón en la cafetería. Es lo más parecido."
+  },
+  "salmon_teriyaki": {
+    "time": "15 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "arroz",
+          0.34,
+          -0.24,
+          0.38
+        ],
+        [
+          "revuelto",
+          0.32,
+          0.4,
+          0.3
+        ],
+        [
+          "salmon",
+          -0.3,
+          0.02,
+          0.38,
+          -0.2
+        ]
+      ]
+    },
+    "steps": [
+      "Mezcla 1 cucharada de salsa de soja con 1 cucharadita de miel.",
+      "Seca el salmón y píntalo con la mezcla.",
+      "Airfryer precalentada a 180 ºC, 9-11 minutos, con la piel hacia abajo y sin darle la vuelta. A mitad, píntalo otra vez con lo que sobre.",
+      "Calienta los 2 vasitos de arroz y saltea una ración de verduras.",
+      "De postre, el yogur."
+    ],
+    "tip": "La miel con la soja se carameliza por fuera. Una cucharadita son unas 20 kcal: no cambia nada en tu dieta."
+  },
+  "macarrones_atun": {
+    "time": "20 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "bolo",
+          0,
+          0.02,
+          0.72
+        ],
+        [
+          "atun",
+          0.04,
+          0,
+          0.4
+        ]
+      ]
+    },
+    "steps": [
+      "Cuece los macarrones en agua con sal el tiempo del paquete.",
+      "Mientras, saltea en una sartén las verduras con el tomate triturado, 3 minutos, con sal y orégano.",
+      "Escurre la pasta, échala a la sartén, apaga el fuego y añade el atún escurrido.",
+      "Pásalo a un recipiente que quepa en la airfryer, echa la mozzarella por encima y gratina 4-5 minutos a 200 ºC."
+    ],
+    "tip": "Si no tienes recipiente para la airfryer, echa la mozzarella en la sartén, tápala y espera 1 minuto a que se funda."
+  },
+  "pollo_curry": {
+    "time": "15 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "arroz",
+          0.36,
+          0,
+          0.4
+        ],
+        [
+          "curry",
+          -0.28,
+          0,
+          0.46
+        ]
+      ]
+    },
+    "steps": [
+      "El miércoles por la noche, pasa el pollo del congelador a la nevera.",
+      "Corta el pollo en dados y échale sal.",
+      "Sartén a fuego alto con la cucharada de aceite. Dora el pollo 5 minutos.",
+      "Añade las verduras y 1 cucharadita de curry en polvo. Remueve 1 minuto.",
+      "Baja el fuego, añade el cottage y un chorrito de agua. Remueve 2 minutos hasta que quede una salsa cremosa.",
+      "Calienta los 2 vasitos de arroz y sirve el curry al lado."
+    ],
+    "tip": "El cottage hace de nata, pero con mucha más proteína y menos grasa."
+  },
+  "pizza_wrap": {
+    "time": "12 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "pizza",
+          0,
+          0,
+          0.8
+        ]
+      ]
+    },
+    "steps": [
+      "Precalienta la airfryer a 200 ºC.",
+      "Pon cada tortilla sobre un papel de horno recortado a su tamaño y extiende el tomate, dejando un borde.",
+      "Reparte las verduras, el pavo en tiras y la mozzarella.",
+      "Airfryer 6-8 minutos, hasta que se funda el queso y el borde quede crujiente. Si no caben las dos, hazlas en dos tandas."
+    ],
+    "tip": "Si la tortilla se infla, pínchala un par de veces con un tenedor antes de meterla."
+  },
+  "solomillo_patata2": {
+    "time": "15 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "patata",
+          0.36,
+          -0.3,
+          0.34
+        ],
+        [
+          "revuelto",
+          0.36,
+          0.38,
+          0.3
+        ],
+        [
+          "medallones",
+          -0.28,
+          0,
+          0.46
+        ]
+      ]
+    },
+    "steps": [
+      "El jueves por la noche, pasa la otra mitad del solomillo del congelador a la nevera.",
+      "Patatas al micro el tiempo del paquete.",
+      "Medallones de 2-3 cm con sal, pimentón, ajo en polvo y la cucharadita de aceite. Airfryer a 200 ºC, 8-10 minutos, vuelta a mitad. Mete las patatas al lado los últimos 5 minutos para que se tuesten.",
+      "Saltea las verduras y emplata."
+    ],
+    "tip": "Comida con poca grasa y mucha patata 90 minutos antes del gym: llegas con energía y sin pesadez."
+  },
+  "albondigas": {
+    "time": "25 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "arroz",
+          0.36,
+          -0.24,
+          0.36
+        ],
+        [
+          "albondigas",
+          -0.22,
+          0.06,
+          0.5
+        ]
+      ]
+    },
+    "steps": [
+      "La carne picada es la que tienes congelada: pásala a la nevera el domingo por la noche.",
+      "Mézclala con sal, pimienta, ajo en polvo y la cucharada de pan rallado. Haz 8-10 bolitas.",
+      "Airfryer precalentada a 190 ºC, 8-10 minutos, agitando la cesta a mitad.",
+      "Mientras, calienta en una sartén el tomate triturado con una ración de verduras, 5 minutos, con sal y orégano.",
+      "Echa las albóndigas a la salsa 2 minutos y sírvelas con los 2 vasitos de arroz. De postre, el yogur."
+    ],
+    "tip": "En la airfryer no hace falta freírlas: sueltan su grasa y quedan doradas por fuera."
+  },
+  "gnocchi_salmon": {
+    "time": "15 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "gnocchiSalmon",
+          0,
+          0.02,
+          0.72
+        ]
+      ]
+    },
+    "steps": [
+      "Corta el salmón en dados y échale sal y pimienta. Airfryer a 180 ºC, 7-8 minutos.",
+      "Mientras, sartén con la cucharadita de aceite a fuego medio-alto. Dora los gnocchi 4-5 minutos. Si el paquete dice que hay que hervirlos, hiérvelos antes 2 minutos.",
+      "Añade las verduras, el cottage, un chorrito de agua y unas gotas de limón. Remueve 1 minuto hasta que quede cremoso.",
+      "Mezcla con el salmón y listo."
+    ],
+    "tip": "El cottage con limón hace de salsa cremosa sin nata. El salmón lo compraste ayer, así que va directo de la nevera."
+  },
+  "lomo_arroz": {
+    "time": "12 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "arroz",
+          0.36,
+          -0.26,
+          0.36
+        ],
+        [
+          "revuelto",
+          0.36,
+          0.38,
+          0.3
+        ],
+        [
+          "pollo",
+          -0.3,
+          -0.1,
+          0.4,
+          -0.4
+        ],
+        [
+          "pollo",
+          -0.12,
+          0.3,
+          0.32,
+          0.3
+        ]
+      ]
+    },
+    "steps": [
+      "El martes por la noche, pasa los filetes de lomo del congelador a la nevera.",
+      "Sécalos y échales sal, pimentón y la cucharadita de aceite.",
+      "Airfryer precalentada a 200 ºC, 6-8 minutos, dándoles la vuelta a mitad.",
+      "Calienta el vasito de arroz y saltea las verduras. De postre, la onza de chocolate."
+    ],
+    "tip": "La cinta de lomo es de lo más magro del cerdo. Si te pasas de tiempo queda seca: mejor un poco rosada por dentro."
+  },
+  "huevos_rotos": {
+    "time": "15 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "patata",
+          0,
+          0,
+          0.62
+        ],
+        [
+          "huevosRotos",
+          0,
+          0,
+          0.5
+        ]
+      ]
+    },
+    "steps": [
+      "Patatas al micro el tiempo del paquete. Córtalas en trozos y pásalas 8 minutos por la airfryer a 200 ºC con sal y pimentón, para que se tuesten.",
+      "Mientras, saltea las verduras en una sartén.",
+      "Haz los 2 huevos en la misma sartén con la cucharadita de aceite, a fuego medio, hasta que cuaje la clara y la yema siga líquida.",
+      "Pon las patatas con las verduras, los huevos encima y el jamón en trozos. Rompe las yemas y mézclalo todo. De postre, el yogur."
+    ],
+    "tip": "Es la versión ligera de los huevos rotos: patata en la airfryer en vez de frita. Si juegas al fútbol, añade 150 g más de patata."
+  },
+  "kebab": {
+    "time": "20 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "patata",
+          0.4,
+          0.22,
+          0.28
+        ],
+        [
+          "tortilla",
+          -0.12,
+          -0.05,
+          0.5,
+          0
+        ],
+        [
+          "tiras",
+          -0.12,
+          0.12,
+          0.3
+        ]
+      ]
+    },
+    "steps": [
+      "El miércoles por la noche, pasa el pollo y la lubina del congelador a la nevera.",
+      "Corta el pollo en tiras y mézclalo con sal, comino, pimentón, ajo en polvo, orégano y la cucharadita de aceite.",
+      "Patatas al micro y córtalas en gajos. Mételas en la airfryer a 200 ºC con el pollo, 10-12 minutos, agitando a mitad.",
+      "Salsa: un yogur natural con ajo en polvo, sal y unas gotas de limón.",
+      "Calienta las pitas 1 minuto, ábrelas y rellénalas con el pollo, las verduras y la salsa. Las patatas, al lado."
+    ],
+    "tip": "La salsa de yogur sustituye a la salsa blanca del kebab: tiene la mitad de grasa y más proteína."
+  },
+  "burrito_ternera": {
+    "time": "12 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "fajita",
+          -0.04,
+          -0.22,
+          0.52,
+          -0.1
+        ],
+        [
+          "fajita",
+          0,
+          0.24,
+          0.52,
+          -0.1
+        ],
+        [
+          "cottage",
+          0.58,
+          0,
+          0.16
+        ]
+      ]
+    },
+    "steps": [
+      "La carne es la otra mitad de la que sacaste del congelador el domingo por la noche.",
+      "Echa la carne en una sartén sin aceite a fuego medio-alto. Deshazla con la cuchara y añade sal, comino y pimentón.",
+      "Cuando esté dorada (5 minutos), quita la grasa que haya soltado con papel de cocina.",
+      "Añade las verduras y mezcla 2 minutos.",
+      "Calienta las tortillas 20 segundos por cada lado en otra sartén sin aceite, rellénalas, pon el cottage encima como si fuera nata agria y enróllalas."
+    ],
+    "tip": "El comino es lo que le da el sabor a burrito mexicano."
+  },
+  "patatas_atun": {
+    "time": "10 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "patata",
+          0,
+          0,
+          0.66
+        ],
+        [
+          "revueltoS",
+          0,
+          0,
+          0.55
+        ],
+        [
+          "atun",
+          0,
+          0,
+          0.45
+        ],
+        [
+          "cottage",
+          0.1,
+          -0.1,
+          0.16
+        ]
+      ]
+    },
+    "steps": [
+      "Patatas al micro el tiempo del paquete. Córtalas por la mitad.",
+      "Saltea las verduras.",
+      "En el plato, mezcla las patatas con las verduras y el atún bien escurrido.",
+      "Pon el cottage encima, echa la cucharada de aceite en crudo, sal, pimienta y orégano.",
+      "De postre, el yogur."
+    ],
+    "tip": "Todo es de despensa: si al final cenas en Cabra, no se te estropea nada."
+  },
+  "fajitas": {
+    "time": "15 min",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "fajita",
+          -0.06,
+          -0.24,
+          0.5,
+          -0.12
+        ],
+        [
+          "fajita",
+          -0.02,
+          0.22,
+          0.5,
+          -0.12
+        ],
+        [
+          "cottage",
+          0.56,
+          0.02,
+          0.17
+        ]
+      ]
+    },
+    "steps": [
+      "El jueves por la noche, pasa el pollo del congelador a la nevera.",
+      "Corta el pollo en tiras finas y échale sal, pimentón y una pizca de comino.",
+      "Sartén a fuego alto con la cucharadita de aceite. Haz las tiras 5-6 minutos, moviéndolas, hasta que se doren.",
+      "Añade las verduras y saltéalo 2 minutos con el pollo.",
+      "Calienta las tortillas 20 segundos por cada lado en una sartén sin aceite, rellénalas, reparte el cottage y enróllalas."
+    ],
+    "tip": "El cottage hace de salsa fresca. Con un poco de pimienta o pimentón por encima gana sabor."
+  },
+  "revuelto": {
+    "time": "10 min",
+    "title": "Verduras de la bolsa congelada",
+    "kind": "1 ración = 200 g",
+    "img": {
+      "scene": "plate",
+      "items": [
+        [
+          "revuelto",
+          0,
+          0.02,
+          0.74
+        ]
+      ]
+    },
+    "ing": [
+      "200 g de verdura congelada, sin descongelar",
+      "1 cucharadita de aceite de oliva",
+      "Sal"
+    ],
+    "steps": [
+      "Sartén a fuego medio-alto con la cucharadita de aceite.",
+      "Echa la verdura directamente congelada.",
+      "Saltéala 8-10 minutos, removiendo de vez en cuando, hasta que se evapore el agua y empiece a dorarse. La sal, al final.",
+      "Si quieres ahorrar tiempo, haz 3 o 4 raciones de golpe y guárdalas en tápers: aguantan 3 días en la nevera."
+    ],
+    "tip": "Si la descongelas antes, suelta agua y queda cocida en vez de salteada. Calcula 200 g por ración: para toda la semana necesitas unos 2 kg."
+  }
+}

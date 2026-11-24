@@ -419,7 +419,7 @@ function Tostada(cx: number, cy: number, rot = 0, w = 54, h = 46): El {
   );
 }
 
-function Bocadillo(cx: number, cy: number, relleno: 'pavo' | 'jamon' | 'lomo'): El {
+function Bocadillo(cx: number, cy: number, relleno: 'pavo' | 'jamon' | 'lomo' | 'pollo'): El {
   const cara = (
     <g>
       <rect x="-68" y="-19" width="136" height="38" rx="19" fill={C.panOsc} />
@@ -435,6 +435,13 @@ function Bocadillo(cx: number, cy: number, relleno: 'pavo' | 'jamon' | 'lomo'): 
       {relleno === 'pavo' &&
         [-42, -18, 6, 30].map((x, k) => (
           <rect x={x - 15} y={-12 + (k % 2) * 2} width="30" height="22" rx="7" fill={C.pavo} stroke={C.pavoOsc} stroke-width="1.6" transform={`rotate(${k % 2 ? 6 : -5} ${x} 0)`} />
+        ))}
+      {relleno === 'pollo' &&
+        [-42, -18, 6, 30].map((x, k) => (
+          <g transform={`rotate(${k % 2 ? 7 : -5} ${x} 0)`}>
+            <rect x={x - 15} y={-12} width="30" height="22" rx="8" fill="#F1DDB8" stroke="#D2AE78" stroke-width="1.6" />
+            <path d={`M${x - 15} -9 q 15 -5 30 0`} stroke="#C99556" stroke-width="3" fill="none" stroke-linecap="round" />
+          </g>
         ))}
       {relleno === 'lomo' &&
         [-46, -26, -6, 14, 34].map((x) => (
@@ -947,9 +954,223 @@ const DIBUJOS: Record<string, (r: R) => El> = {
   )
 };
 
+function Rollo(cx: number, cy: number, rot: number, relleno: string[]): El {
+  return (
+    <g transform={`translate(${cx} ${cy}) rotate(${rot})`}>
+      <rect x="-38" y="-17" width="76" height="34" rx="17" fill={C.tortillaOsc} />
+      <rect x="-36" y="-16" width="72" height="31" rx="15.5" fill={C.tortilla} />
+      <path d="M-30 -6 q 30 -10 60 0" stroke={C.tortillaOsc} stroke-width="1.6" fill="none" opacity="0.7" />
+      <ellipse cx="33" cy="0" rx="9" ry="14" fill="#F4E7CE" />
+      {relleno.map((c, k) => (
+        <circle cx={31 + (k % 2) * 4} cy={-8 + k * 4.5} r="3" fill={c} />
+      ))}
+      {[-22, -8, 6].map((k) => (
+        <ellipse cx={k} cy={5} rx="3.6" ry="2.2" fill={C.tortillaOsc} opacity="0.55" />
+      ))}
+    </g>
+  );
+}
+
+function SalsaBlanca(r: R, cx: number, cy: number, rad: number): El {
+  return Salsa(r, cx, cy, rad, '#F6F0E2', '#FFFFFF');
+}
+
+const NUEVOS: Record<string, (r: R) => El> = {
+  'bocadillo-pollo': () => <g>{Tabla(14, 40, 172, 124)}{Bocadillo(100, 102, 'pollo')}</g>,
+  'desayuno-huevos': (r) => (
+    <g>
+      {Plato()}
+      {Tostada(72, 112, -10)}
+      {Revuelto(r, 118, 88, 24)}
+      {Tiras(r, 118, 90, 18, 3, C.pavo, C.pavoOsc)}
+      {Cuenquito(132, 136, 16, '#3F4C8E')}
+      {Arandanos(r, 132, 136, 9, 6)}
+    </g>
+  ),
+  'pollo-patata': (r) => (
+    <g>
+      {Plato()}
+      {Verduras(r, 72, 122, 24, 10)}
+      {Patatas(r, 130, 126, 22, 4)}
+      {FiletePollo(r, 98, 80, -8, 5)}
+      {Hierbas(r, 98, 80, 20, 4)}
+    </g>
+  ),
+  'solomillo-arroz': (r) => (
+    <g>
+      {Plato()}
+      {Arroz(r, 72, 112, 28)}
+      {Verduras(r, 126, 128, 20, 8)}
+      {Medallones(r, 116, 82, 22, 4)}
+      {Hierbas(r, 72, 112, 22, 4)}
+    </g>
+  ),
+  'lomo-arroz': (r) => (
+    <g>
+      {Plato()}
+      {Arroz(r, 128, 118, 26)}
+      {Verduras(r, 72, 126, 20, 8)}
+      {FiletesLomo(92, 82, -12)}
+      {Hierbas(r, 128, 118, 20, 4)}
+    </g>
+  ),
+  'lubina-arroz': (r) => (
+    <g>
+      {Plato()}
+      {Arroz(r, 74, 124, 24)}
+      {Verduras(r, 128, 128, 20, 8)}
+      {Lubina(100, 80, -8)}
+      {Hierbas(r, 100, 80, 20, 4)}
+      <path d="M148 98 a 10 10 0 0 1 0 18 z" fill="#F2E46B" stroke="#E0CC3F" stroke-width="1.5" />
+    </g>
+  ),
+  'salmon-teriyaki': (r) => (
+    <g>
+      {Plato()}
+      {Arroz(r, 74, 122, 26)}
+      {Verduras(r, 130, 128, 18, 7)}
+      <g opacity="0.9">{Salmon(104, 80, -10, 1)}</g>
+      <path d="M78 70 C 92 62 116 62 130 70" stroke="#7A3A16" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.55" />
+      <path d="M80 86 C 96 80 116 80 128 88" stroke="#8E4A1E" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.45" />
+      {girasol(r, 104, 80, 20, 10).map((p) => (
+        <ellipse cx={p.x} cy={p.y} rx="1.6" ry="0.9" fill="#F6EBD2" transform={`rotate(${p.a} ${p.x} ${p.y})`} />
+      ))}
+    </g>
+  ),
+  'gnocchi-salmon': (r) => (
+    <g>
+      {Plato()}
+      {SalsaBlanca(r, 100, 100, 50)}
+      {girasol(r, 100, 100, 42, 16).map((p) => (
+        <g transform={`rotate(${p.a} ${p.x} ${p.y})`}>
+          <ellipse cx={p.x} cy={p.y + 1.2} rx="7.6" ry="5.6" fill="#D9B070" />
+          <ellipse cx={p.x} cy={p.y} rx="7.2" ry="5.2" fill="#F2D9A0" />
+        </g>
+      ))}
+      {Dados(r, 100, 100, 34, 8, C.salmon, C.salmonOsc, 11)}
+      {Verduras(r, 100, 100, 38, 6)}
+      {Hierbas(r, 100, 100, 44, 10)}
+      <path d="M146 62 a 11 11 0 0 1 0 20 z" fill="#F2E46B" stroke="#E0CC3F" stroke-width="1.5" />
+    </g>
+  ),
+  'gnocchi-atun': (r) => (
+    <g>
+      {Plato()}
+      {Salsa(r, 100, 100, 50, C.tomate, C.tomateLuz)}
+      {girasol(r, 100, 100, 44, 18).map((p) => (
+        <g transform={`rotate(${p.a} ${p.x} ${p.y})`}>
+          <ellipse cx={p.x} cy={p.y + 1.2} rx="7.6" ry="5.6" fill="#D39A50" />
+          <ellipse cx={p.x} cy={p.y} rx="7.2" ry="5.2" fill="#EFC77E" />
+        </g>
+      ))}
+      {Migas(r, 100, 100, 30, 14, '#D9B9A1', '#EBD3C2', 3.6)}
+      {Verduras(r, 100, 100, 36, 6)}
+      {Hierbas(r, 100, 100, 44, 8)}
+    </g>
+  ),
+  macarrones: (r) => (
+    <g>
+      {Plato()}
+      {Pasta(r, 100, 100, 50, 24)}
+      {Salsa(r, 100, 100, 26, C.tomate, C.tomateLuz)}
+      {Migas(r, 100, 100, 24, 10, '#D9B9A1', '#EBD3C2', 3.4)}
+      {Queso(r, 100, 100, 40, 12)}
+      {Hierbas(r, 100, 100, 46, 9)}
+    </g>
+  ),
+  kebab: (r) => (
+    <g>
+      {Plato()}
+      {[
+        [80, 92, -28],
+        [116, 108, 18]
+      ].map(([x, y, a]) => (
+        <g transform={`translate(${x} ${y}) rotate(${a})`}>
+          <path d="M-34 8 A 34 34 0 0 1 34 8 Z" fill={C.tortillaOsc} />
+          <path d="M-31 8 A 31 31 0 0 1 31 8 Z" fill="#EBCB93" />
+          <path d="M-30 8 Q 0 -6 30 8 Q 0 18 -30 8 Z" fill="#FFFFFF" />
+          {[-20, -9, 2, 13, 22].map((k, i) => (
+            <rect x={k - 4} y={1} width="9" height="6" rx="3" fill={[C.pollo, C.pimRojo, '#D99A55', C.pimVerde, C.pollo][i]} />
+          ))}
+        </g>
+      ))}
+      {Gajos(r, 136, 146, 14, 3)}
+      {Cuenquito(150, 62, 13, '#FFFFFF')}
+      {Hierbas(r, 150, 62, 6, 3)}
+    </g>
+  ),
+  'burrito-ternera': (r) => (
+    <g>
+      {Plato()}
+      {Rollo(84, 84, -24, [C.carne, C.pimRojo, C.carneLuz, '#FFFFFF'])}
+      {Rollo(118, 118, -24, [C.carneLuz, C.pimVerde, C.carne, '#FFFFFF'])}
+      {Hierbas(r, 100, 100, 50, 6)}
+    </g>
+  ),
+  fajitas: (r) => (
+    <g>
+      {Plato()}
+      {Rollo(80, 82, 14, [C.pollo, C.pimRojo, C.pimVerde, '#FFFFFF'])}
+      {Rollo(98, 112, 14, [C.polloOsc, C.zanahoria, C.pollo, '#FFFFFF'])}
+      {Tiras(r, 136, 140, 12, 3, '#E1A564', '#B97A3E')}
+      {Hierbas(r, 100, 100, 50, 6)}
+    </g>
+  ),
+  'patatas-atun': (r) => (
+    <g>
+      {Plato()}
+      {Verduras(r, 100, 100, 46, 12)}
+      {Patatas(r, 100, 100, 40, 6)}
+      {Migas(r, 104, 96, 26, 12, '#D9B9A1', '#EBD3C2', 4)}
+      <ellipse cx="102" cy="96" rx="14" ry="9" fill="#FFFFFF" />
+      <ellipse cx="98" cy="93" rx="5" ry="3" fill="#F3EEE2" />
+      {Hierbas(r, 100, 100, 44, 10)}
+    </g>
+  ),
+  'huevos-revuelto': (r) => (
+    <g>
+      {Plato()}
+      {Revuelto(r, 90, 98, 34)}
+      {Verduras(r, 90, 98, 32, 10)}
+      {Tostada(142, 120, 14, 40, 52)}
+    </g>
+  ),
+  'huevos-patatas': (r) => (
+    <g>
+      {Plato()}
+      {Patatas(r, 100, 100, 40, 6)}
+      {Revuelto(r, 100, 100, 30)}
+      {Verduras(r, 100, 100, 36, 8)}
+      {Tostada(146, 66, 20, 30, 36)}
+    </g>
+  ),
+  'batido-mix': (r) => (
+    <g>
+      {Vaso(80, 96, '#A77AA8', '#D9C2DD')}
+      {Platano(140, 142, -40, 0.6)}
+      {Arandanos(r, 148, 70, 16, 9)}
+    </g>
+  ),
+  'yogur-platano': (r) => (
+    <g>
+      {Cuenco(100, 100, 76)}
+      <circle cx="100" cy="100" r="60" fill={C.yogur} />
+      <path d="M70 92 q 30 -22 60 0 q -30 26 -60 0" fill="none" stroke="#ECE8DD" stroke-width="3" />
+      {Rodajas(r, 92, 92, 28, 9)}
+      {Nueces(r, 118, 122, 16, 5)}
+    </g>
+  ),
+  verduras: (r) => (
+    <g>
+      {Plato()}
+      {Verduras(r, 100, 100, 54, 34)}
+    </g>
+  )
+};
+
 export function Ilustracion({ dibujo, fondo, titulo }: { dibujo: string; fondo: string; titulo?: string }) {
   const r = rng(hash(dibujo));
-  const pintar = DIBUJOS[dibujo];
+  const pintar = NUEVOS[dibujo] ?? DIBUJOS[dibujo];
   return (
     <svg viewBox="0 0 200 200" role="img" aria-label={titulo ?? dibujo} preserveAspectRatio="xMidYMid slice">
       <rect width="200" height="200" fill={fondo} />

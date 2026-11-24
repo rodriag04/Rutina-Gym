@@ -21,6 +21,7 @@ import { interpretar } from '../lib/notas';
 import { calcularDia, type ComidaDia, type DiaCalculado } from '../lib/plan';
 import { abrir, avisar, fmt } from '../lib/ui';
 import { cfgDia } from '../lib/generador';
+import { porQue, resumenCantidades } from '../lib/explicar';
 import { Finde } from './Finde';
 
 const ICONO_TAREA = { compra: ICompra, congelar: ICopo, descongelar: INevera, pesar: IBascula, medidas: IBascula } as const;
@@ -147,6 +148,7 @@ function DiaHoy({ d }: { d: DiaCalculado }) {
         <h2>Tu día</h2>
         <span class="mas">Toca un plato para ver la receta</span>
       </div>
+      <PorQue lineas={porQue(d, tareas, objetivos.value, { lunes: d.fecha === sem.config.lunes, taper: sem.config.taper })} />
       <div class="linea">
         {pasos.map((p) => (
           <div key={p.k} class={`paso-linea${p.hecho ? ' hecha' : ''}${p.evento ? ' evento' : ''}${proxima && p.k === proxima.hueco.slot ? ' ahora' : ''}`}>
@@ -158,6 +160,15 @@ function DiaHoy({ d }: { d: DiaCalculado }) {
 
       <Resto d={d} />
     </>
+  );
+}
+
+export function PorQue({ lineas }: { lineas: string[] }) {
+  if (!lineas.length) return null;
+  return (
+    <div class="porque">
+      <b>Por qué</b> {lineas.join(' ')}
+    </div>
   );
 }
 
@@ -234,6 +245,7 @@ function TarjetaComida({ d, c, base }: { d: DiaCalculado; c: ComidaDia; base?: n
           {cambio && <span class="marca-ajuste">{c.macro.kcal > base! ? '+' : '−'}{fmt(Math.abs(c.macro.kcal - base!))} kcal</span>}
         </div>
         <h3>{titulo}</h3>
+        {!r && c.porciones.length > 0 && <div class="cantidades">{resumenCantidades(c.porciones)}</div>}
         <div class="datos">
           {r?.estado === 'saltada' ? (
             <span>Saltada</span>

@@ -72,8 +72,11 @@ function totalItems(items: Item[], fp: number, fh: number, descanso: boolean, re
 export function cuadrar(items: Item[], meta: { kcal: number; p: number }, descanso: boolean) {
   let fp = 1;
   let fh = 1;
-  const LIM = { fp: [0.6, 1.8], fh: [0.25, 2.6] } as const;
   const f = (a: number, b: number) => totalItems(items, a, b, descanso, false);
+  // Si ya te has pasado de kcal, la proteína no sube las raciones: se recortan hidratos
+  // y, si falta proteína, el aviso propone un yogur o un batido.
+  const recortar = meta.kcal < f(1, 1).kcal;
+  const LIM = { fp: [0.6, recortar ? 1 : 1.8], fh: [0.25, 2.6] } as const;
   for (let it = 0; it < 12; it++) {
     const m = f(fp, fh);
     const eK = (meta.kcal - m.kcal) * W_KCAL;

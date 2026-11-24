@@ -2,8 +2,10 @@ import { useState } from 'preact/hooks';
 import { IAtras, IBalon, ICambiar, IFlecha, IGym, IAjustes } from '../components/Iconos';
 import { ImagenPlato } from '../components/Imagen';
 import { aMin, DIAS, DIAS_CORTO, desdeISO, diaSemana, fechaCorta, lunesDe, sumarDias } from '../lib/fechas';
-import { actualizarDia, actualizarSemana, diaCalculado, hoy, proximoLunes, semanas } from '../lib/estado';
-import { alimento, textoCantidad } from '../lib/nutricion';
+import { actualizarDia, actualizarSemana, diaCalculado, horas, hoy, objetivos, proximoLunes, semanas } from '../lib/estado';
+import { resumenCantidades, porQue } from '../lib/explicar';
+import { tareasSemana } from '../lib/compra';
+import { PorQue } from './Hoy';
 import type { ConfigDia } from '../lib/tipos';
 import { abrir, fmt } from '../lib/ui';
 import { Finde } from './Finde';
@@ -117,6 +119,9 @@ function Dia({ fecha, cfg, i, taper }: { fecha: string; cfg: ConfigDia; i: numbe
         </div>
       </div>
 
+      <div style="margin-top:10px">
+        <PorQue lineas={porQue(d, tareasSemana(semanas.value[lunesDe(fecha)]!, objetivos.value, horas.value).filter((t) => t.fecha === fecha), objetivos.value, { lunes: i === 0, taper })} />
+      </div>
       <div class="seccion">
         <h2>Comidas</h2>
         {d.fuera && <span class="mas">Tarde en Cabra</span>}
@@ -137,13 +142,7 @@ function Dia({ fecha, cfg, i, taper }: { fecha: string; cfg: ConfigDia; i: numbe
               </div>
             );
           if (!c.receta) return null;
-          const clave = c.porciones
-            .filter((p) => p.rol === 'prot' || p.rol === 'hc')
-            .map((p) => {
-              const t = textoCantidad(p);
-              const a = alimento(p.a);
-              return a.unidad && t.includes(a.unidad.nombre.slice(0, 4)) ? t : `${t} ${a.corto ?? a.nombre.toLowerCase()}`;
-            });
+          const clave = resumenCantidades(c.porciones);
           return (
             <div class="comida-semana">
               <button class="miniatura" onClick={() => abrir({ t: 'receta', fecha, slot: c.hueco.slot, id: c.receta!.id })} aria-label={c.receta.titulo}>
@@ -154,7 +153,7 @@ function Dia({ fecha, cfg, i, taper }: { fecha: string; cfg: ConfigDia; i: numbe
                   {c.hueco.hora} · {c.hueco.etiqueta}
                 </div>
                 <div style="font-weight:800;line-height:1.2">{c.registro?.estado === 'otro' ? c.registro.texto : c.receta.titulo}</div>
-                {clave.length > 0 && <div class="muted" style="font-size:12.5px;margin-top:2px">{clave.join(' · ')}</div>}
+                {clave && <div class="muted" style="font-size:12.5px;margin-top:2px">{clave}</div>}
               </button>
               <div style="display:grid;justify-items:end;gap:4px">
                 <div class="k">

@@ -3,7 +3,7 @@ import { IAjustes, ICopa, ICopia, IFlecha, IFuego, IGym, IInfo, ILibro, INota, I
 import { Hoja } from '../components/Hoja';
 import { ImagenPlato } from '../components/Imagen';
 import { ALIMENTOS } from '../data/alimentos';
-import { RECETAS } from '../data/recetas';
+import { RECETAS, VERDURAS } from '../data/recetas';
 import { db } from '../lib/db';
 import { correcciones, exportar, horas, importar, notas, objetivos, prefs } from '../lib/estado';
 import { fechaCorta } from '../lib/fechas';
@@ -135,7 +135,7 @@ export function Recetario() {
         ))}
       </div>
       <div class="rejilla">
-        {lista.map((r) => {
+        {(g === 'comida' ? [...lista, VERDURAS] : lista).map((r) => {
           const m = macroReceta(r);
           return (
             <button class="receta-tarjeta pulsable" onClick={() => abrir({ t: 'receta', id: r.id })}>

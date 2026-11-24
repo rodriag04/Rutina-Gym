@@ -23,7 +23,7 @@ Si al abrir la dirección te sale la rutina: cierra la pestaña de Safari y vuel
 - **Generador**: táper sí/no, Cabra el viernes, lunes festivo, horario de cada día y lo que hay en casa.
 - **Compra**: lista agrupada y marcable, envases de Mercadona, lo que hace falta el lunes antes de comprar y agenda del congelador.
 - **Progreso**: peso (mar, jue, sáb) con media semanal sin lunes, cintura cada 2 semanas y ajuste de ±150 kcal según las reglas.
-- **Más**: fin de semana (regla del plato y calculadora de copas), airfryer, recetario (32 platos), notas, tabla de alimentos editable, cómo se calcula, copia de seguridad (Archivos → iCloud Drive) y ajustes.
+- **Más**: fin de semana (regla del plato y calculadora de copas), airfryer, recetario (42 platos + la verdura base), notas, tabla de alimentos editable, cómo se calcula, copia de seguridad (Archivos → iCloud Drive) y ajustes.
 
 ## Reglas del plan (las que aplica el código)
 
@@ -36,10 +36,17 @@ Si al abrir la dirección te sale la rutina: cierra la pestaña de Safari y vuel
 - Viernes: si se va a Cabra, el plan acaba en la comida; la tarde cuenta como presupuesto (regla del plato). Si no, cena de despensa.
 - Ajustes: si en 3 semanas la cintura no baja → −150 kcal los días de descanso. Si baja más de 0,5 kg/semana o pierde fuerza → +150 kcal los días de gym.
 
+## De dónde salen los datos
+
+- `origen/`: los archivos del proyecto "Dieta Rodrigo" (tabla de alimentos, 38 recetas y el plan del 16-20 nov), tal cual llegaron.
+- `src/data/alimentos.ts`: kcal y proteína de `origen/alimentos.json` pasadas a valores por 100 g. Hidratos y grasa añadidos de etiquetas de Mercadona/BEDCA (solo para mostrar).
+- `src/data/recetas.ts`: las recetas de `origen/recetas.json` con sus pasos y trucos, y las cantidades de su plan. Se quitan las líneas tipo "el martes por la noche, pasa…": eso lo pone la agenda del congelador. Se añaden 4 de variedad (revuelto con jamón, tostadas con huevo, arroz salteado y tostada con yogur).
+- Los tests (`tests/dieta`) comprueban que 18 platos de su plan dan las mismas kcal y proteína que entonces.
+
 ## Código
 
 ```
-dieta/src/data/       alimentos, recetas (32), comidas fuera
+dieta/src/data/       alimentos, recetas (42), comidas fuera
 dieta/src/lib/        horario (comidas alrededor del gym), plan (cuadra el día), generador, compra y congelador, notas (texto libre), progreso, estado, IndexedDB
 dieta/src/components/ ilustraciones de los platos (Plato.tsx), anillo, hoja, iconos
 dieta/src/views/      Hoy, Semana, Compra, Progreso, Más, Receta, Registrar, Cambiar, Generador, Finde

@@ -100,7 +100,14 @@ export function Receta({ id, fecha, slot }: { id: string; fecha?: string; slot?:
                   {alimento(p.a).nombre}
                   {p.nota && p.a !== 'especias' && p.a !== 'limon' && <span class="nota"> · {p.nota}</span>}
                 </span>
-                <span class="cant">{textoCantidad(p)}</span>
+                <span class="cant">
+                  {textoCantidad(p)}
+                  {p.a === 'verdura' && id !== 'verduras' && (
+                    <button class="chip" style="margin-left:8px;padding:2px 8px;font-size:12px" onClick={() => abrir({ t: 'receta', id: 'verduras' })}>
+                      Cómo
+                    </button>
+                  )}
+                </span>
               </li>
             ))}
         </ul>

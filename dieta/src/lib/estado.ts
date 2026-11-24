@@ -1,4 +1,5 @@
 import { computed, effect, signal } from '@preact/signals';
+import { RECETA } from '../data/recetas';
 import { db, pedirPersistencia } from './db';
 import { ahoraHora, diaSemana, hoyISO, lunesDe, sumarDias } from './fechas';
 import { cfgDia, configPorDefecto, generarSemana, reparar } from './generador';
@@ -65,9 +66,7 @@ export async function cargar() {
     if (v !== undefined) (sig as { value: unknown }).value = v;
   }
   fijarCorrecciones(correcciones.value);
-  // Primera vez (o semana nueva sin plan): genera la de esta semana con lo habitual.
-  asegurarSemana(lunesDe(hoy.value));
-  cargado.value = true;
+  // Guardar cada cambio (también la semana que se genera o se repara justo abajo).
   for (const [clave, sig] of Object.entries(PERSISTIDO)) {
     let primero = true;
     effect(() => {
@@ -79,6 +78,10 @@ export async function cargar() {
       void db.set(clave, v);
     });
   }
+  migrarRecetas();
+  // Primera vez (o semana nueva sin plan): genera la de esta semana con lo habitual.
+  asegurarSemana(lunesDe(hoy.value));
+  cargado.value = true;
   effect(() => fijarCorrecciones(correcciones.value));
   void pedirPersistencia();
   setInterval(() => {
@@ -86,6 +89,23 @@ export async function cargar() {
     ahora.value = ahoraHora();
     if (diaSemana(hoy.value) < 5) asegurarSemana(lunesDe(hoy.value));
   }, 30000);
+}
+
+/** Si una semana guardada usa un plato que ya no existe, se cambia por otro que cumpla las reglas. */
+function migrarRecetas() {
+  let cambio = false;
+  const out: Record<string, Semana> = {};
+  for (const [k, sem] of Object.entries(semanas.value)) {
+    const malas = Object.values(sem.menu).some((els) => els.some((e) => !RECETA[e.receta]));
+    if (!malas) {
+      out[k] = sem;
+      continue;
+    }
+    cambio = true;
+    const menu = Object.fromEntries(Object.entries(sem.menu).map(([f, els]) => [f, els.filter((e) => RECETA[e.receta])]));
+    out[k] = reparar({ ...sem, menu }, horas.value);
+  }
+  if (cambio) semanas.value = out;
 }
 
 export function asegurarSemana(lunes: string) {

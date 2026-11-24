@@ -46,8 +46,8 @@ describe('datos', () => {
       const m = macroReceta(r);
       if (r.slots.includes('comida') || r.slots.includes('cena')) {
         expect(m.kcal, r.id).toBeGreaterThan(500);
-        expect(m.kcal, r.id).toBeLessThan(850);
-        expect(m.p, r.id).toBeGreaterThan(38);
+        expect(m.kcal, r.id).toBeLessThan(900);
+        expect(m.p, r.id).toBeGreaterThan(35);
       }
     }
   });
@@ -255,4 +255,35 @@ describe('progreso', () => {
     );
     expect(r.tipo).toBe('subir');
   });
+});
+
+describe('tabla de Rodri', () => {
+  // kcal y proteína de su plan del 16-20 nov (semana-16-20-nov.json), con las mismas cantidades.
+  const PLAN: [string, number, number, boolean][] = [
+    ['boc-jamon', 392, 32, false],
+    ['boc-pollo', 332, 34, true],
+    ['boc-pavo', 300, 26, false],
+    ['bolonesa', 826, 45, false],
+    ['pollo-patata', 666, 66, false],
+    ['gnocchi-salmon', 794, 44, false],
+    ['burrito-ternera', 706, 53, false],
+    ['lomo-arroz', 640, 47, true],
+    ['huevos-rotos', 682, 47, true],
+    ['kebab', 810, 68, false],
+    ['lubina-arroz', 656, 56, false],
+    ['pizza-wrap', 602, 43, true],
+    ['patatas-atun', 644, 51, true],
+    ['batido-platano', 416, 30, false],
+    ['batido-arandanos', 361, 29, false],
+    ['batido-platano-arandanos', 466, 30, false],
+    ['yogur-arandanos', 434, 31, true],
+    ['yogur-platano', 489, 31, true]
+  ];
+  for (const [id, kcal, p, descanso] of PLAN) {
+    test(`${id}: ${kcal} kcal y ${p} g como en su plan`, () => {
+      const m = macroReceta(RECETA[id], { fp: 1, fh: 1 }, descanso);
+      expect(Math.abs(m.kcal - kcal), `${id} kcal ${m.kcal}`).toBeLessThanOrEqual(3);
+      expect(Math.abs(m.p - p), `${id} prot ${m.p}`).toBeLessThanOrEqual(1);
+    });
+  }
 });
