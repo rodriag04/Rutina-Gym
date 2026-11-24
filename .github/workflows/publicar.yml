@@ -3,7 +3,7 @@ name: Publicar en GitHub Pages
 # Se publica en cada push a la rama principal del repositorio (ahora la rama de trabajo; main cuando exista).
 on:
   push:
-    branches: [main, claude/gym-routine-app-optimized-7fw3i3]
+    branches: [main, claude/gym-routine-app-optimized-7fw3i3, claude/gifted-shannon-lmqmnz]
   workflow_dispatch:
 
 permissions:
@@ -24,7 +24,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
-      # Rodrigo en /Rutina-Gym/ y Mari Carmen en /Rutina-Gym/maricarmen/
+      # Rodrigo en /Rutina-Gym/, Mari Carmen en /Rutina-Gym/maricarmen/ y las comidas en /Rutina-Gym/dieta/
       - run: npm run build:pages
       - uses: peaceiris/actions-gh-pages@v4
         with:

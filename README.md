@@ -6,6 +6,7 @@ App de entrenamiento. Funciona sin conexión, se instala en el móvil y guarda l
 |---|---|
 | Rodrigo | https://rodriag04.github.io/Rutina-Gym/ |
 | Mari Carmen | https://rodriag04.github.io/Rutina-Gym/maricarmen/ |
+| Comidas de Rodrigo (app aparte) | https://rodriag04.github.io/Rutina-Gym/dieta/ · ver `dieta/README.md` |
 
 Cada persona tiene su propia app (rutina, textos, icono y datos aparte), compilada desde el mismo código con un perfil distinto: `src/perfiles/<id>/`.
 

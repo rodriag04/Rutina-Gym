@@ -17,5 +17,5 @@
     "baseUrl": ".",
     "paths": { "@perfil": ["src/perfiles/rodrigo/index.ts"] }
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests", "dieta/src"]
 }

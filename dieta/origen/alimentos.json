@@ -1,0 +1,150 @@
+{
+  "_nota": "Valores por gramo (kcal_g, prot_g) o por unidad (kcal_u, prot_u). Son los que se han usado para calcular todos los planes. Valores aproximados y redondeados de productos tipo Mercadona; comprobar con la etiqueta si se cambia de producto.",
+  "por_gramo": {
+    "pan_integral_100": {
+      "kcal_g": 2.5,
+      "prot_g": 0.09
+    },
+    "pechuga_pavo_92": {
+      "kcal_g": 1.0,
+      "prot_g": 0.19
+    },
+    "lomo_embuchado": {
+      "kcal_g": 2.0,
+      "prot_g": 0.38
+    },
+    "jamon_serrano": {
+      "kcal_g": 2.4,
+      "prot_g": 0.31
+    },
+    "pechuga_pollo_asada_lonchas": {
+      "kcal_g": 1.1,
+      "prot_g": 0.22
+    },
+    "pechuga_pollo_cruda": {
+      "kcal_g": 1.1,
+      "prot_g": 0.23
+    },
+    "solomillo_cerdo": {
+      "kcal_g": 1.2,
+      "prot_g": 0.21
+    },
+    "carne_picada_vacuno": {
+      "kcal_g": 2.0,
+      "prot_g": 0.19
+    },
+    "salmon": {
+      "kcal_g": 2.0,
+      "prot_g": 0.2
+    },
+    "lubina": {
+      "kcal_g": 1.1,
+      "prot_g": 0.19
+    },
+    "cinta_lomo_cerdo": {
+      "kcal_g": 1.4,
+      "prot_g": 0.22
+    },
+    "patata": {
+      "kcal_g": 0.8,
+      "prot_g": 0.02
+    },
+    "pasta_seca": {
+      "kcal_g": 3.55,
+      "prot_g": 0.12
+    },
+    "gnocchi_patata": {
+      "kcal_g": 1.6,
+      "prot_g": 0.045
+    },
+    "pan_pita": {
+      "kcal_g": 2.6,
+      "prot_g": 0.09
+    },
+    "pan_rallado": {
+      "kcal_g": 3.5,
+      "prot_g": 0.12
+    },
+    "tomate_triturado": {
+      "kcal_g": 0.35,
+      "prot_g": 0.015
+    },
+    "queso_cottage": {
+      "kcal_g": 0.98,
+      "prot_g": 0.11
+    },
+    "mozzarella_rallada": {
+      "kcal_g": 2.9,
+      "prot_g": 0.2
+    },
+    "aceite_oliva": {
+      "kcal_g": 9.0,
+      "prot_g": 0
+    },
+    "arandanos": {
+      "kcal_g": 0.5,
+      "prot_g": 0.007
+    },
+    "nueces": {
+      "kcal_g": 6.54,
+      "prot_g": 0.15
+    },
+    "chocolate_85": {
+      "kcal_g": 5.8,
+      "prot_g": 0.1
+    },
+    "miel": {
+      "kcal_g": 3.0,
+      "prot_g": 0
+    }
+  },
+  "por_unidad": {
+    "platano": {
+      "kcal_u": 105,
+      "prot_u": 1.3
+    },
+    "batido_proteina_30g": {
+      "kcal_u": 115,
+      "prot_u": 24
+    },
+    "yogur_mas_proteinas_natural": {
+      "kcal_u": 61,
+      "prot_u": 12
+    },
+    "vasito_arroz_basmati_125g": {
+      "kcal_u": 185,
+      "prot_u": 4
+    },
+    "lata_atun_natural": {
+      "kcal_u": 62,
+      "prot_u": 14
+    },
+    "racion_verduras_200g": {
+      "kcal_u": 100,
+      "prot_u": 2
+    },
+    "pan_hamburguesa": {
+      "kcal_u": 190,
+      "prot_u": 8
+    },
+    "huevo": {
+      "kcal_u": 90,
+      "prot_u": 7.8
+    },
+    "tortilla_trigo_integral": {
+      "kcal_u": 108,
+      "prot_u": 3.7
+    },
+    "taper_madre_estimado": {
+      "kcal_u": 645,
+      "prot_u": 55,
+      "_nota": "200 g pollo + 350 g patata + verduras; el aceite es desconocido"
+    }
+  },
+  "medidas_caseras": {
+    "cucharadita_aceite_g": 5,
+    "cucharada_aceite_g": 10,
+    "onza_chocolate_g": 10,
+    "pan_bocadillo_g": 80
+  }
+}

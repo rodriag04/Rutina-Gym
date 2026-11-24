@@ -1,0 +1,367 @@
+{
+  "semana": "2026-11-16/2026-11-20",
+  "constantes": {
+    "R1": "1 ración de verduras (200 g de la bolsa)",
+    "YOG": "Postre: 1 yogur alto en proteína, natural"
+  },
+  "dias": [
+    {
+      "id": "lunes",
+      "name": "Lunes",
+      "tag": "Gym 16:30 · pecho, hombro, tríceps",
+      "gym": true,
+      "meals": [
+        {
+          "t": "11:00",
+          "k": "Desayuno",
+          "h": "Bocadillo con lo que tengas en casa",
+          "kc": 350,
+          "p": 30,
+          "r": "bocadillo_casa",
+          "i": [
+            "1 pan integral (80 g)",
+            "100 g de pavo, 80 g de jamón o 60 g de lomo"
+          ]
+        },
+        {
+          "t": "15:00",
+          "k": "Comida · pre-gym",
+          "h": "Pasta boloñesa",
+          "kc": 826,
+          "p": 45,
+          "r": "bolonesa",
+          "i": [
+            "110 g de pasta (la que tengas en casa)",
+            "150 g de carne picada (la congelada)",
+            "100 g de tomate triturado",
+            "1 ración de verduras (200 g de la bolsa)"
+          ]
+        },
+        {
+          "gym": "Gimnasio, y a la salida, compra en Mercadona",
+          "t": "16:30"
+        },
+        {
+          "t": "18:45",
+          "k": "Merienda · post-gym",
+          "h": "Batido + plátano + nueces",
+          "kc": 416,
+          "p": 30,
+          "r": "batido_platano",
+          "i": [
+            "Batido de proteína (30 g) con agua",
+            "1 plátano",
+            "30 g de nueces"
+          ]
+        },
+        {
+          "t": "21:30",
+          "k": "Cena",
+          "h": "Pollo en airfryer con patatas",
+          "kc": 666,
+          "p": 66,
+          "r": "pollo_patata_air",
+          "i": [
+            "200 g de pechuga de pollo",
+            "300 g de patata de microondas",
+            "1 ración de verduras (200 g de la bolsa)",
+            "1 cucharadita de aceite de oliva",
+            "Postre: 1 yogur alto en proteína, natural"
+          ]
+        }
+      ],
+      "note": "Por qué: sin táper, la comida antes del gym es una boloñesa con lo que ya tienes en casa: pasta, la carne congelada y la bolsa de verdura. Hidratos y proteína 90 minutos antes del pecho. Después del gym, compra y cena de pollo con patatas. Al volver de la compra, congela lo que se indica abajo."
+    },
+    {
+      "id": "martes",
+      "name": "Martes",
+      "tag": "Gym 13:30 · espalda, bíceps",
+      "gym": true,
+      "meals": [
+        {
+          "t": "11:00",
+          "k": "Desayuno",
+          "h": "Bocadillo de jamón",
+          "kc": 392,
+          "p": 32,
+          "r": "bocadillo_jamon",
+          "i": [
+            "1 pan integral (80 g)",
+            "80 g de jamón serrano"
+          ]
+        },
+        {
+          "t": "13:00",
+          "k": "Pre-gym",
+          "h": "Plátano",
+          "kc": 105,
+          "p": 1,
+          "r": "platano",
+          "i": [
+            "1 plátano, 30 min antes"
+          ]
+        },
+        {
+          "gym": "Gimnasio",
+          "t": "13:30"
+        },
+        {
+          "t": "15:15",
+          "k": "Comida · post-gym",
+          "h": "Gnocchi con salmón y salsa de limón",
+          "kc": 794,
+          "p": 44,
+          "r": "gnocchi_salmon",
+          "i": [
+            "200 g de gnocchi",
+            "150 g de salmón",
+            "1 ración de verduras (200 g de la bolsa)",
+            "30 g de cottage",
+            "1 cucharadita de aceite de oliva",
+            "Unas gotas de limón"
+          ]
+        },
+        {
+          "t": "18:30",
+          "k": "Merienda",
+          "h": "Batido de arándanos + nueces",
+          "kc": 361,
+          "p": 29,
+          "r": "batido_arandanos",
+          "i": [
+            "Batido de proteína (30 g)",
+            "100 g de arándanos congelados",
+            "30 g de nueces"
+          ]
+        },
+        {
+          "t": "21:30",
+          "k": "Cena",
+          "h": "Burritos de ternera",
+          "kc": 706,
+          "p": 53,
+          "r": "burrito_ternera",
+          "i": [
+            "2 tortillas integrales",
+            "150 g de carne picada (la otra mitad de la que sacaste)",
+            "1 ración de verduras (200 g de la bolsa)",
+            "30 g de cottage",
+            "Postre: 1 yogur alto en proteína, natural"
+          ]
+        }
+      ],
+      "note": "Por qué: hoy entrenas a las 13:30, así que el plátano va justo antes y la comida de después del gym, la que más hidratos lleva, es la de recuperación. La cena usa la otra mitad de la carne que sacaste del congelador el domingo. Esta noche, pasa los filetes de lomo a la nevera."
+    },
+    {
+      "id": "miercoles",
+      "name": "Miércoles",
+      "tag": "Descanso",
+      "gym": false,
+      "meals": [
+        {
+          "t": "11:00",
+          "k": "Desayuno",
+          "h": "Bocadillo de pollo asado",
+          "kc": 332,
+          "p": 34,
+          "r": "bocadillo_pollo",
+          "i": [
+            "1 pan integral (80 g)",
+            "120 g de pechuga de pollo asada en lonchas"
+          ]
+        },
+        {
+          "t": "15:00",
+          "k": "Comida",
+          "h": "Lomo de cerdo en airfryer con arroz",
+          "kc": 640,
+          "p": 47,
+          "r": "lomo_arroz",
+          "i": [
+            "180 g de cinta de lomo en filetes",
+            "1 vasito de arroz basmati",
+            "1 ración de verduras (200 g de la bolsa)",
+            "1 cucharadita de aceite de oliva",
+            "Postre: 1 onza de chocolate negro 85 %"
+          ]
+        },
+        {
+          "t": "18:30",
+          "k": "Merienda",
+          "h": "Yogures con arándanos y nueces",
+          "kc": 434,
+          "p": 31,
+          "r": "yogur_arandanos",
+          "i": [
+            "2 yogures altos en proteína, naturales",
+            "100 g de arándanos",
+            "40 g de nueces"
+          ]
+        },
+        {
+          "t": "21:30",
+          "k": "Cena",
+          "h": "Huevos rotos con jamón",
+          "kc": 682,
+          "p": 47,
+          "r": "huevos_rotos",
+          "i": [
+            "250 g de patata de microondas",
+            "2 huevos",
+            "40 g de jamón serrano",
+            "1 ración de verduras (200 g de la bolsa)",
+            "1 cucharadita de aceite de oliva",
+            "Postre: 1 yogur alto en proteína, natural"
+          ]
+        }
+      ],
+      "note": "Por qué: sin gym gastas menos, así que hay menos hidratos y más grasas buenas. Si juegas al fútbol por la tarde, añade 150 g más de patata a la cena. Esta noche, el pollo y la lubina del congelador a la nevera."
+    },
+    {
+      "id": "jueves",
+      "name": "Jueves",
+      "tag": "Gym 11:00 · brazos, hombro",
+      "gym": true,
+      "meals": [
+        {
+          "t": "10:15",
+          "k": "Pre-gym",
+          "h": "Plátano",
+          "kc": 105,
+          "p": 1,
+          "r": "platano",
+          "i": [
+            "1 plátano, 30-45 min antes"
+          ]
+        },
+        {
+          "gym": "Gimnasio",
+          "t": "11:00"
+        },
+        {
+          "t": "13:00",
+          "k": "Post-gym · vuelta a clase",
+          "h": "Bocadillo de pavo",
+          "kc": 300,
+          "p": 26,
+          "r": "bocadillo_pavo",
+          "i": [
+            "1 pan integral (80 g)",
+            "100 g de pechuga de pavo"
+          ]
+        },
+        {
+          "t": "15:00",
+          "k": "Comida",
+          "h": "Kebab de pollo con patatas",
+          "kc": 810,
+          "p": 68,
+          "r": "kebab",
+          "i": [
+            "180 g de pechuga de pollo",
+            "2 panes de pita (≈110 g)",
+            "150 g de patata de microondas",
+            "1 ración de verduras (200 g de la bolsa)",
+            "1 yogur natural para la salsa",
+            "1 cucharadita de aceite de oliva"
+          ]
+        },
+        {
+          "t": "18:30",
+          "k": "Merienda",
+          "h": "Batido de plátano y arándanos + nueces",
+          "kc": 466,
+          "p": 30,
+          "r": "batido_platano_arandanos",
+          "i": [
+            "Batido de proteína (30 g)",
+            "1 plátano",
+            "100 g de arándanos congelados",
+            "30 g de nueces"
+          ]
+        },
+        {
+          "t": "21:30",
+          "k": "Cena",
+          "h": "Lubina en airfryer con arroz",
+          "kc": 656,
+          "p": 56,
+          "r": "lubina_arroz",
+          "i": [
+            "200 g de lubina en filetes",
+            "1 vasito de arroz basmati",
+            "1 ración de verduras (200 g de la bolsa)",
+            "2 cucharaditas de aceite de oliva",
+            "Postre: 1 yogur alto en proteína, natural"
+          ]
+        }
+      ],
+      "note": "Por qué: es tu día de brazos, el que más hidratos lleva (pita, patatas, arroz y dos plátanos) para rendir y recuperar. Esta noche no hay que sacar nada del congelador."
+    },
+    {
+      "id": "viernes",
+      "name": "Viernes",
+      "tag": "Descanso",
+      "gym": false,
+      "meals": [
+        {
+          "t": "11:00",
+          "k": "Desayuno",
+          "h": "Bocadillo de jamón",
+          "kc": 392,
+          "p": 32,
+          "r": "bocadillo_jamon",
+          "i": [
+            "1 pan integral (80 g)",
+            "80 g de jamón serrano"
+          ]
+        },
+        {
+          "t": "15:00",
+          "k": "Comida",
+          "h": "Pizzas wrap de pavo",
+          "kc": 602,
+          "p": 43,
+          "r": "pizza_wrap",
+          "i": [
+            "2 tortillas integrales",
+            "60 g de tomate triturado",
+            "120 g de pechuga de pavo",
+            "1 ración de verduras (200 g de la bolsa)",
+            "50 g de mozzarella rallada"
+          ]
+        },
+        {
+          "t": "18:30",
+          "k": "Merienda",
+          "h": "Yogures con plátano y nueces",
+          "kc": 489,
+          "p": 31,
+          "r": "yogur_platano",
+          "i": [
+            "2 yogures altos en proteína, naturales",
+            "1 plátano",
+            "40 g de nueces"
+          ]
+        },
+        {
+          "t": "21:30",
+          "k": "Cena",
+          "h": "Patatas con atún y cottage",
+          "kc": 644,
+          "p": 51,
+          "r": "patatas_atun",
+          "i": [
+            "300 g de patata de microondas",
+            "2 latas de atún al natural",
+            "1 ración de verduras (200 g de la bolsa)",
+            "30 g de cottage",
+            "1 cucharada de aceite de oliva",
+            "Postre: 1 yogur alto en proteína, natural"
+          ]
+        }
+      ],
+      "note": "La cena es toda de despensa: si al final te vas a Cabra, no se te estropea nada. Si juegas al fútbol, añade 1 plátano en la merienda."
+    }
+  ]
+}

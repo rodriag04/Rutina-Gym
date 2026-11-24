@@ -65,7 +65,8 @@ export default defineConfig({
         globIgnores: otros.map((p) => `**/iconos/${p}/**`),
         navigateFallback: 'index.html',
         // La app de Rodrigo vive en la carpeta padre: no debe responder por las de los demás.
-        navigateFallbackDenylist: otros.map((p) => new RegExp(`/${p}/`)),
+        // La app de comidas (/dieta/) tampoco: tiene su propio service worker.
+        navigateFallbackDenylist: [...otros.map((p) => new RegExp(`/${p}/`)), /\/dieta\//],
         cleanupOutdatedCaches: true
       }
     })
