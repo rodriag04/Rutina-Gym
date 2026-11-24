@@ -10,6 +10,7 @@ Exportado el 17 nov 2026 desde el proyecto "Rutina Gym" de Claude. Ese proyecto 
   - `rodrigo` (por defecto): /Rutina-Gym/.
   - `maricarmen` (su madre, 53 años, 2 días/semana, ~45-50 min, prioridad piernas y glúteo): /Rutina-Gym/maricarmen/. Adaptada de su tabla "The Natural Way · Liberto Level I" (A/B/C a 3 días). Sin historial: la primera vez elige ella los pesos. Semana suave fija cada 4 semanas. Textos sencillos (sin "RIR").
   - `npm run dev:maricarmen` para verla en local; `npm run build:pages` compila las dos como en GitHub Pages.
+- App de comidas aparte en `dieta/` (24 nov 2026), publicada en /Rutina-Gym/dieta/. Contexto, reglas y código en `dieta/README.md`. No mezclar con la app de la rutina.
 - Comandos: `npm run dev`, `npm test` (motor de progresión e importación), `npm run build` (sale en `dist/`). `lab.html` en dev muestra todas las figuras animadas.
 - Código: `src/data/rutina.ts` (ejercicios, días, músculos, técnica, cambios), `src/data/musculos.ts`, `src/lib/progresion.ts` (reglas de peso y reps), `src/lib/analisis.ts` (avisos, descarga, saltos, series semanales), `src/components/animaciones.tsx` (figuras), `src/components/MapaMuscular.tsx`.
 - Del paquete original solo llegó este archivo. `app-actual/`, `imagenes/`, `memoria-proyecto/`, `rutina/` y `datos/plan-*.json` no están. `datos/sesiones.json` y `datos/series.csv` se reconstruyeron desde el historial de abajo (13 sesiones, 244 series; lo comprueban los tests y la app al importar).

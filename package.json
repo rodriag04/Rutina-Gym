@@ -10,11 +10,17 @@
     "test": "vitest run",
     "iconos": "node scripts/iconos.mjs",
     "build:maricarmen": "tsc --noEmit && PERFIL=maricarmen vite build",
-    "build:pages": "tsc --noEmit && BASE=/Rutina-Gym/ vite build && PERFIL=maricarmen BASE=/Rutina-Gym/maricarmen/ vite build --outDir dist/maricarmen",
-    "dev:maricarmen": "PERFIL=maricarmen vite"
+    "build:pages": "tsc --noEmit && BASE=/Rutina-Gym/ vite build && PERFIL=maricarmen BASE=/Rutina-Gym/maricarmen/ vite build --outDir dist/maricarmen && BASE=/Rutina-Gym/dieta/ OUT_DIR=./dist/dieta vite build --config vite.dieta.config.ts",
+    "dev:maricarmen": "PERFIL=maricarmen vite",
+    "dev:dieta": "vite --config vite.dieta.config.ts",
+    "build:dieta": "tsc --noEmit && vite build --config vite.dieta.config.ts",
+    "iconos:dieta": "node scripts/iconos-dieta.mjs"
   },
   "dependencies": {
     "@fontsource/barlow-condensed": "^5.2.6",
+    "@fontsource/bricolage-grotesque": "^5.3.0",
+    "@fontsource/figtree": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
     "@preact/signals": "^2.3.1",
     "preact": "^10.27.2"
   },
