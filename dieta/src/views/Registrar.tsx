@@ -7,6 +7,8 @@ import { RECETAS, RECETA } from '../data/recetas';
 import { comprimir, db } from '../lib/db';
 import { diaCalculado, fotoId, registrar } from '../lib/estado';
 import { nombreSlot } from '../lib/horario';
+import { leerCodigo, pareceCodigo, promptComida } from '../lib/claude';
+import { URL_CLAUDE } from './ConClaude';
 import { macroReceta } from '../lib/nutricion';
 import type { Macro, Slot } from '../lib/tipos';
 import { avisar, cerrarTodo, fmt } from '../lib/ui';
@@ -71,13 +73,23 @@ export function Registrar({ fecha, slot }: { fecha: string; slot: Slot }) {
   };
 
   const copiarParaClaude = async () => {
-    const t = `Te paso una foto de mi ${nombreSlot(slot).toLowerCase()}. Estima las kcal y los gramos de proteína de lo que se ve. Responde solo con dos números: kcal y proteína.`;
+    const t = promptComida(slot);
     try {
       await navigator.clipboard.writeText(t);
-      avisar(['Texto copiado. Pégalo en Claude con la foto y escribe aquí los dos números.']);
+      avisar(['Copiado. En Claude: pega, adjunta la foto del plato y copia su respuesta aquí abajo.']);
     } catch {
       avisar([t]);
     }
+  };
+
+  const pegarRespuesta = (t: string) => {
+    if (!pareceCodigo(t)) return;
+    const r = leerCodigo(t, { alimentos: new Set(), recetas: new Set() });
+    if (r.ok && r.codigo.tipo === 'comida') {
+      const m = r.codigo.macro;
+      setNum({ kcal: String(Math.round(m.kcal)), p: String(Math.round(m.p)), texto: r.codigo.texto });
+      avisar([`Claude: ${r.codigo.texto}, ${Math.round(m.kcal)} kcal y ${Math.round(m.p)} g. Revisa y guarda.`]);
+    } else if (!r.ok) avisar([r.error]);
   };
 
   const lista = RECETAS.filter((r) => r.id !== 'taper-mama' && r.titulo.toLowerCase().includes(buscar.toLowerCase()));
@@ -185,9 +197,24 @@ export function Registrar({ fecha, slot }: { fecha: string; slot: Slot }) {
               <input class="campo num" inputMode="decimal" value={num.p} onInput={(e) => setNum({ ...num, p: (e.target as HTMLInputElement).value })} placeholder="35" />
             </label>
           </div>
-          <button class="btn borde peq" onClick={copiarParaClaude}>
-            <ICopia /> ¿No los sabes? Copia el texto para Claude
-          </button>
+          <div class="tarjeta" style="background:var(--surface-2);box-shadow:none;padding:12px">
+            <div style="font-weight:700;font-size:14px">¿No los sabes? Que los calcule Claude con la foto</div>
+            <div class="muted" style="font-size:12.5px;margin:2px 0 8px">1. Copia el texto · 2. Pégalo en Claude con la foto del plato · 3. Pega aquí su respuesta</div>
+            <div class="fila envolver" style="gap:6px">
+              <button class="btn borde peq" onClick={copiarParaClaude}>
+                <ICopia /> Copiar texto
+              </button>
+              <a class="btn borde peq" style="text-decoration:none" href={URL_CLAUDE} target="_blank" rel="noopener">
+                Abrir Claude
+              </a>
+            </div>
+            <input
+              class="campo"
+              style="margin-top:8px;font-family:var(--f-num);font-size:13px"
+              placeholder="Pega aquí la respuesta de Claude"
+              onInput={(e) => pegarRespuesta((e.target as HTMLInputElement).value)}
+            />
+          </div>
         </div>
       )}
 

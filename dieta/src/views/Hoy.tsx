@@ -6,6 +6,7 @@ import { tareasSemana, type Tarea } from '../lib/compra';
 import { aMin, diaSemana, fechaCorta, DIAS } from '../lib/fechas';
 import {
   aplicarAcciones,
+  aplicarCodigo,
   borrarRegistro,
   diaCalculado,
   horas,
@@ -18,8 +19,9 @@ import {
   tareasHechas
 } from '../lib/estado';
 import { interpretar } from '../lib/notas';
+import { pareceCodigo } from '../lib/claude';
 import { calcularDia, type ComidaDia, type DiaCalculado } from '../lib/plan';
-import { abrir, avisar, fmt } from '../lib/ui';
+import { abrir, avisar, fmt, pestana } from '../lib/ui';
 import { cfgDia } from '../lib/generador';
 import { porQue, resumenCantidades } from '../lib/explicar';
 import { Finde } from './Finde';
@@ -324,6 +326,14 @@ function Cuentame() {
     e.preventDefault();
     const t = txt.trim();
     if (!t) return;
+    if (pareceCodigo(t)) {
+      const r = aplicarCodigo(t);
+      setTxt('');
+      (document.activeElement as HTMLElement | null)?.blur();
+      if (!r.ok) return avisar([r.error]);
+      if (r.semana) pestana.value = 'semana';
+      return avisar(r.lineas, () => restaurar(r.deshacer), 9000);
+    }
     const { acciones, resumen } = interpretar(t, hoy.value);
     const antes = aplicarAcciones(acciones, t, resumen);
     setTxt('');

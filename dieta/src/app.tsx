@@ -3,6 +3,7 @@ import { ICompra, IHoy, IMas, IProgreso, ISemana, type Icono } from './component
 import { cargado, prefs } from './lib/estado';
 import { hojas, pestana, toast, type Pestana } from './lib/ui';
 import { Cambiar } from './views/Cambiar';
+import { ConClaude } from './views/ConClaude';
 import { Compra } from './views/Compra';
 import { HojaFinde } from './views/Finde';
 import { Generador } from './views/Generador';
@@ -82,6 +83,8 @@ export function App({ actualizar }: { actualizar?: () => void }) {
             return <Copia />;
           case 'metodo':
             return <Metodo />;
+          case 'claude':
+            return <ConClaude lunes={h.lunes} />;
         }
       })}
       {toast.value && (

@@ -57,5 +57,15 @@ export const ALIMENTOS: Alimento[] = [
 
 export const ALIMENTO: Record<string, Alimento> = Object.fromEntries(ALIMENTOS.map((a) => [a.id, a]));
 
+/** Alimentos nuevos que ha añadido Claude (de la etiqueta de la foto). */
+export function registrarAlimentosExtra(as: Alimento[]) {
+  for (const a of as) {
+    const k = ALIMENTOS.findIndex((x) => x.id === a.id);
+    if (k >= 0) ALIMENTOS[k] = a;
+    else ALIMENTOS.push(a);
+    ALIMENTO[a.id] = a;
+  }
+}
+
 /** Ración de verdura: 200 g de la bolsa congelada = 100 kcal y 2 g de proteína (como en sus planes). */
 export const R1 = 200;

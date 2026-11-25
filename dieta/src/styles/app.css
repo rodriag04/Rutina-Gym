@@ -764,6 +764,32 @@ h3 {
   color: var(--verde);
   margin-right: 2px;
 }
+.paso-claude {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.paso-claude:last-child {
+  border-bottom: 0;
+}
+.paso-claude > span {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: var(--verde-suave);
+  color: var(--verde);
+  font-family: var(--f-num);
+  font-weight: 700;
+  font-size: 14px;
+}
+.claude-btn {
+  background: linear-gradient(135deg, #d97757, #c2643f) !important;
+  color: #fff !important;
+}
 .resto {
   margin-top: 16px;
   padding: 14px 16px;

@@ -18,6 +18,7 @@ Si al abrir la dirección te sale la rutina: cierra la pestaña de Safari y vuel
 
 - **Hoy**: el día en una línea de tiempo (gym, comidas, tareas del congelador). Anillo de kcal y barra de proteína. Un toque en el círculo = comida hecha.
 - **Comí otra cosa**: foto opcional + lo que comiste (del plan con más o menos ración, comida fuera, otro plato del recetario o los números). El resto del día se reajusta solo.
+- **Con Claude, sin API**: la app copia unas instrucciones (horario de la semana, kcal, recetas y alimentos), Rodri las pega en su Claude con una foto y pega de vuelta el bloque JSON que responde (`"rodri":1`). Foto de la compra o de la nevera → semana montada con lo que tiene (Semana → "Semana con Claude"); puede traer recetas y alimentos nuevos, que se guardan en el móvil. Foto de un plato → kcal y proteína (Comí otra cosa → Números, o pegándolo en Cuéntame). La app valida el código y ajusta las cantidades con su motor. Código: `src/lib/claude.ts`.
 - **Cuéntame**: notas en texto libre que cambian el plan: "gym a las 17:30", "mañana entreno a las 10 y media", "ceno fuera", "partido a las 21", "sin táper", "me voy a Cabra el jueves", "peso 71,8", "cintura 82", "no he merendado".
 - **Semana**: días L-V y finde. Gym, fútbol, desayuno en casa, comida/cena fuera, táper y Cabra por día. Cambiar plato solo ofrece los que cumplen las reglas.
 - **Generador**: táper sí/no, Cabra el viernes, lunes festivo, horario de cada día y lo que hay en casa.

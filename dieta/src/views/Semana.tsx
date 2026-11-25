@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks';
-import { IAtras, IBalon, ICambiar, IFlecha, IGym, IAjustes } from '../components/Iconos';
+import { IAtras, IBalon, ICamara, ICambiar, IFlecha, IGym, IAjustes } from '../components/Iconos';
 import { ImagenPlato } from '../components/Imagen';
 import { aMin, DIAS, DIAS_CORTO, desdeISO, diaSemana, fechaCorta, lunesDe, sumarDias } from '../lib/fechas';
 import { actualizarDia, actualizarSemana, diaCalculado, horas, hoy, objetivos, proximoLunes, semanas } from '../lib/estado';
@@ -85,9 +85,14 @@ export function Semana() {
           ) : (
             <Dia fecha={sem.config.dias[sel].fecha} cfg={sem.config.dias[sel]} i={sel} taper={sem.config.taper} />
           )}
-          <button class="btn borde ancho" style="margin-top:18px" onClick={() => abrir({ t: 'generador', lunes })}>
-            <IAjustes /> Rehacer la semana
-          </button>
+          <div style="display:grid;gap:8px;margin-top:18px">
+            <button class="btn ancho claude-btn" onClick={() => abrir({ t: 'claude', lunes })}>
+              <ICamara /> Semana con Claude · foto de la compra
+            </button>
+            <button class="btn borde ancho" onClick={() => abrir({ t: 'generador', lunes })}>
+              <IAjustes /> Rehacer la semana
+            </button>
+          </div>
         </>
       )}
     </>

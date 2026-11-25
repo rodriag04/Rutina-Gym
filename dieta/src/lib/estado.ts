@@ -1,5 +1,7 @@
 import { computed, effect, signal } from '@preact/signals';
-import { RECETA } from '../data/recetas';
+import { ALIMENTOS, registrarAlimentosExtra } from '../data/alimentos';
+import { RECETA, registrarRecetasExtra } from '../data/recetas';
+import { leerCodigo } from './claude';
 import { db, pedirPersistencia } from './db';
 import { ahoraHora, diaSemana, hoyISO, lunesDe, sumarDias } from './fechas';
 import { cfgDia, configPorDefecto, generarSemana, reparar } from './generador';
@@ -7,7 +9,7 @@ import { HORAS, type Horas } from './horario';
 import type { Accion } from './notas';
 import { fijarCorrecciones } from './nutricion';
 import { calcularDia, OBJETIVOS } from './plan';
-import type { Ajuste, Alimento, ConfigDia, ConfigSemana, EstadoRegistro, Macro, Medida, Nota, Objetivos, Registro, Semana, Slot } from './tipos';
+import type { Ajuste, Alimento, ConfigDia, ConfigSemana, EstadoRegistro, Macro, Medida, Nota, Objetivos, Receta, Registro, Semana, Slot } from './tipos';
 
 export interface Prefs {
   tema: 'auto' | 'claro' | 'oscuro';
@@ -31,6 +33,9 @@ export const fotosReceta = signal<Record<string, string>>({});
 export const compraHecha = signal<Record<string, string[]>>({});
 export const tareasHechas = signal<string[]>([]);
 export const prefs = signal<Prefs>({ tema: 'auto', pierdeFuerza: false });
+/** Lo que ha añadido Claude desde fotos: alimentos y recetas nuevas. */
+export const alimentosExtra = signal<Alimento[]>([]);
+export const recetasExtra = signal<Receta[]>([]);
 
 /** Lo que se guarda: clave en IndexedDB → señal. */
 const PERSISTIDO = {
@@ -45,7 +50,9 @@ const PERSISTIDO = {
   fotosReceta,
   compraHecha,
   tareasHechas,
-  prefs
+  prefs,
+  alimentosExtra,
+  recetasExtra
 } as const;
 
 export const semanaDe = (fecha: string) => semanas.value[lunesDe(fecha)];
@@ -66,6 +73,7 @@ export async function cargar() {
     if (v !== undefined) (sig as { value: unknown }).value = v;
   }
   fijarCorrecciones(correcciones.value);
+  registrarExtras();
   // Guardar cada cambio (también la semana que se genera o se repara justo abajo).
   for (const [clave, sig] of Object.entries(PERSISTIDO)) {
     let primero = true;
@@ -261,4 +269,66 @@ export function exportar() {
 export function importar(datos: Record<string, unknown>) {
   if (datos.app !== 'comidas-rodri') throw new Error('No es una copia de esta app');
   for (const [k, s] of Object.entries(PERSISTIDO)) if (datos[k] !== undefined) (s as { value: unknown }).value = datos[k];
+  registrarExtras();
+}
+
+function registrarExtras() {
+  registrarAlimentosExtra(alimentosExtra.value);
+  registrarRecetasExtra(recetasExtra.value);
+}
+
+// ───────── Códigos de Claude ─────────
+
+export type ResultadoCodigo = { ok: true; lineas: string[]; deshacer: Instantanea; semana?: string } | { ok: false; error: string };
+
+/** Pega la respuesta de Claude: una comida (se apunta) o una semana (se monta). */
+export function aplicarCodigo(texto: string, slotPorDefecto?: Slot): ResultadoCodigo {
+  const r = leerCodigo(texto, { alimentos: new Set(ALIMENTOS.map((a) => a.id)), recetas: new Set(Object.keys(RECETA)) });
+  if (!r.ok) return r;
+  const antes = instantanea();
+  const c = r.codigo;
+  if (c.tipo === 'comida') {
+    const d = diaCalculado(hoy.value);
+    const slot = c.slot ?? slotPorDefecto ?? d?.comidas.find((x) => !x.registro && !x.hueco.libre && x.hueco.slot !== 'pre')?.hueco.slot ?? 'comida';
+    registrar(hoy.value, slot, 'otro', c.macro, { texto: c.texto });
+    return { ok: true, deshacer: antes, lineas: [`${c.texto}: ${Math.round(c.macro.kcal)} kcal, ${Math.round(c.macro.p)} g de proteína (${slot}).`, 'El resto del día se ha reajustado.'] };
+  }
+  // Semana
+  if (c.alimentos.length) {
+    alimentosExtra.value = [...alimentosExtra.value.filter((a) => !c.alimentos.some((n) => n.id === a.id)), ...c.alimentos];
+    registrarAlimentosExtra(c.alimentos);
+  }
+  if (c.recetas.length) {
+    recetasExtra.value = [...recetasExtra.value.filter((x) => !c.recetas.some((n) => n.id === x.id)), ...c.recetas];
+    registrarRecetasExtra(c.recetas);
+  }
+  const prev = semanas.value[c.lunes];
+  const config: ConfigSemana = { ...(prev?.config ?? configPorDefecto(c.lunes)), ...(c.enCasa ? { enCasa: c.enCasa } : {}) };
+  const menu: Semana['menu'] = {};
+  for (const d of config.dias) {
+    // Los días ya pasados conservan lo que había.
+    if (prev && d.fecha < hoy.value) {
+      menu[d.fecha] = prev.menu[d.fecha] ?? [];
+      continue;
+    }
+    // Lo que manda Claude sustituye a esos huecos; lo que no toca, se queda como estaba.
+    const deClaude = Object.entries(c.menu[d.fecha] ?? {}).map(([slot, receta]) => ({ slot: slot as Slot, receta: receta! }));
+    const antes = (prev?.menu[d.fecha] ?? []).filter((e) => !deClaude.some((x) => x.slot === e.slot));
+    menu[d.fecha] = [...antes, ...deClaude];
+  }
+  const sem = reparar({ id: c.lunes, config, menu, semilla: Math.floor(Math.random() * 1e6), creada: new Date().toISOString(), origen: 'claude', nota: c.nota }, horas.value);
+  semanas.value = { ...semanas.value, [c.lunes]: sem };
+  const platos = Object.values(c.menu).reduce((t, x) => t + Object.keys(x).length, 0);
+  return {
+    ok: true,
+    deshacer: antes,
+    semana: c.lunes,
+    lineas: [
+      `Semana del ${c.lunes.slice(8)}/${c.lunes.slice(5, 7)} montada con ${platos} ${platos === 1 ? 'plato' : 'platos'} de Claude.`,
+      ...(c.recetas.length ? [`Recetas nuevas: ${c.recetas.map((x) => x.titulo).join(', ')}.`] : []),
+      ...(c.alimentos.length ? [`Alimentos nuevos: ${c.alimentos.map((x) => x.nombre).join(', ')}.`] : []),
+      'Las cantidades las ha ajustado la app a tus kcal y proteína.',
+      ...c.avisos.slice(0, 4)
+    ]
+  };
 }

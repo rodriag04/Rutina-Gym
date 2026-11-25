@@ -1,12 +1,14 @@
 import { useState } from 'preact/hooks';
-import { IAjustes, ICopa, ICopia, IFlecha, IFuego, IGym, IInfo, ILibro, INota, IHoja, type Icono } from '../components/Iconos';
+import { IAjustes, ICamara, ICopa, ICopia, IFlecha, IFuego, IGym, IInfo, ILibro, INota, IHoja, type Icono } from '../components/Iconos';
 import { Hoja } from '../components/Hoja';
 import { ImagenPlato } from '../components/Imagen';
 import { ALIMENTOS } from '../data/alimentos';
 import { RECETAS, VERDURAS } from '../data/recetas';
 import { db } from '../lib/db';
-import { correcciones, exportar, horas, importar, notas, objetivos, prefs } from '../lib/estado';
-import { fechaCorta } from '../lib/fechas';
+import { correcciones, exportar, horas, hoy, importar, notas, objetivos, prefs, proximoLunes } from '../lib/estado';
+
+const diaSemanaHoy = () => diaSemana(hoy.value);
+import { diaSemana, fechaCorta, lunesDe } from '../lib/fechas';
 import { HORAS, type Horas } from '../lib/horario';
 import { macroReceta } from '../lib/nutricion';
 import { OBJETIVOS } from '../lib/plan';
@@ -19,6 +21,7 @@ export function Mas() {
   const sinCopia = !prefs.value.ultimaCopia || Date.now() - Date.parse(prefs.value.ultimaCopia) > 7 * 86400000;
   const items: [Icono, string, string, () => void][] = [
     [IGym, 'Rutina del gym', 'Tu app de entrenamiento', () => (location.href = RUTINA)],
+    [ICamara, 'Semana con Claude', 'Foto de la compra → comidas con lo que tienes', () => abrir({ t: 'claude', lunes: diaSemanaHoy() >= 4 ? proximoLunes() : lunesDe(hoy.value) })],
     [ICopa, 'Fin de semana', 'Regla del plato, domingo y calculadora de copas', () => abrir({ t: 'finde' })],
     [IFuego, 'Airfryer', 'Temperaturas y tiempos', () => abrir({ t: 'airfryer' })],
     [ILibro, 'Recetario', `${RECETAS.length} platos con foto y preparación`, () => abrir({ t: 'recetario' })],

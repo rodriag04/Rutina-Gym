@@ -15,7 +15,8 @@ export type HojaAbierta =
   | { t: 'ajustes' }
   | { t: 'notas' }
   | { t: 'copia' }
-  | { t: 'metodo' };
+  | { t: 'metodo' }
+  | { t: 'claude'; lunes: string };
 
 export const pestana = signal<Pestana>('hoy');
 export const hojas = signal<HojaAbierta[]>([]);

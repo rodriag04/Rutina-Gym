@@ -924,3 +924,13 @@ export const VERDURAS: Receta = {
 };
 
 export const RECETA: Record<string, Receta> = Object.fromEntries([...RECETAS, VERDURAS].map((r) => [r.id, r]));
+
+/** Recetas nuevas que ha hecho Claude (se guardan en el móvil y entran en el generador). */
+export function registrarRecetasExtra(rs: Receta[]) {
+  for (const r of rs) {
+    const k = RECETAS.findIndex((x) => x.id === r.id);
+    if (k >= 0) RECETAS[k] = r;
+    else RECETAS.push(r);
+    RECETA[r.id] = r;
+  }
+}

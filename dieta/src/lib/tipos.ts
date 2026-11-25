@@ -137,6 +137,9 @@ export interface Semana {
   menu: Record<string, Eleccion[]>;
   semilla: number;
   creada: string;
+  /** Semana hecha por Claude a partir de una foto: se respetan sus platos. */
+  origen?: 'claude';
+  nota?: string;
 }
 
 export type EstadoRegistro = 'hecho' | 'otro' | 'saltada';

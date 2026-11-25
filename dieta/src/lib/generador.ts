@@ -213,10 +213,12 @@ export function alternativas(sem: Semana, fecha: string, slot: Slot, horas: Hora
 export const nombreDia = (fecha: string) => ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'][diaSemana(fecha)];
 
 /** ¿Sigue valiendo este plato para el hueco tras un cambio de horario o de semana? */
-function valida(e: Eleccion | undefined, h: Hueco, cfg: ConfigDia, i: number, semana: ConfigSemana): boolean {
+function valida(e: Eleccion | undefined, h: Hueco, cfg: ConfigDia, i: number, semana: ConfigSemana, estricto = true): boolean {
   if (!e) return false;
   const r = RECETA[e.receta];
   if (!r || !r.slots.includes(h.slot)) return false;
+  // Semana de Claude: se respeta su elección mientras el plato sea del tipo de comida que toca.
+  if (!estricto) return !(h.noBatido && (r.etiquetas ?? []).includes('batido'));
   const et = r.etiquetas ?? [];
   if (h.slot === 'desayuno' && (cfg.desayunoCasa ? !et.includes('casa') : !et.includes('bocadillo'))) return false;
   if (h.noBatido && et.includes('batido')) return false;
@@ -242,7 +244,7 @@ export function reparar(sem: Semana, horas: Horas = HORAS, desde?: string): Sema
     for (const h of huecos) {
       const e = nuevo.find((x) => x.slot === h.slot);
       if (h.libre && e) continue;
-      if (valida(e, h, cfg, i, sem.config)) continue;
+      if (valida(e, h, cfg, i, sem.config, sem.origen !== 'claude')) continue;
       const sin = nuevo.filter((x) => x.slot !== h.slot);
       const usos = new Map<string, number>();
       for (const [f, els] of Object.entries(menu)) if (f !== cfg.fecha) for (const x of els) usos.set(x.receta, (usos.get(x.receta) ?? 0) + 1);
