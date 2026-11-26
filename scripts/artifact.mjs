@@ -7,6 +7,7 @@ const APPS = {
     dir: '../dist-claude/',
     salida: 'comidas-de-rodri.html',
     titulo: 'Comidas de Rodri',
+    portada: '../dieta/public/iconos/portada.png',
     fuentes:
       'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap'
   },

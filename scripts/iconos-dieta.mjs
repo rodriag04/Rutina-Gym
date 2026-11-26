@@ -24,4 +24,15 @@ for (const [nombre, t, completo] of salidas) {
   await p.screenshot({ path: new URL(nombre, dir).pathname, omitBackground: !completo });
   console.log('ok', nombre);
 }
+// Portada para la versión de Claude (galería y enlaces): 1200×630 con el icono y el nombre.
+await p.setViewportSize({ width: 1200, height: 630 });
+await p.setContent(`<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&display=swap">
+<body style="margin:0;width:1200px;height:630px;background:#17432f;display:flex;align-items:center;justify-content:center;gap:56px">
+${svg.replace('<svg ', '<svg width="360" height="360" ')}
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;line-height:1">
+<div style="font-size:140px;color:#eef7ef;letter-spacing:-3px">Dieta</div>
+<div style="font-size:44px;color:#C9EC6A;margin-top:14px">Comidas con Claude</div></div></body>`);
+await p.waitForTimeout(800);
+await p.screenshot({ path: new URL('portada.png', dir).pathname });
+console.log('ok portada.png');
 await b.close();
