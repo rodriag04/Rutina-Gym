@@ -14,7 +14,8 @@
     "dev:maricarmen": "PERFIL=maricarmen vite",
     "dev:dieta": "vite --config vite.dieta.config.ts",
     "build:dieta": "tsc --noEmit && vite build --config vite.dieta.config.ts",
-    "iconos:dieta": "node scripts/iconos-dieta.mjs"
+    "iconos:dieta": "node scripts/iconos-dieta.mjs",
+    "build:claude": "tsc --noEmit && vite build --config vite.claude.config.ts && node scripts/artifact-dieta.mjs"
   },
   "dependencies": {
     "@fontsource/barlow-condensed": "^5.2.6",

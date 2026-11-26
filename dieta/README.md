@@ -6,6 +6,17 @@ Dirección: **https://rodriag04.github.io/Rutina-Gym/dieta/**
 
 Es una app aparte de la rutina (la dieta no va dentro de la app del gym). Comparte repositorio y despliegue.
 
+## Versión dentro de Claude (con chat)
+
+**https://claude.ai/artifact/SgNVpU9v8jwY9iTSNumM2r** (privada: solo Rodri).
+
+La misma app compilada como página de Claude (`npm run build:claude` → `dist-claude/comidas-de-rodri.html`, se publica con la herramienta Artifact en esa misma URL). Diferencias:
+- Pestaña **Claude**: chat con fotos. Claude recibe el estado de la app y las reglas del plan, y cambia el plan con funciones de la página (`src/lib/asistente.ts`): cambiar_dia, apuntar_comida, marcar_comida, cambiar_plato, ver_dia, montar_semana, guardar_medida, cambiar_objetivos. Cada respuesta con cambios tiene "Deshacer". Usa el plan de Claude de Rodri (capacidad `sample`), sin API.
+- "Comí otra cosa" → foto → "Que Claude calcule las kcal de la foto".
+- Lo que "Cuéntame" no entiende va al chat.
+- Datos en la base de datos del artifact (`src/lib/nube.ts`: `semanas/<lunes>`, `registros/<AAAA-MM>`, `app/<clave>`; reglas: solo el dueño lee y escribe) y fotos en sus `assets`. Desde Claude Code se pueden leer con la herramienta ArtifactData.
+- Necesita conexión. Para pasar los datos de la app del iPhone: Más → Copia de seguridad → Guardar copia con fotos, y en la de Claude → Importar una copia.
+
 ## Instalar en el iPhone
 
 1. Abre la dirección en **Safari**.

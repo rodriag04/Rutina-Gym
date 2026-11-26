@@ -1,13 +1,15 @@
-import { useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import { ICamara, ICopia } from '../components/Iconos';
 import { Hoja } from '../components/Hoja';
 import { ImagenPlato, useFoto } from '../components/Imagen';
 import { COMUNES, RACIONES, textoRacion } from '../data/comunes';
 import { RECETAS, RECETA } from '../data/recetas';
-import { comprimir, db } from '../lib/db';
-import { diaCalculado, fotoId, registrar } from '../lib/estado';
+import { comprimir } from '../lib/db';
+import { almacen } from '../lib/almacen';
+import { diaCalculado, registrar } from '../lib/estado';
 import { nombreSlot } from '../lib/horario';
 import { leerCodigo, pareceCodigo, promptComida } from '../lib/claude';
+import { estimarFoto, mensajeError, usarSample, type ErrorSample, type Sample } from '../lib/asistente';
 import { URL_CLAUDE } from './ConClaude';
 import { macroReceta } from '../lib/nutricion';
 import type { Macro, Slot } from '../lib/tipos';
@@ -27,6 +29,27 @@ export function Registrar({ fecha, slot }: { fecha: string; slot: Slot }) {
   const [buscar, setBuscar] = useState('');
   const [num, setNum] = useState({ kcal: '', p: '', texto: '' });
   const [foto, setFoto] = useState<string | undefined>();
+  const [blobFoto, setBlobFoto] = useState<Blob | null>(null);
+  const [calculando, setCalculando] = useState(false);
+  const [sample, setSample] = useState<Sample | null>(null);
+  useEffect(() => {
+    if (__CLAUDE__) void usarSample().then((s) => setSample(() => s));
+  }, []);
+
+  const calcularConClaude = async () => {
+    if (!sample || !blobFoto) return;
+    setCalculando(true);
+    try {
+      const r = await estimarFoto(sample, blobFoto, slot);
+      setModo('numeros');
+      setNum({ kcal: String(Math.round(r.kcal)), p: String(Math.round(r.p)), texto: r.texto });
+      avisar([`Claude: ${r.texto}, ${Math.round(r.kcal)} kcal y ${Math.round(r.p)} g. Revisa y guarda.`]);
+    } catch (e) {
+      avisar([mensajeError(e as ErrorSample)]);
+    } finally {
+      setCalculando(false);
+    }
+  };
   const urlFoto = useFoto(foto);
 
   const resultado = useMemo((): { m: Macro; texto: string } | null => {
@@ -51,9 +74,9 @@ export function Registrar({ fecha, slot }: { fecha: string; slot: Slot }) {
     const f = (e.target as HTMLInputElement).files?.[0];
     if (!f) return;
     const blob = await comprimir(f);
-    const id = fotoId();
-    await db.guardarFoto(id, blob);
+    const id = await almacen.subirFoto(blob);
     setFoto(id);
+    setBlobFoto(blob);
   };
 
   const guardar = () => {
@@ -106,6 +129,11 @@ export function Registrar({ fecha, slot }: { fecha: string; slot: Slot }) {
         </div>
         <input type="file" accept="image/*" capture="environment" class="oculto" onChange={subir} />
       </label>
+      {__CLAUDE__ && sample && blobFoto && (
+        <button class="btn ancho claude-btn" style="margin-top:10px" disabled={calculando} onClick={calcularConClaude}>
+          {calculando ? 'Claude está mirando la foto…' : 'Que Claude calcule las kcal de la foto'}
+        </button>
+      )}
 
       <div class="segmentado" style="margin-top:14px">
         {tienePlan && (

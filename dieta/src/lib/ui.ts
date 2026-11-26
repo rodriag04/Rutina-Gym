@@ -1,7 +1,10 @@
 import { signal } from '@preact/signals';
 import type { Slot } from './tipos';
 
-export type Pestana = 'hoy' | 'semana' | 'compra' | 'progreso' | 'mas';
+export type Pestana = 'hoy' | 'semana' | 'chat' | 'compra' | 'progreso' | 'mas';
+
+/** Texto para enviar al chat al abrirlo (desde Cuéntame o Semana). */
+export const borradorChat = signal<{ texto: string; enviar: boolean } | null>(null);
 
 export type HojaAbierta =
   | { t: 'receta'; fecha?: string; slot?: Slot; id: string }

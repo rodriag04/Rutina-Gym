@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { RECETA } from '../data/recetas';
-import { db } from '../lib/db';
+import { almacen } from '../lib/almacen';
 import { fotosReceta } from '../lib/estado';
 import { Ilustracion } from './Plato';
 
@@ -12,9 +12,8 @@ export function useFoto(id?: string) {
     if (!id) return setUrl(undefined);
     if (cache.has(id)) return setUrl(cache.get(id));
     let vivo = true;
-    db.foto(id).then((b) => {
-      if (!b || !vivo) return;
-      const u = URL.createObjectURL(b);
+    almacen.urlFoto(id).then((u) => {
+      if (!u || !vivo) return;
       cache.set(id, u);
       setUrl(u);
     });

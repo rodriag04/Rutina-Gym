@@ -42,3 +42,4 @@ export const IPesa = IGym;
 export const ICompartir = I(['M12 3v12', 'm8 7 4-4 4 4', 'M6 11H5v9h14v-9h-1']);
 export const IMas2 = I(['M12 5v14', 'M5 12h14'], { 'stroke-width': 2.2 });
 export const IEstrella = I('m12 4 2.4 5 5.4.6-4 3.7 1.1 5.4L12 16l-4.9 2.7 1.1-5.4-4-3.7 5.4-.6z');
+export const IChat = I(['M5 5h14v10H9l-4 4z', 'M9 9h6M9 12h4']);

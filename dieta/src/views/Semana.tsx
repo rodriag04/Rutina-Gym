@@ -7,7 +7,7 @@ import { resumenCantidades, porQue } from '../lib/explicar';
 import { tareasSemana } from '../lib/compra';
 import { PorQue } from './Hoy';
 import type { ConfigDia } from '../lib/tipos';
-import { abrir, fmt } from '../lib/ui';
+import { abrir, borradorChat, fmt, pestana } from '../lib/ui';
 import { Finde } from './Finde';
 
 export function Semana() {
@@ -86,7 +86,14 @@ export function Semana() {
             <Dia fecha={sem.config.dias[sel].fecha} cfg={sem.config.dias[sel]} i={sel} taper={sem.config.taper} />
           )}
           <div style="display:grid;gap:8px;margin-top:18px">
-            <button class="btn ancho claude-btn" onClick={() => abrir({ t: 'claude', lunes })}>
+            <button
+              class="btn ancho claude-btn"
+              onClick={() => {
+                if (!__CLAUDE__) return abrir({ t: 'claude', lunes });
+                borradorChat.value = { texto: `Te mando la foto de mi compra: móntame la semana del ${fechaCorta(lunes)} con lo que tengo.`, enviar: false };
+                pestana.value = 'chat';
+              }}
+            >
               <ICamara /> Semana con Claude · foto de la compra
             </button>
             <button class="btn borde ancho" onClick={() => abrir({ t: 'generador', lunes })}>

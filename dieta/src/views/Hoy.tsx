@@ -21,7 +21,7 @@ import {
 import { interpretar } from '../lib/notas';
 import { pareceCodigo } from '../lib/claude';
 import { calcularDia, type ComidaDia, type DiaCalculado } from '../lib/plan';
-import { abrir, avisar, fmt, pestana } from '../lib/ui';
+import { abrir, avisar, borradorChat, fmt, pestana } from '../lib/ui';
 import { cfgDia } from '../lib/generador';
 import { porQue, resumenCantidades } from '../lib/explicar';
 import { Finde } from './Finde';
@@ -339,7 +339,10 @@ function Cuentame() {
     setTxt('');
     (document.activeElement as HTMLElement | null)?.blur();
     if (acciones.length) avisar(resumen, () => restaurar(antes), 8000);
-    else avisar(['Guardado en tus notas.', 'No he visto nada que cambiar en el plan. Prueba con horas, "ceno fuera", "peso 72"…']);
+    else if (__CLAUDE__) {
+      borradorChat.value = { texto: t, enviar: true };
+      pestana.value = 'chat';
+    } else avisar(['Guardado en tus notas.', 'No he visto nada que cambiar en el plan. Prueba con horas, "ceno fuera", "peso 72"…']);
   };
   return (
     <form class="cuentame" onSubmit={enviar}>

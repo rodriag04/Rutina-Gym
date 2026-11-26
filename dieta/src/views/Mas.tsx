@@ -4,7 +4,7 @@ import { Hoja } from '../components/Hoja';
 import { ImagenPlato } from '../components/Imagen';
 import { ALIMENTOS } from '../data/alimentos';
 import { RECETAS, VERDURAS } from '../data/recetas';
-import { db } from '../lib/db';
+import { almacen, capacidad } from '../lib/almacen';
 import { correcciones, exportar, resumenActual, horas, hoy, importar, notas, objetivos, prefs, proximoLunes } from '../lib/estado';
 
 const diaSemanaHoy = () => diaSemana(hoy.value);
@@ -15,7 +15,7 @@ import { OBJETIVOS } from '../lib/plan';
 import type { Alimento, Slot } from '../lib/tipos';
 import { abrir, avisar, fmt } from '../lib/ui';
 
-const RUTINA = '/Rutina-Gym/';
+const RUTINA = __CLAUDE__ ? 'https://rodriag04.github.io/Rutina-Gym/' : '/Rutina-Gym/';
 
 async function copiarResumen() {
   const t = resumenActual();
@@ -30,12 +30,12 @@ async function copiarResumen() {
 export function Mas() {
   const sinCopia = !prefs.value.ultimaCopia || Date.now() - Date.parse(prefs.value.ultimaCopia) > 7 * 86400000;
   const items: [Icono, string, string, () => void][] = [
-    [IGym, 'Rutina del gym', 'Tu app de entrenamiento', () => (location.href = RUTINA)],
-    [ICamara, 'Semana con Claude', 'Foto de la compra → comidas con lo que tienes', () => abrir({ t: 'claude', lunes: diaSemanaHoy() >= 4 ? proximoLunes() : lunesDe(hoy.value) })],
+    [IGym, 'Rutina del gym', 'Tu app de entrenamiento', () => (__CLAUDE__ ? window.open(RUTINA, '_blank') : (location.href = RUTINA))],
+    ...(__CLAUDE__ ? [] : ([[ICamara, 'Semana con Claude', 'Foto de la compra → comidas con lo que tienes', () => abrir({ t: 'claude', lunes: diaSemanaHoy() >= 4 ? proximoLunes() : lunesDe(hoy.value) })]] as [Icono, string, string, () => void][])),
     [ICopa, 'Fin de semana', 'Regla del plato, domingo y calculadora de copas', () => abrir({ t: 'finde' })],
     [IFuego, 'Airfryer', 'Temperaturas y tiempos', () => abrir({ t: 'airfryer' })],
     [ILibro, 'Recetario', `${RECETAS.length} platos con foto y preparación`, () => abrir({ t: 'recetario' })],
-    [ICopia, 'Resumen para Claude', 'Copia tu semana, peso y notas para el proyecto "Dieta Rodrigo"', copiarResumen],
+    ...(__CLAUDE__ ? [] : ([[ICopia, 'Resumen para Claude', 'Copia tu semana, peso y notas para el proyecto "Dieta Rodrigo"', copiarResumen]] as [Icono, string, string, () => void][])),
     [INota, 'Tus notas', `${notas.value.length} comentarios`, () => abrir({ t: 'notas' })],
     [IHoja, 'Alimentos', 'Tabla de kcal y proteína (editable)', () => abrir({ t: 'alimentos' })],
     [IInfo, 'Cómo se calcula', 'Objetivos, reparto y reglas del plan', () => abrir({ t: 'metodo' })],
@@ -279,11 +279,20 @@ export function Notas() {
   );
 }
 
+function dataUrlABlob(url: string): Blob {
+  const [cab, b64] = url.split(',');
+  const tipo = cab.match(/data:([^;]+)/)?.[1] ?? 'image/jpeg';
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new Blob([bytes], { type: tipo });
+}
+
 export function Copia() {
   const descargar = async (conFotos: boolean) => {
     const datos = exportar();
     if (conFotos) {
-      const fotos = await db.todasFotos();
+      const fotos = await almacen.todasFotos();
       const out: Record<string, string> = {};
       for (const [k, b] of fotos) out[k] = await new Promise<string>((ok) => {
         const r = new FileReader();
@@ -293,7 +302,19 @@ export function Copia() {
       datos.fotos = out;
     }
     const nombre = `comidas-rodri-${new Date().toISOString().slice(0, 10)}.json`;
-    const file = new File([JSON.stringify(datos)], nombre, { type: 'application/json' });
+    const texto = JSON.stringify(datos);
+    const descargas = await capacidad<{ save(r: { filename: string; data: string }): Promise<unknown> }>('downloads');
+    if (descargas) {
+      try {
+        await descargas.save({ filename: nombre, data: texto });
+        prefs.value = { ...prefs.value, ultimaCopia: new Date().toISOString() };
+        avisar(['Copia guardada.']);
+      } catch {
+        avisar(['No se guardó la copia.']);
+      }
+      return;
+    }
+    const file = new File([texto], nombre, { type: 'application/json' });
     try {
       if (navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file], title: nombre });
       else {
@@ -313,14 +334,21 @@ export function Copia() {
     if (!f) return;
     try {
       const datos = JSON.parse(await f.text());
-      importar(datos);
-      if (datos.fotos) {
-        for (const [k, url] of Object.entries(datos.fotos as Record<string, string>)) {
-          const b = await (await fetch(url)).blob();
-          await db.guardarFoto(k, b);
+      // Las fotos de la copia se suben y cambian de id: se actualizan sus referencias.
+      const ids = new Map<string, string>();
+      for (const [k, url] of Object.entries((datos.fotos ?? {}) as Record<string, string>)) {
+        try {
+          ids.set(k, await almacen.subirFoto(dataUrlABlob(url)));
+        } catch {
+          /* una foto que no sube no impide importar lo demás */
         }
       }
-      avisar(['Copia importada.']);
+      if (ids.size) {
+        datos.fotosReceta = Object.fromEntries(Object.entries((datos.fotosReceta ?? {}) as Record<string, string>).map(([r, id]) => [r, ids.get(id) ?? id]));
+        datos.registros = ((datos.registros ?? []) as { foto?: string }[]).map((r) => (r.foto && ids.has(r.foto) ? { ...r, foto: ids.get(r.foto) } : r));
+      }
+      importar(datos);
+      avisar([`Copia importada${ids.size ? ` con ${ids.size} fotos` : ''}.`]);
     } catch (err) {
       avisar([`No se pudo importar: ${(err as Error).message}`]);
     }

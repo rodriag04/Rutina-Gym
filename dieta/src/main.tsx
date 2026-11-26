@@ -3,6 +3,7 @@ import { signal } from '@preact/signals';
 import { registerSW } from 'virtual:pwa-register';
 import { App } from './app';
 import { cargar } from './lib/estado';
+import './styles/fuentes.css';
 import './styles/app.css';
 
 const actualizar = signal<(() => void) | undefined>(undefined);

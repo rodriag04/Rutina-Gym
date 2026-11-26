@@ -2,8 +2,9 @@ import { ICamara, ICambiar, ICheck, IFuego, IReloj, ISaltar, ILapiz } from '../c
 import { Hoja } from '../components/Hoja';
 import { ImagenPlato } from '../components/Imagen';
 import { RECETA } from '../data/recetas';
-import { comprimir, db } from '../lib/db';
-import { diaCalculado, fotoId, fotosReceta, registrar, borrarRegistro } from '../lib/estado';
+import { comprimir } from '../lib/db';
+import { almacen } from '../lib/almacen';
+import { diaCalculado, fotosReceta, registrar, borrarRegistro } from '../lib/estado';
 import { alimento, cantidades, macroPorciones, textoCantidad, type Porcion } from '../lib/nutricion';
 import { abrir, avisar, cerrar, fmt } from '../lib/ui';
 import type { Slot } from '../lib/tipos';
@@ -20,8 +21,7 @@ export function Receta({ id, fecha, slot }: { id: string; fecha?: string; slot?:
     const f = (e.target as HTMLInputElement).files?.[0];
     if (!f) return;
     const blob = await comprimir(f, 1200);
-    const fid = fotoId();
-    await db.guardarFoto(fid, blob);
+    const fid = await almacen.subirFoto(blob);
     fotosReceta.value = { ...fotosReceta.value, [id]: fid };
     avisar(['Foto guardada: saldrá en este plato a partir de ahora.']);
   };

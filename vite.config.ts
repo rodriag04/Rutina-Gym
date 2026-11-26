@@ -22,7 +22,7 @@ const base = process.env.BASE || '/';
 
 export default defineConfig({
   base,
-  define: { __VERSION__: JSON.stringify(pkg.version) },
+  define: { __VERSION__: JSON.stringify(pkg.version), __CLAUDE__: 'false', __VERSION_DIETA__: '"test"' },
   resolve: { alias: { '@perfil': raiz(`./src/perfiles/${perfil}/index.ts`) } },
   plugins: [
     preact(),

@@ -12,7 +12,7 @@ const base = process.env.BASE || '/';
 export default defineConfig({
   root: raiz('./dieta'),
   base,
-  define: { __VERSION_DIETA__: JSON.stringify(pkg.version) },
+  define: { __VERSION_DIETA__: JSON.stringify(pkg.version), __CLAUDE__: 'false' },
   build: {
     outDir: process.env.OUT_DIR ? raiz(process.env.OUT_DIR) : raiz('./dist-dieta'),
     emptyOutDir: true

@@ -1,6 +1,7 @@
 import { useEffect } from 'preact/hooks';
-import { ICompra, IHoy, IMas, IProgreso, ISemana, type Icono } from './components/Iconos';
-import { cargado, prefs } from './lib/estado';
+import { IChat, ICompra, IHoy, IMas, IProgreso, ISemana, type Icono } from './components/Iconos';
+import { Chat } from './views/Chat';
+import { cargado, prefs, sinNube } from './lib/estado';
 import { hojas, pestana, toast, type Pestana } from './lib/ui';
 import { Cambiar } from './views/Cambiar';
 import { ConClaude } from './views/ConClaude';
@@ -17,6 +18,7 @@ import { Semana } from './views/Semana';
 const PESTANAS: [Pestana, string, Icono][] = [
   ['hoy', 'Hoy', IHoy],
   ['semana', 'Semana', ISemana],
+  ...(__CLAUDE__ ? ([['chat', 'Claude', IChat]] as [Pestana, string, Icono][]) : []),
   ['compra', 'Compra', ICompra],
   ['progreso', 'Progreso', IProgreso],
   ['mas', 'Más', IMas]
@@ -26,6 +28,8 @@ export function App({ actualizar }: { actualizar?: () => void }) {
   const tema = prefs.value.tema;
   useEffect(() => {
     const r = document.documentElement;
+    // Dentro de Claude el tema "automático" es el de Claude: no se toca.
+    if (tema === 'auto' && __CLAUDE__) return;
     if (tema === 'auto') r.removeAttribute('data-theme');
     else r.setAttribute('data-theme', tema === 'oscuro' ? 'dark' : 'light');
   }, [tema]);
@@ -35,7 +39,8 @@ export function App({ actualizar }: { actualizar?: () => void }) {
   const P = pestana.value;
   return (
     <>
-      <main class="app">
+      <main class={`app${P === 'chat' ? ' con-chat' : ''}`}>
+        {sinNube.value && <div class="aviso" style="margin:0 0 10px">{sinNube.value}</div>}
         {actualizar && (
           <button class="aviso verde" style="width:100%;text-align:left;margin:0 0 10px" onClick={actualizar}>
             Hay una versión nueva. Toca para actualizar.
@@ -43,12 +48,13 @@ export function App({ actualizar }: { actualizar?: () => void }) {
         )}
         {P === 'hoy' && <Hoy />}
         {P === 'semana' && <Semana />}
+        {P === 'chat' && <Chat />}
         {P === 'compra' && <Compra />}
         {P === 'progreso' && <Progreso />}
         {P === 'mas' && <Mas />}
       </main>
       <nav class="nav" aria-label="Secciones">
-        <div class="nav-in">
+        <div class={`nav-in${__CLAUDE__ ? ' seis' : ''}`}>
           {PESTANAS.map(([id, t, Ic]) => (
             <button class={P === id ? 'activa' : ''} aria-current={P === id ? 'page' : undefined} onClick={() => (pestana.value = id)}>
               <Ic />

@@ -3,7 +3,8 @@ import { ALIMENTOS, registrarAlimentosExtra } from '../data/alimentos';
 import { RECETA, registrarRecetasExtra } from '../data/recetas';
 import { leerCodigo, resumenParaClaude } from './claude';
 import { recomendar } from './progreso';
-import { db, pedirPersistencia } from './db';
+import { pedirPersistencia } from './db';
+import { almacen, iniciarAlmacen } from './almacen';
 import { ahoraHora, diaSemana, hoyISO, lunesDe, sumarDias } from './fechas';
 import { cfgDia, configPorDefecto, generarSemana, reparar } from './generador';
 import { HORAS, type Horas } from './horario';
@@ -36,6 +37,19 @@ export const tareasHechas = signal<string[]>([]);
 export const prefs = signal<Prefs>({ tema: 'auto', pierdeFuerza: false });
 /** Lo que ha añadido Claude desde fotos: alimentos y recetas nuevas. */
 export const alimentosExtra = signal<Alimento[]>([]);
+/** Conversación con Claude (versión dentro de Claude). */
+export interface MensajeChat {
+  rol: 'yo' | 'claude';
+  texto: string;
+  hora: string;
+  fecha: string;
+  foto?: string;
+  cambios?: string[];
+  error?: boolean;
+}
+export const chat = signal<MensajeChat[]>([]);
+/** Aviso si no se pudo leer la nube: en ese caso no se escribe nada para no pisar datos. */
+export const sinNube = signal<string | null>(null);
 export const recetasExtra = signal<Receta[]>([]);
 
 /** Lo que se guarda: clave en IndexedDB → señal. */
@@ -53,7 +67,8 @@ const PERSISTIDO = {
   tareasHechas,
   prefs,
   alimentosExtra,
-  recetasExtra
+  recetasExtra,
+  chat
 } as const;
 
 export const semanaDe = (fecha: string) => semanas.value[lunesDe(fecha)];
@@ -69,10 +84,17 @@ export function diaCalculado(fecha: string) {
 }
 
 export async function cargar() {
+  await iniciarAlmacen();
+  let lecturaOk = true;
   for (const [clave, sig] of Object.entries(PERSISTIDO)) {
-    const v = await db.get(clave);
-    if (v !== undefined) (sig as { value: unknown }).value = v;
+    try {
+      const v = await almacen.get(clave);
+      if (v !== undefined) (sig as { value: unknown }).value = v;
+    } catch {
+      lecturaOk = false;
+    }
   }
+  if (!lecturaOk) sinNube.value = 'No se pudo leer tus datos de Claude. Lo que cambies ahora no se guardará: cierra y vuelve a abrir la app.';
   fijarCorrecciones(correcciones.value);
   registrarExtras();
   // Guardar cada cambio (también la semana que se genera o se repara justo abajo).
@@ -84,7 +106,7 @@ export async function cargar() {
         primero = false;
         return;
       }
-      void db.set(clave, v);
+      if (lecturaOk) void almacen.set(clave, v);
     });
   }
   migrarRecetas();
@@ -92,7 +114,7 @@ export async function cargar() {
   asegurarSemana(lunesDe(hoy.value));
   cargado.value = true;
   effect(() => fijarCorrecciones(correcciones.value));
-  void pedirPersistencia();
+  if (!almacen.nube) void pedirPersistencia();
   setInterval(() => {
     hoy.value = hoyISO();
     ahora.value = ahoraHora();
