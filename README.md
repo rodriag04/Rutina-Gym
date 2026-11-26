@@ -30,6 +30,8 @@ La misma app publicada como artifact de Claude: https://claude.ai/artifact/Wm2WC
 - Necesita conexión. Los datos viven en la base de datos del artifact (solo tú puedes leerla), no en el iPhone: son independientes de la app instalada. Para pasar tus sesiones, en la app del iPhone Ajustes → Copia JSON, y en la de Claude Ajustes → Importar.
 - Código: `src/main-claude.tsx`, `src/lib/nube.ts` (almacén), `src/lib/asistente.ts` (instrucciones y herramientas), `src/views/Chat.tsx`. Compilar: `npm run build:claude-gym` → `dist-claude-gym/rutina-de-rodrigo.html`, que se publica en esa misma dirección. En local: `npm run dev:claude-gym` y abrir `/claude.html` (sin Claude, el chat avisa de que no está disponible).
 
+**Acceso con icono propio en el iPhone.** Claude dibuja él mismo el icono de los accesos a sus artifacts. Para tener el nuestro: abrir en Safari https://rodriag04.github.io/Rutina-Gym/ir/rutina.html (o `ir/dieta.html`) → Compartir → Añadir a pantalla de inicio. La página guarda la dirección con `?abrir` y, al tocar el icono, salta a la app de Claude. Código: `public/ir/`.
+
 ## Primer arranque
 
 Importa `datos/sesiones.json` (13 sesiones, 244 series) y lo comprueba. El resultado sale en Ajustes → Datos.
