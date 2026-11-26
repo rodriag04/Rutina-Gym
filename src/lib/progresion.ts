@@ -1,4 +1,4 @@
-import type { Ejercicio } from '../data/rutina';
+import type { Carga, Ejercicio } from '../data/rutina';
 import { conPesoCorporal, Escalera } from './cargas';
 import { kg as fkg } from './formato';
 import type { Serie, Sesion } from './tipos';
@@ -49,6 +49,9 @@ export interface Plan {
 }
 
 export const gymCompatible = (s: Sesion, gym: string | null) => !gym || s.gym == null || s.gym === gym;
+/** Mancuernas, barras y tu peso pesan lo mismo en cualquier gimnasio; poleas y máquinas no. */
+export const pesoLibre = (c: Carga) => c === 'mancuerna' || c === 'barra' || c === 'lastre' || c === 'corporal';
+export const comparable = (ex: Pick<Ejercicio, 'carga'>, s: Sesion, gym: string | null) => pesoLibre(ex.carga) || gymCompatible(s, gym);
 
 /** Series válidas para calcular: sin calentamientos ni series < 75 % del peso máximo. */
 export function limpias(series: Serie[], ex?: Pick<Ejercicio, 'carga'>): Serie[] {
@@ -70,7 +73,7 @@ export function sesionesDe(exId: string, sesiones: Sesion[]): Sesion[] {
 
 export function referencia(ex: Ejercicio, ctx: ContextoPlan): { s: Sesion; otroGym: boolean } | undefined {
   const lista = sesionesDe(ex.id, ctx.sesiones).filter((s) => !s.descarga && limpias(s.ex[ex.id], ex).length);
-  const mismo = lista.find((s) => gymCompatible(s, ctx.gym));
+  const mismo = lista.find((s) => comparable(ex, s, ctx.gym));
   if (mismo) return { s: mismo, otroGym: false };
   if (lista[0]) return { s: lista[0], otroGym: true };
   return undefined;

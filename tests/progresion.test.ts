@@ -80,6 +80,12 @@ describe('series rectas', () => {
     const o = plan('jue-4a', 'otro');
     expect(o.ref?.fecha).toBe('2026-11-03'); // 3 nov sin confirmar vale para los dos; 12 nov es Sevilla
   });
+  it('mancuernas: valen las de cualquier gimnasio; máquinas no', () => {
+    const p = plan('lun-1', 'montoto');
+    expect(p.otroGym).toBe(false);
+    expect(p.ref?.fecha).toBe('2026-11-16');
+    expect(plan('lun-2', 'montoto').otroGym).toBe(true);
+  });
   it('3 nov fondos sustituidos no cuentan', () => {
     const p = planificar(ejercicio('jue-2')!, ctx('jue-2', 'sevilla', { sesiones: sesiones.filter((s) => s.fecha < '2026-11-12') }));
     expect(p.ref?.fecha).toBe('2026-10-29');

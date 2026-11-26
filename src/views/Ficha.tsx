@@ -8,7 +8,7 @@ import { PERFIL, dia as getDia, ejercicio, etiquetas } from '../data/rutina';
 import { textoSeries } from '../lib/analisis';
 import { ajustes, escalera, notasEjercicio, pesoCorporal, sesiones, setNota } from '../lib/estado';
 import { fechaCorta, kg as fkg, mmss } from '../lib/formato';
-import { gymCompatible, sesionesDe } from '../lib/progresion';
+import { comparable, sesionesDe } from '../lib/progresion';
 import { serie } from './Progreso';
 import { volver } from '../lib/ruta';
 import { comoVariante, planVariante, sesionesVariante } from '../lib/variantes';
@@ -22,7 +22,7 @@ export function Ficha({ id }: { id: string }) {
   const pc = pesoCorporal.value;
   const hist = sesionesDe(id, sesiones.value);
   const puntos = serie(ex, pc);
-  const fuera = hist.filter((s) => !gymCompatible(s, ajustes.value.gymPorDefecto));
+  const fuera = hist.filter((s) => !comparable(ex, s, ajustes.value.gymPorDefecto));
   const grupos = [...new Set(ex.musculos.p.map((m) => MUSCULOS[m].grupo))].map((g) => GRUPOS[g]);
   const gymNombre = (g: string | null) => ajustes.value.gimnasios.find((x) => x.id === g)?.nombre ?? 'sin confirmar';
   const d = getDia(ex.dia);

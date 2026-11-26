@@ -551,10 +551,11 @@ export const perfil: Perfil = {
   historial: historial as unknown as Sesion[],
   verificacion: { sesiones: 13, series: 244 },
   gimnasios: [
-    { id: 'sevilla', nombre: 'Basic-Fit Sevilla' },
+    { id: 'montoto', nombre: 'Basic-Fit Luis Montoto' },
+    { id: 'sevilla', nombre: 'Basic-Fit Sevilla (el otro)' },
     { id: 'otro', nombre: 'Otro gimnasio' }
   ],
-  gymPorDefecto: 'sevilla',
+  gymPorDefecto: 'montoto',
   pesoCorporal: 72,
   pesosIniciales: { mancuerna: 10, 'polea-lb': 32, 'polea-kg': 20, barra: 20 },
   medidasIniciales: [{ fecha: '2026-10-01', peso: 72 }],

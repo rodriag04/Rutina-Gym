@@ -5,14 +5,14 @@ import { DIAS, EJERCICIOS, PERFIL, ejercicio, type Ejercicio } from '../data/rut
 import { avisos, seriesSemana } from '../lib/analisis';
 import { ajustes, medidas, pesoCorporal, sesiones, setMedidas } from '../lib/estado';
 import { fechaCorta, hoyISO, kg as fkg, lunesDe, sumarDias } from '../lib/formato';
-import { e1rm, gymCompatible, limpias, rendimiento, sesionesDe } from '../lib/progresion';
+import { comparable, e1rm, limpias, rendimiento, sesionesDe } from '../lib/progresion';
 import { ir } from '../lib/ruta';
 import type { Medida } from '../lib/tipos';
 
 /** Puntos de 1RM estimado del ejercicio, solo del gimnasio por defecto (los pesos no se comparan entre gimnasios). */
 export function serie(ex: Ejercicio, pc: number) {
   const gym = ajustes.value.gymPorDefecto;
-  return [...sesionesDe(ex.id, sesiones.value)].reverse().filter((s) => gymCompatible(s, gym)).map((s) => {
+  return [...sesionesDe(ex.id, sesiones.value)].reverse().filter((s) => comparable(ex, s, gym)).map((s) => {
     const c = limpias(s.ex[ex.id], ex);
     const mejor = c.reduce((m, x) => (e1rm(x.kg, x.reps) > e1rm(m.kg, m.reps) ? x : m), c[0]);
     return { fecha: s.fecha, valor: Math.round(rendimiento(s.ex[ex.id], ex, pc) * 10) / 10, etiqueta: mejor ? `${fkg(mejor.kg)}×${mejor.reps}` : '' };

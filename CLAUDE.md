@@ -85,7 +85,9 @@ Cambios del 17 nov (app nueva, hechos como entrenador; motivo en una línea):
 
 ## Gimnasios
 
-- Mis pesos en poleas y máquinas no son comparables entre gimnasios.
+- Mis pesos en poleas y máquinas no son comparables entre gimnasios. Mancuernas, barras y peso corporal sí (la app los compara entre gimnasios desde el 26 nov).
+- Desde el 19 nov entreno en el Basic-Fit de Luis Montoto (Sevilla): ahí sí hay máquina de fondos; en el otro Basic-Fit de Sevilla hago extensión en polea en su lugar. En la app: `montoto` (por defecto), `sevilla` ("el otro"), `otro`.
+- Sesiones apuntadas en la app nueva (todas en Luis Montoto): 19 nov (jueves), 23 nov (rutina del martes), 24 nov (rutina del jueves, con press militar extra: solo 2 series de laterales, con mancuerna = variante), 26 nov (rutina del lunes: press inclinado todo con 26 sin compañero, no cuenta para la progresión; aperturas → cruce de poleas = variante). Están en la versión de Claude (17 sesiones, 323 series).
 - 12 nov (jueves): Sevilla, seguro.
 - 29 oct (jueves): otro gimnasio (fondos 64, predicador 36, laterales 9).
 - 2 nov: otro gimnasio (nota: el pullover "seguro mal").

@@ -1,7 +1,7 @@
 import { DIAS, EJERCICIOS, ORDEN_SEMANA, PERFIL, dia as getDia, ejercicio, equivalente, type DiaId, type Ejercicio } from '../data/rutina';
 import { ZONAS_SEMANALES } from '../data/musculos';
 import { diasEntre, fechaCorta, kg as fkg, lunesDe, sumarDias } from './formato';
-import { e1rm, gymCompatible, limpias, ordenarSesiones, rendimiento } from './progresion';
+import { comparable, e1rm, limpias, ordenarSesiones, rendimiento } from './progresion';
 import type { Serie, Sesion } from './tipos';
 
 export interface Aviso {
@@ -21,7 +21,7 @@ export function comparar(s: Sesion, todas: Sesion[], pc = 72): Map<string, numbe
     const ex = ejercicio(id);
     if (!ex || s.sustituto?.[id]) continue;
     const ahora = rendimiento(series, ex, pc);
-    const antes = [...prev].reverse().find((x) => x.ex[id]?.length && !x.sustituto?.[id] && !x.descarga && gymCompatible(x, s.gym));
+    const antes = [...prev].reverse().find((x) => x.ex[id]?.length && !x.sustituto?.[id] && !x.descarga && comparable(ex, x, s.gym));
     if (!antes || !ahora) continue;
     const r0 = rendimiento(antes.ex[id], ex, pc);
     if (r0) out.set(id, ahora / r0 - 1);
@@ -62,7 +62,7 @@ export function bajadasSesion(s: Sesion, todas: Sesion[], pc = 72): string[] {
   for (const [id, series] of Object.entries(s.ex)) {
     const ex = ejercicio(id);
     if (!ex || s.sustituto?.[id]) continue;
-    const antes = [...prev].reverse().find((x) => x.ex[id]?.length && !x.sustituto?.[id] && !x.descarga && gymCompatible(x, s.gym));
+    const antes = [...prev].reverse().find((x) => x.ex[id]?.length && !x.sustituto?.[id] && !x.descarga && comparable(ex, x, s.gym));
     if (antes && haBajado(antes.ex[id], series, ex, pc)) out.push(id);
   }
   return out;
@@ -197,7 +197,7 @@ export function resumenSesion(s: Sesion, todas: Sesion[], pc = 72): ResumenSesio
     if (!ex.esquema && new Set(c.map((x) => x.kg)).size > 1) r.piramides.push(ex);
     if (ex.rirMin >= 2 && series.some((x) => x.drop)) r.bajadasRir.push(ex);
     // Con variante no hay récord: se compararía con otro ejercicio.
-    const mejorAntes = s.sustituto?.[ex.id] ? 0 : Math.max(0, ...anteriores.filter((x) => x.ex[ex.id] && !x.sustituto?.[ex.id] && gymCompatible(x, s.gym)).map((x) => rendimiento(x.ex[ex.id], ex, pc)));
+    const mejorAntes = s.sustituto?.[ex.id] ? 0 : Math.max(0, ...anteriores.filter((x) => x.ex[ex.id] && !x.sustituto?.[ex.id] && comparable(ex, x, s.gym)).map((x) => rendimiento(x.ex[ex.id], ex, pc)));
     if (mejorAntes > 0) {
       const mejor = c.reduce<Serie | undefined>((m, x) => (!m || e1rm(x.kg, x.reps) > e1rm(m.kg, m.reps) ? x : m), undefined);
       if (mejor && rendimiento([mejor], ex, pc) > mejorAntes * 1.001) r.records.push({ ex, serie: mejor });
