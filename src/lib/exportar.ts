@@ -3,6 +3,7 @@ import { avisos, resumenSesion, textoSeries } from './analisis';
 import { fechaCorta, fechaLarga, hoyISO, kg as fkg, sumarDias } from './formato';
 import { ordenarSesiones } from './progresion';
 import type { Ajustes, EntradaDiario, Medida, Sesion } from './tipos';
+import { esVariante, nombreSustituto } from './variantes';
 
 export function descargar(nombre: string, contenido: string, tipo: string) {
   const blob = new Blob([contenido], { type: tipo });
@@ -32,13 +33,14 @@ const csvCampo = (v: unknown) => {
 };
 
 export function seriesCSV(sesiones: Sesion[], gyms: Ajustes['gimnasios']) {
-  const filas = [['fecha', 'dia', 'gimnasio', 'ejercicio_id', 'ejercicio', 'serie', 'kg', 'reps', 'bajada_kg', 'bajada_reps', 'calentamiento', 'notas_sesion']];
+  const filas = [['fecha', 'dia', 'gimnasio', 'ejercicio_id', 'ejercicio', 'serie', 'kg', 'reps', 'bajada_kg', 'bajada_reps', 'calentamiento', 'notas_sesion', 'hecho_en_su_lugar']];
   for (const s of ordenarSesiones(sesiones)) {
     const gym = gyms.find((g) => g.id === s.gym)?.nombre ?? (s.gym ? s.gym : 'sin confirmar');
     for (const [id, series] of Object.entries(s.ex)) {
       series.forEach((x, i) =>
         filas.push([s.fecha, s.dia, gym, id, ejercicio(id)?.nombre ?? id, String(i + 1), String(x.kg).replace('.', ','), String(x.reps),
-          x.drop ? String(x.drop.kg).replace('.', ',') : '', x.drop ? String(x.drop.reps) : '', x.calentamiento ? 'si' : '', s.notas])
+          x.drop ? String(x.drop.kg).replace('.', ',') : '', x.drop ? String(x.drop.reps) : '', x.calentamiento ? 'si' : '', s.notas,
+          s.sustituto?.[id] ? nombreSustituto(id, s.sustituto[id]) : ''])
       );
     }
   }
@@ -55,7 +57,9 @@ export function textoSesion(s: Sesion, todas: Sesion[], gyms: Ajustes['gimnasios
   for (const id of d.bloques.flat()) {
     const ex = ejercicio(id)!;
     const series = s.ex[id];
-    l.push(series?.length ? `${et.get(id)}. ${ex.corto}: ${textoSeries(series)}` : `${et.get(id)}. ${ex.corto}: —`);
+    const sus = s.sustituto?.[id];
+    const nombre = sus ? `${esVariante(id, sus) ? ex.variante!.corto : sus} (en lugar de ${ex.corto})` : ex.corto;
+    l.push(series?.length ? `${et.get(id)}. ${nombre}: ${textoSeries(series)}` : `${et.get(id)}. ${nombre}: —`);
   }
   l.push(`Series: ${r.hechas}/${r.previstas}${s.duracionMin ? ` · ${s.duracionMin} min` : ''}`);
   if (r.records.length) l.push(`Récords: ${r.records.map((x) => `${x.ex.corto} ${fkg(x.serie.kg)}×${x.serie.reps}`).join(', ')}`);
@@ -116,7 +120,8 @@ export function informeClaude(d: {
     l.push(`### ${fechaLarga(s.fecha)} · ${getDia(s.dia).nombre} · ${gym}${s.descarga ? ' · descarga' : ''}`);
     for (const id of getDia(s.dia).bloques.flat()) {
       const ex = ejercicio(id)!;
-      l.push(`- ${ex.nombre}: ${s.ex[id]?.length ? textoSeries(s.ex[id]) : 'sin hacer'}`);
+      const sus = s.sustituto?.[id];
+      l.push(`- ${ex.nombre}${sus ? ` → hecho en su lugar: ${nombreSustituto(id, sus)}` : ''}: ${s.ex[id]?.length ? textoSeries(s.ex[id]) : 'sin hacer'}`);
     }
     if (s.sensacion?.energia) l.push(`- Energía: ${['', 'floja', 'normal', 'buena', 'muy buena'][s.sensacion.energia]}`);
     if (s.sensacion?.molestias?.length) l.push(`- Molestias: ${s.sensacion.molestias.join(', ')}`);

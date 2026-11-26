@@ -6,11 +6,12 @@ import { MapaMuscular } from '../components/MapaMuscular';
 import { GRUPOS, MUSCULOS } from '../data/musculos';
 import { PERFIL, dia as getDia, ejercicio, etiquetas } from '../data/rutina';
 import { textoSeries } from '../lib/analisis';
-import { ajustes, notasEjercicio, pesoCorporal, sesiones, setNota } from '../lib/estado';
-import { fechaCorta, mmss } from '../lib/formato';
+import { ajustes, escalera, notasEjercicio, pesoCorporal, sesiones, setNota } from '../lib/estado';
+import { fechaCorta, kg as fkg, mmss } from '../lib/formato';
 import { gymCompatible, sesionesDe } from '../lib/progresion';
 import { serie } from './Progreso';
 import { volver } from '../lib/ruta';
+import { comoVariante, planVariante, sesionesVariante } from '../lib/variantes';
 
 
 export function Ficha({ id }: { id: string }) {
@@ -25,6 +26,19 @@ export function Ficha({ id }: { id: string }) {
   const grupos = [...new Set(ex.musculos.p.map((m) => MUSCULOS[m].grupo))].map((g) => GRUPOS[g]);
   const gymNombre = (g: string | null) => ajustes.value.gimnasios.find((x) => x.id === g)?.nombre ?? 'sin confirmar';
   const d = getDia(ex.dia);
+  const v = ex.variante;
+  const exV = v ? comoVariante(ex) : null;
+  const planV = v
+    ? planVariante(ex, {
+        sesiones: sesiones.value,
+        gym: ajustes.value.gymPorDefecto,
+        escalera: escalera(v.carga),
+        pesoCorporal: pc,
+        descarga: false,
+        escaleraDe: (e) => escalera(e.carga)
+      })
+    : null;
+  const histV = v ? [...sesionesVariante(ex, sesiones.value)].reverse() : [];
 
   return (
     <div class="vista vista-ficha" style={{ '--dia': d.color }}>
@@ -88,6 +102,40 @@ export function Ficha({ id }: { id: string }) {
           <div><dt>Tempo</dt><dd>sube {ex.tempo.sube} s · baja {ex.tempo.baja} s</dd></div>
         </dl>
       </section>
+
+      {v && exV && planV && (
+        <section class="tarjeta">
+          <h2 class="tarjeta-tit">Variante · trabaja lo mismo</h2>
+          <p class="ficha-var-nombre">{v.nombre}</p>
+          <p class="nota-pie">{v.cuando} Se elige en la pantalla de entrenar y no mezcla sus pesos con los de {ex.corto}.</p>
+          <p class="tecnica">{v.tecnica}</p>
+          <dl class="datos num">
+            <div><dt>Series</dt><dd>{exV.series} × {exV.min}-{exV.max}{exV.porLado ? ' por lado' : ''}</dd></div>
+            <div>
+              <dt>Hoy</dt>
+              <dd>
+                {planV.decision === 'nuevo'
+                  ? 'elige peso'
+                  : `${fkg(planV.series[0].kg)} kg × ${planV.series.map((x) => x.reps).join(' · ')}`}
+              </dd>
+            </div>
+          </dl>
+          <p class="nota-pie">{planV.motivo}{v.kgNota ? ` (${v.kgNota}.)` : ''}</p>
+          {histV.length > 0 && (
+            <table class="tabla">
+              <thead><tr><th>Fecha</th><th>Series</th></tr></thead>
+              <tbody>
+                {histV.map((s) => (
+                  <tr key={s.id}>
+                    <td>{fechaCorta(s.fecha)}<span class="tabla-sub">{gymNombre(s.gym)}</span></td>
+                    <td class="num">{textoSeries(s.ex[id])}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </section>
+      )}
 
       <section class="tarjeta">
         <h2 class="tarjeta-tit">Tus correcciones</h2>

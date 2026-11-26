@@ -20,6 +20,7 @@ export function sesionDesde(b: Borrador): Sesion {
     if (ok.length) ex[id] = ok;
   }
   const exNotas = Object.fromEntries(Object.entries(b.exNotas).filter(([, v]) => v.trim()));
+  const sustituto = Object.fromEntries(Object.entries(b.sustituto ?? {}).filter(([id, v]) => v && ex[id]?.length));
   const dur = Math.round((Date.now() - new Date(b.inicio).getTime()) / 60000);
   return {
     id: b.editando ?? `${b.fecha}-${b.dia}-${uid().slice(0, 4)}`,
@@ -30,6 +31,7 @@ export function sesionDesde(b: Borrador): Sesion {
     notas: b.notas ?? '',
     ex,
     exNotas: Object.keys(exNotas).length ? exNotas : undefined,
+    sustituto: Object.keys(sustituto).length ? sustituto : undefined,
     sensacion: b.sensacion,
     descarga: b.descarga || undefined,
     guardado: new Date().toISOString(),
@@ -53,7 +55,6 @@ export function Terminar({ b, onCerrar, onGuardado }: { b: Borrador; onCerrar: (
       if (orig) {
         s.duracionMin = orig.duracionMin;
         s.origen = orig.origen;
-        if (orig.sustituto) s.sustituto = orig.sustituto;
       }
     }
     await guardarSesion(s);

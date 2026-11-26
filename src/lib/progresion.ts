@@ -34,13 +34,15 @@ export interface SeriePlan {
   alt?: { kg: number; reps: number; si: string };
 }
 
-export type Decision = 'subir' | 'mantener' | 'bajar' | 'nuevo' | 'descarga';
+export type Decision = 'subir' | 'mantener' | 'bajar' | 'nuevo' | 'descarga' | 'estimado';
 
 export interface Plan {
   series: SeriePlan[];
   decision: Decision;
   motivo: string;
   ref?: { fecha: string; gym: string | null; series: Serie[]; inicial?: boolean };
+  /** Ejercicio del que sale la referencia cuando no es este (variantes). */
+  fuente?: string;
   otroGym?: boolean;
   calentamiento?: { kg: number; reps: number }[];
   bajoRango?: boolean;

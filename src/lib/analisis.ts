@@ -196,7 +196,8 @@ export function resumenSesion(s: Sesion, todas: Sesion[], pc = 72): ResumenSesio
     if (c.length < series.length) r.calentamientos.push(ex);
     if (!ex.esquema && new Set(c.map((x) => x.kg)).size > 1) r.piramides.push(ex);
     if (ex.rirMin >= 2 && series.some((x) => x.drop)) r.bajadasRir.push(ex);
-    const mejorAntes = Math.max(0, ...anteriores.filter((x) => x.ex[ex.id] && !x.sustituto?.[ex.id] && gymCompatible(x, s.gym)).map((x) => rendimiento(x.ex[ex.id], ex, pc)));
+    // Con variante no hay récord: se compararía con otro ejercicio.
+    const mejorAntes = s.sustituto?.[ex.id] ? 0 : Math.max(0, ...anteriores.filter((x) => x.ex[ex.id] && !x.sustituto?.[ex.id] && gymCompatible(x, s.gym)).map((x) => rendimiento(x.ex[ex.id], ex, pc)));
     if (mejorAntes > 0) {
       const mejor = c.reduce<Serie | undefined>((m, x) => (!m || e1rm(x.kg, x.reps) > e1rm(m.kg, m.reps) ? x : m), undefined);
       if (mejor && rendimiento([mejor], ex, pc) > mejorAntes * 1.001) r.records.push({ ex, serie: mejor });

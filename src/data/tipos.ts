@@ -4,6 +4,33 @@ import type { Gimnasio, Medida, Sesion } from '../lib/tipos';
 export type DiaId = string;
 export type Carga = 'mancuerna' | 'polea-lb' | 'polea-kg' | 'barra' | 'lastre' | 'corporal';
 
+/**
+ * Otro ejercicio que trabaja lo mismo, para cuando la máquina está ocupada o no apetece.
+ * Sus series se guardan con el id del ejercicio principal y la marca `sustituto`,
+ * así no ensucian la progresión del principal y cuentan igual en las series semanales.
+ */
+export interface Variante {
+  id: string;
+  nombre: string;
+  corto: string;
+  carga: Carga;
+  /** Cuándo usarla, en una frase. */
+  cuando: string;
+  tecnica: string;
+  /** Ejercicio de la rutina del que sale el peso la primera vez (por defecto, el principal). */
+  fuente?: string;
+  /** 1RM de la variante = 1RM de la fuente × factor (por defecto 1). */
+  factor?: number;
+  series?: number;
+  min?: number;
+  max?: number;
+  rir?: string;
+  rirMin?: number;
+  porLado?: boolean;
+  /** Qué significa el kg (p. ej. "kg = cada polea"). */
+  kgNota?: string;
+}
+
 export interface Ejercicio {
   id: string;
   nombre: string;
@@ -37,6 +64,7 @@ export interface Ejercicio {
   desde?: string;
   /** Se hace primero con un lado y luego con el otro. */
   porLado?: boolean;
+  variante?: Variante;
 }
 
 export interface Dia {

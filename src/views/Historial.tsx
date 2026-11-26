@@ -7,6 +7,7 @@ import { compartir, copiar, textoSesion } from '../lib/exportar';
 import { fechaCorta, fechaLarga, hoyISO, lunesDe, sumarDias } from '../lib/formato';
 import { ordenarSesiones } from '../lib/progresion';
 import { ir, volver } from '../lib/ruta';
+import { nombreSustituto } from '../lib/variantes';
 import type { Sesion } from '../lib/tipos';
 
 
@@ -125,7 +126,7 @@ export function DetalleSesion({ id }: { id: string }) {
               <div class="det-txt">
                 <button class="det-nombre" onClick={() => ir({ v: 'ejercicio', id: exId })}>{ex?.nombre ?? exId}</button>
                 <span class="num">{series?.length ? textoSeries(series) : 'Sin hacer'}</span>
-                {s.sustituto?.[exId] && <span class="det-nota">Hecho en su lugar: {s.sustituto[exId]}</span>}
+                {s.sustituto?.[exId] && <span class="det-nota">Hecho en su lugar: {nombreSustituto(exId, s.sustituto[exId])}</span>}
                 {s.exNotas?.[exId] && <span class="det-nota">{s.exNotas[exId]}</span>}
               </div>
               {c != null && <span class={`det-cmp ${c > 0.02 ? 'sube' : c < -0.02 ? 'baja' : ''}`}>{c > 0.02 ? '↑' : c < -0.02 ? '↓' : '='} {Math.abs(Math.round(c * 100))}%</span>}

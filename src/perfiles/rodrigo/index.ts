@@ -1,6 +1,6 @@
 import historial from '../../../datos/sesiones.json';
 import type { Sesion } from '../../lib/tipos';
-import type { Dia, Ejercicio, Perfil } from '../../data/tipos';
+import type { Dia, Ejercicio, Perfil, Variante } from '../../data/tipos';
 
 const E = (e: Ejercicio) => e;
 
@@ -389,6 +389,115 @@ const ejercicios: Ejercicio[] = [
     tempo: { sube: 1, baja: 2 }, anim: 'press-frances', busqueda: 'press francés barra z técnica'
   })
 ];
+
+// ───────── VARIANTES ─────────
+// Una por ejercicio: mismos músculos, otra máquina. Respeta tus vetos (sin sentadilla, peso muerto
+// ni bisagra; press plano solo en máquina). El peso de la 1.ª vez sale de la fuente con el factor.
+const TEC_FONDOS = 'Torso recto y codos pegados apuntando atrás; empuja hasta estirar y sube hasta 90° de codo.';
+const TEC_TRASNUCA = 'De espaldas a la polea y un pie adelantado; codos junto a la cabeza apuntando al frente, estira hasta bloquear y vuelve hasta notar el estiramiento.';
+const TEC_VERTICALES = 'Pecho pegado al apoyo y asas verticales; tira con los codos rozando el cuerpo hacia la cadera y aguanta 1 s.';
+
+const variantes: Record<string, Omit<Variante, 'id'>> = {
+  'lun-1': { nombre: 'Press inclinado en máquina', corto: 'Press inclinado máquina', carga: 'polea-lb', factor: 1.9,
+    cuando: 'Si no hay banco libre o nadie te ayuda a subir las mancuernas.',
+    tecnica: 'Respaldo inclinado y asas a la altura del pecho alto; escápulas juntas y empuja hacia arriba sin despegar la espalda.' },
+  'lun-2': { nombre: 'Press plano en máquina convergente', corto: 'Press convergente', carga: 'polea-lb', factor: 1,
+    cuando: 'Si la máquina de siempre está ocupada. Sigue siendo press plano en máquina.',
+    tecnica: 'Asas a la altura del pezón; pecho arriba, escápulas atrás y empuja juntando un poco las manos al final.',
+    kgNota: 'si es de discos, apunta los discos que cargas' },
+  'lun-3': { nombre: 'Cruce de poleas de pie', corto: 'Cruce de poleas', carga: 'polea-lb', factor: 0.28,
+    cuando: 'Si la máquina de aperturas está ocupada.',
+    tecnica: 'Poleas a la altura del hombro y un paso adelante; codos algo flexionados y fijos, junta las manos delante del pecho en arco.',
+    kgNota: 'kg = cada polea' },
+  'lun-4': { nombre: 'Elevaciones laterales en polea', corto: 'Laterales polea', carga: 'polea-kg', fuente: 'jue-4a',
+    cuando: 'Si no hay mancuernas libres. Es la del jueves.',
+    tecnica: 'Polea baja con el cable por delante del cuerpo; sube el brazo hacia el lado hasta la altura del hombro y baja en 2 s.' },
+  'lun-5': { nombre: 'Extensión sobre la cabeza con mancuerna, a dos manos', corto: 'Extensión mancuerna', carga: 'mancuerna', factor: 0.6,
+    cuando: 'Si la polea está ocupada.',
+    tecnica: 'Sentado con respaldo y una mancuerna con las dos manos; bájala por detrás de la cabeza con los codos al frente y estira hasta arriba.' },
+  'lun-6': { nombre: 'Fondos en máquina para tríceps', corto: 'Fondos máquina', carga: 'polea-lb', fuente: 'jue-2',
+    cuando: 'Si la polea alta está ocupada. Es la del jueves.', tecnica: TEC_FONDOS },
+
+  'mar-1': { nombre: 'Dominadas', corto: 'Dominadas', carga: 'lastre', fuente: 'alt-1',
+    cuando: 'Si el jalón está ocupado. Mismo músculo con tu peso.',
+    tecnica: 'Agarre prono algo más ancho que los hombros; empieza colgado con las escápulas abajo y sube hasta pasar la barbilla.',
+    kgNota: 'kg = lastre (0 = tu peso)' },
+  'mar-2': { nombre: 'Remo en máquina con apoyo en el pecho, asas verticales', corto: 'Remo máquina verticales', carga: 'polea-lb', factor: 0.85,
+    cuando: 'Si la polea baja está ocupada (tu decisión del 27 oct).', tecnica: TEC_VERTICALES },
+  'mar-3': { nombre: 'Remo en polea baja con barra larga, agarre abierto', corto: 'Remo polea abierto', carga: 'polea-lb', factor: 1,
+    cuando: 'Si la máquina de remo está ocupada.',
+    tecnica: 'Sentado y torso casi vertical; tira de la barra hacia el pecho bajo con los codos abiertos a 60-70° y junta las escápulas.' },
+  'mar-4': { nombre: 'Pullover con mancuerna en banco', corto: 'Pullover mancuerna', carga: 'mancuerna', factor: 0.45,
+    cuando: 'Si la polea alta está ocupada.',
+    tecnica: 'Tumbado en banco plano con la mancuerna sobre el pecho; bájala por detrás de la cabeza con los codos casi rectos hasta estirar el dorsal y vuelve.' },
+  'mar-5': { nombre: 'Curl bayesiano en polea', corto: 'Curl bayesiano', carga: 'polea-kg', fuente: 'jue-3a', porLado: true,
+    cuando: 'Si no hay banco inclinado libre. Mismo bíceps estirado.',
+    tecnica: 'De espaldas a la polea baja y un paso adelante; el brazo queda por detrás del cuerpo y subes sin adelantar el codo.' },
+  'mar-6': { nombre: 'Curl martillo en polea con cuerda', corto: 'Martillo polea', carga: 'polea-lb', factor: 2.3,
+    cuando: 'Si no hay mancuernas libres.',
+    tecnica: 'Polea baja con cuerda y palmas mirándose; sube sin mover los codos y baja en 2 s.' },
+
+  'jue-1': { nombre: 'Curl predicador en máquina', corto: 'Predicador máquina', carga: 'polea-lb', factor: 1,
+    cuando: 'Si el banco predicador está ocupado.',
+    tecnica: 'Axilas pegadas al apoyo; baja hasta casi estirar el brazo controlando y sube sin despegar los codos.' },
+  'jue-2': { nombre: 'Extensión de tríceps en polea alta con barra en V', corto: 'Extensión barra V', carga: 'polea-lb', fuente: 'dom-1b',
+    cuando: 'Si la máquina de fondos está ocupada (como el 3 nov).',
+    tecnica: 'Codos pegados al costado y quietos; empuja hasta estirar del todo y sube controlando hasta 90°.' },
+  'jue-3a': { nombre: 'Curl en banco inclinado con mancuernas', corto: 'Curl inclinado', carga: 'mancuerna', fuente: 'mar-5',
+    cuando: 'Si la polea está ocupada. Es el del martes.',
+    tecnica: 'Banco a 45-60°, espalda apoyada y brazos colgando; sube girando la palma hacia arriba sin adelantar el codo.' },
+  'jue-3b': { nombre: 'Extensión trasnuca en polea con cuerda', corto: 'Trasnuca cuerda', carga: 'polea-lb', fuente: 'lun-5',
+    cuando: 'Si la polea del jueves está ocupada. Es la del lunes, a dos manos.', tecnica: TEC_TRASNUCA },
+  'jue-4a': { nombre: 'Elevaciones laterales con mancuerna', corto: 'Laterales mancuerna', carga: 'mancuerna', fuente: 'lun-4',
+    cuando: 'Si la polea está ocupada. Es la del lunes.',
+    tecnica: 'Torso un poco inclinado hacia delante; sube con los codos por delante de las manos hasta la altura del hombro y baja en 2 s.' },
+  'jue-4b': { nombre: 'Pájaros con mancuernas, pecho apoyado en banco inclinado', corto: 'Pájaros mancuerna', carga: 'mancuerna', factor: 0.16,
+    cuando: 'Si la máquina está ocupada.',
+    tecnica: 'Pecho contra un banco a 30-45° y brazos colgando; abre en arco hasta la altura del hombro con los codos un poco flexionados.' },
+
+  'dom-1a': { nombre: 'Curl con barra Z de pie', corto: 'Curl barra Z', carga: 'barra', fuente: 'jue-1',
+    cuando: 'Si la polea está ocupada.',
+    tecnica: 'De pie y agarre en la parte ancha de la barra Z; sube con los codos pegados al costado y baja en 2 s.' },
+  'dom-1b': { nombre: 'Fondos en máquina para tríceps', corto: 'Fondos máquina', carga: 'polea-lb', fuente: 'jue-2',
+    cuando: 'Si la polea alta está ocupada. Es la del jueves, aquí a 2 RIR.', tecnica: TEC_FONDOS },
+  'dom-2': { nombre: 'Prensa inclinada de discos (45°)', corto: 'Prensa 45°', carga: 'polea-kg', factor: 1.3,
+    cuando: 'Si la prensa de siempre está ocupada.',
+    tecnica: 'Pies a la anchura de los hombros en el centro de la plataforma; baja hasta 90° sin despegar la cadera y empuja sin bloquear las rodillas.',
+    kgNota: 'kg = discos que cargas, sin el carro' },
+  'dom-6a': { nombre: 'Gemelos de pie en máquina', corto: 'Gemelos de pie', carga: 'polea-lb', factor: 0.9,
+    cuando: 'Si haces la prensa en otra máquina o está ocupada.',
+    tecnica: 'Hombros bajo las almohadillas y la punta del pie en el borde; baja el talón del todo, pausa 1 s y sube con los dedos.' },
+  'dom-3': { nombre: 'Curl femoral tumbado', corto: 'Femoral tumbado', carga: 'polea-lb', factor: 0.75,
+    cuando: 'Si la máquina de sentado está ocupada.',
+    tecnica: 'Tumbado boca abajo con la rodilla justo fuera del banco; dobla hasta el máximo sin levantar la cadera y baja en 2 s.' },
+  'dom-4': { nombre: 'Prensa con los pies bajos y juntos', corto: 'Prensa pies bajos', carga: 'polea-lb', fuente: 'dom-2', factor: 0.8,
+    cuando: 'Si la máquina de extensión está ocupada. Pies bajos = más cuádriceps.',
+    tecnica: 'Pies juntos en la parte baja de la plataforma; baja hasta donde la cadera no se despegue y empuja sin bloquear las rodillas.' },
+  'dom-5': { nombre: 'Aductores en polea baja con tobillera', corto: 'Aductores polea', carga: 'polea-kg', factor: 0.3, porLado: true,
+    cuando: 'Si la máquina está ocupada.',
+    tecnica: 'De lado a la polea con la tobillera en la pierna de dentro; cruza la pierna por delante de la otra y vuelve despacio.' },
+  'dom-6b': { nombre: 'Abducción en polea baja con tobillera', corto: 'Abducción polea', carga: 'polea-kg', factor: 0.25, porLado: true,
+    cuando: 'Si la máquina está ocupada.',
+    tecnica: 'De lado a la polea con la tobillera en la pierna de fuera; abre la pierna hacia el lado sin inclinar el tronco y vuelve en 2 s.' },
+
+  'alt-1': { nombre: 'Jalón al pecho agarre ancho', corto: 'Jalón ancho', carga: 'polea-lb', fuente: 'mar-1',
+    cuando: 'Si las dominadas no salen o la barra está ocupada.',
+    tecnica: 'Agarre algo más ancho que los hombros; saca pecho y baja la barra a la parte alta del pecho llevando los codos hacia los bolsillos.' },
+  'alt-2': { nombre: 'Remo en máquina con apoyo en el pecho, asas verticales', corto: 'Remo máquina verticales', carga: 'polea-lb', fuente: 'mar-2', factor: 0.85,
+    cuando: 'Si la polea baja está ocupada.', tecnica: TEC_VERTICALES },
+  'alt-3': { nombre: 'Press de hombro en máquina', corto: 'Press hombro máquina', carga: 'polea-lb', factor: 1.6,
+    cuando: 'Si no hay mancuernas o banco libre.',
+    tecnica: 'Asas a la altura de las orejas y espalda pegada al respaldo; empuja hacia arriba sin bloquear los codos.' },
+  'alt-4a': { nombre: 'Curl en polea baja con barra Z', corto: 'Curl polea Z', carga: 'polea-lb', fuente: 'dom-1a',
+    cuando: 'Si no hay mancuernas libres. Es el del domingo.',
+    tecnica: 'De pie cerca de la polea y codos pegados al costado; sube hasta el pecho y baja en 2 s.' },
+  'alt-4b': { nombre: 'Extensión trasnuca en polea con cuerda', corto: 'Trasnuca cuerda', carga: 'polea-lb', fuente: 'lun-5',
+    cuando: 'Si no hay barra Z o banco libre. Es la del lunes.', tecnica: TEC_TRASNUCA }
+};
+for (const e of ejercicios) {
+  const v = variantes[e.id];
+  if (v && !e.retirado) e.variante = { id: `${e.id}v`, ...v };
+}
 
 
 const dias: Dia[] = [

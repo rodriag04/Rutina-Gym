@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'preact/hooks';
+import { useMemo, useRef, useState } from 'preact/hooks';
 import { MapaMuscular } from '../components/MapaMuscular';
 import { Hoja } from '../components/Hoja';
 import { IcoAviso, IcoBaja, IcoCheck, IcoDcha, IcoIgual, IcoMas, IcoMenos, IcoSube, IcoX } from '../components/Iconos';
@@ -11,6 +11,7 @@ import {
 import { fechaCorta, fechaLarga, hoyISO, kg as fkg, lunesDe, mmss } from '../lib/formato';
 import { calentamientoGenerico, e1rm, planificar, repsCon, resolverAlt, type Plan } from '../lib/progresion';
 import { ir } from '../lib/ruta';
+import { comoVariante, esVariante, planVariante } from '../lib/variantes';
 import { mantenerPantalla, prepararAudio } from '../lib/sonido';
 import type { Serie } from '../lib/tipos';
 import { Terminar } from './Terminar';
@@ -44,6 +45,9 @@ export function Entrenar() {
   const [cambioDia, setCambioDia] = useState<DiaId | null>(null);
   const [terminar, setTerminar] = useState(false);
   const [notaAbierta, setNotaAbierta] = useState<string | null>(null);
+  // Al guardar, el borrador pasa a null: la hoja de "Sesión guardada" sigue con el último.
+  const ultimo = useRef<Borrador | null>(null);
+  if (b) ultimo.current = b;
 
   const diaId = b?.dia ?? diaElegido;
   const d = getDia(diaId);
@@ -58,15 +62,24 @@ export function Entrenar() {
   );
   const planes = useMemo(() => {
     const m = new Map<string, Plan>();
+    const v = new Map<string, Plan>();
     for (const id of d.bloques.flat()) {
       const ex = ejercicio(id)!;
-      m.set(id, planificar(ex, { sesiones: base, gym, escalera: escalera(ex.carga), pesoCorporal: pc, descarga }));
+      const c = { sesiones: base, gym, escalera: escalera(ex.carga), pesoCorporal: pc, descarga };
+      m.set(id, planificar(ex, c));
+      if (ex.variante) v.set(id, planVariante(ex, { ...c, escaleraDe: (e: Ejercicio) => escalera(e.carga) }));
     }
-    return m;
+    return { m, v };
   }, [base, gym, diaId, descarga, pc, ajustes.value.escalones]);
 
+  /** El ejercicio como se hace hoy: el de la rutina o su variante. */
+  const vista = (id: string): Ejercicio => {
+    const ex = ejercicio(id)!;
+    return esVariante(id, b?.sustituto?.[id]) ? comoVariante(ex) : ex;
+  };
+
   const lista = avisos(sesiones.value, hoy, { ultimaCopia: ajustes.value.ultimaCopia, medidas: medidas.value, pc }).filter((a) => a.nivel !== 'info' || a.id === 'medidas');
-  const totalSeries = d.bloques.flat().reduce((a, id) => a + nSeries(ejercicio(id)!), 0);
+  const totalSeries = d.bloques.flat().reduce((a, id) => a + nSeries(vista(id)), 0);
   const hechas = seriesHechas(b);
   const semana = lunesDe(hoy);
   const hechosSemana = new Set(sesiones.value.filter((s) => s.fecha >= semana && s.fecha <= hoy).map((s) => s.dia));
@@ -106,7 +119,7 @@ export function Entrenar() {
     const k = bloque.indexOf(ex.id);
     const esA = bloque.length > 1 && k < bloque.length - 1;
     const seg = esA ? Math.min(ex.descanso, 30) : ex.descanso;
-    const sigEx = esA ? ejercicio(bloque[k + 1])! : null;
+    const sigEx = esA ? vista(bloque[k + 1]) : null;
     const restantes = nSeries(ex) - listaEx.filter(Boolean).length;
     const texto = sigEx ? `Ahora: ${sigEx.corto}` : restantes > 0 ? `Quedan ${restantes} de ${ex.corto}` : siguienteTexto(ex.id);
     nb.descanso = { hasta: Date.now() + seg * 1000, total: seg, exId: ex.id, texto };
@@ -117,7 +130,7 @@ export function Entrenar() {
   function siguienteTexto(exId: string) {
     const ids = d.bloques.flat();
     const sig = ids.slice(ids.indexOf(exId) + 1).find((id) => !(borrador.value?.ex[id]?.filter(Boolean).length));
-    return sig ? `Siguiente: ${ejercicio(sig)!.corto}` : 'Último ejercicio hecho';
+    return sig ? `Siguiente: ${vista(sig).corto}` : 'Último ejercicio hecho';
   }
 
   function setReps(ex: Ejercicio, i: number, delta: number) {
@@ -155,6 +168,20 @@ export function Entrenar() {
     nb.pesos = { ...nb.pesos, [ex.id]: pesos };
     guardar(nb);
     setPesoAbierto(null);
+  }
+
+  /** Variante o ejercicio hecho en su lugar (null = el de la rutina). Reinicia los pesos elegidos. */
+  function setSustituto(id: string, valor: string | null) {
+    const nb = { ...actual() };
+    const sus = { ...(nb.sustituto ?? {}) };
+    if (valor) sus[id] = valor;
+    else delete sus[id];
+    nb.sustituto = Object.keys(sus).length ? sus : undefined;
+    const { [id]: _p, ...pesos } = nb.pesos;
+    const { [id]: _e, ...extra } = nb.extra;
+    nb.pesos = pesos;
+    nb.extra = extra;
+    guardar(nb);
   }
 
   function cambiarSeries(ex: Ejercicio, delta: number) {
@@ -240,8 +267,14 @@ export function Entrenar() {
             </p>
           )}
           {bloque.map((id) => {
-            const ex = ejercicio(id)!;
-            const plan = planes.get(id)!;
+            const principal = ejercicio(id)!;
+            const sus = b?.sustituto?.[id];
+            const enVariante = esVariante(id, sus);
+            const libre = sus && !enVariante ? sus : null;
+            const ex = enVariante ? comoVariante(principal) : principal;
+            const plan = enVariante ? planes.v.get(id)! : planes.m.get(id)!;
+            const planV = planes.v.get(id);
+            const v = principal.variante;
             const n = nSeries(ex);
             const filas = Array.from({ length: n }, (_, i) => fila(ex, plan, b, i, pc));
             const nota = notasEjercicio.value[id];
@@ -252,6 +285,7 @@ export function Entrenar() {
                 <button class="ej-cab" onClick={() => ir({ v: 'ejercicio', id })}>
                   <span class="ej-num num">{et.get(id)}</span>
                   <span class="ej-titulos">
+                    {enVariante && <span class="ej-var-tag">Variante de {principal.corto}</span>}
                     <span class="ej-nombre">{ex.nombre}</span>
                     <span class="ej-foco">{ex.foco}</span>
                   </span>
@@ -262,7 +296,15 @@ export function Entrenar() {
                   {descarga ? Math.ceil(ex.series / 2) : ex.series} × {ex.min}-{ex.max}{ex.porLado ? ' por lado' : ''} · {rirTexto(ex.rir)} · {mmss(ex.descanso)}
                   {ex.carga === 'lastre' && ' · kg = lastre'}
                   {ex.carga === 'corporal' && ' · kg = disco opcional'}
+                  {enVariante && v?.kgNota && ` · ${v.kgNota}`}
                 </p>
+                {enVariante && <p class="ej-tecnica">{ex.tecnica}</p>}
+                {libre && (
+                  <p class="ej-libre">
+                    Hecho en su lugar: <b>{libre}</b>. No cuenta para la progresión de {principal.corto}.
+                    <button class="btn-texto" onClick={() => setSustituto(id, null)}>Quitar</button>
+                  </p>
+                )}
                 <Decision plan={plan} gym={gym} />
                 {calent && calent.length > 0 && (
                   <p class="ej-calent">Calienta (no se apunta): <span class="num">{calent.map((c) => `${fkg(c.kg)}×${c.reps}`).join(' · ')}</span></p>
@@ -313,6 +355,18 @@ export function Entrenar() {
                     </div>
                   ))}
                 </div>
+                {v && planV && hechasEx === 0 && !libre && (
+                  <button class="ej-var" onClick={() => setSustituto(id, enVariante ? null : v.id)}>
+                    {enVariante ? (
+                      <span>↩ Volver a <b>{principal.corto}</b></span>
+                    ) : (
+                      <>
+                        <span>↔ Variante: <b>{v.corto}</b>{resumenPlan(planV, v.carga)}</span>
+                        <span class="ej-var-cuando">{v.cuando}</span>
+                      </>
+                    )}
+                  </button>
+                )}
                 <div class="ej-pie">
                   <button class="btn-texto" onClick={() => cambiarSeries(ex, 1)}>+ Serie</button>
                   {(b?.extra[id] ?? 0) > 0 && <button class="btn-texto" onClick={() => cambiarSeries(ex, -1)}>− Serie</button>}
@@ -327,7 +381,7 @@ export function Entrenar() {
                     onInput={(e) => guardar({ ...actual(), exNotas: { ...actual().exNotas, [id]: (e.target as HTMLTextAreaElement).value } })}
                   />
                 )}
-                {nota && <p class="ej-nota"><span>Tu corrección</span>{nota}</p>}
+                {nota && !enVariante && <p class="ej-nota"><span>Tu corrección</span>{nota}</p>}
               </article>
             );
           })}
@@ -363,14 +417,22 @@ export function Entrenar() {
           </div>
         </Hoja>
       )}
-      {terminar && b && <Terminar b={b} onCerrar={() => setTerminar(false)} onGuardado={() => { setTerminar(false); }} />}
+      {terminar && ultimo.current && <Terminar b={b ?? ultimo.current} onCerrar={() => setTerminar(false)} onGuardado={() => { setTerminar(false); }} />}
     </div>
   );
 }
 
+/** "· 50 kg × 10" para el botón de la variante. */
+function resumenPlan(p: Plan, carga: Ejercicio['carga']): string {
+  const s = p.series[0];
+  if (!s || p.decision === 'nuevo') return '';
+  if (conPesoCorporal(carga) && s.kg === 0) return ` · tu peso × ${s.reps}`;
+  return ` · ${fkg(s.kg)} kg × ${s.reps}`;
+}
+
 function Decision({ plan, gym }: { plan: Plan; gym: string }) {
   const Ico = plan.decision === 'subir' ? IcoSube : plan.decision === 'bajar' ? IcoBaja : IcoIgual;
-  const txt = { subir: 'Sube', bajar: 'Baja', mantener: 'Mantén', nuevo: PERFIL.sencillo ? 'Primera vez' : 'Nuevo', descarga: PERFIL.sencillo ? 'Semana suave' : 'Descarga' }[plan.decision];
+  const txt = { subir: 'Sube', bajar: 'Baja', mantener: 'Mantén', nuevo: PERFIL.sencillo ? 'Primera vez' : 'Nuevo', descarga: PERFIL.sencillo ? 'Semana suave' : 'Descarga', estimado: 'Calculado' }[plan.decision];
   const motivo = plan.decision === 'nuevo' && PERFIL.sencillo
     ? 'Toca el peso y elige uno con el que hagas las repeticiones y te sobren 2. La próxima vez la app te dice cuál poner.'
     : plan.motivo;
@@ -380,7 +442,7 @@ function Decision({ plan, gym }: { plan: Plan; gym: string }) {
       <span class="decision-motivo">{motivo}</span>
       {plan.ref && (
         <span class="decision-ref num">
-          {plan.ref.inicial ? 'Notas' : 'Último'} · {fechaCorta(plan.ref.fecha)}{plan.otroGym ? ' (otro gimnasio)' : ''}: {textoSeries(plan.ref.series)}
+          {plan.fuente ? `${plan.fuente} · ` : ''}{plan.ref.inicial ? 'Notas' : 'Último'} · {fechaCorta(plan.ref.fecha)}{plan.otroGym ? ' (otro gimnasio)' : ''}: {textoSeries(plan.ref.series)}
         </span>
       )}
       {plan.otroGym && <span class="decision-ref">No hay registros en {gym === 'sevilla' ? 'Sevilla' : 'este gimnasio'}: ajusta el peso por sensaciones.</span>}

@@ -3,7 +3,7 @@ import { perfil } from '@perfil';
 import { duracionBloques } from './tiempo';
 import type { Dia, DiaId, Ejercicio } from './tipos';
 
-export type { Carga, Dia, DiaId, Ejercicio, Perfil } from './tipos';
+export type { Carga, Dia, DiaId, Ejercicio, Perfil, Variante } from './tipos';
 
 export const PERFIL = perfil;
 export const EJERCICIOS = perfil.ejercicios;

@@ -33,6 +33,8 @@ export interface Borrador {
   descanso?: { hasta: number; total: number; exId: string; texto: string };
   /** Id de la sesión guardada que se está editando. */
   editando?: string;
+  /** Ejercicio → variante (su id) o lo que hiciste en su lugar (texto). */
+  sustituto?: Record<string, string>;
   notas?: string;
   sensacion?: { energia?: number; molestias?: string[] };
   descarga?: boolean;
@@ -149,6 +151,7 @@ export function borradorDesde(s: Sesion): Borrador {
     extra: {},
     exNotas: { ...(s.exNotas ?? {}) },
     editando: s.id,
+    sustituto: s.sustituto ? { ...s.sustituto } : undefined,
     notas: s.notas,
     sensacion: s.sensacion,
     descarga: s.descarga
