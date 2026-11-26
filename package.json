@@ -10,7 +10,7 @@
     "test": "vitest run",
     "iconos": "node scripts/iconos.mjs",
     "build:maricarmen": "tsc --noEmit && PERFIL=maricarmen vite build",
-    "build:pages": "tsc --noEmit && BASE=/Rutina-Gym/ vite build && PERFIL=maricarmen BASE=/Rutina-Gym/maricarmen/ vite build --outDir dist/maricarmen && BASE=/Rutina-Gym/dieta/ OUT_DIR=./dist/dieta vite build --config vite.dieta.config.ts",
+    "build:pages": "tsc --noEmit && BASE=/Rutina-Gym/ vite build && PERFIL=maricarmen BASE=/Rutina-Gym/maricarmen/ vite build --outDir dist/maricarmen && rm -rf dist/maricarmen/ir && BASE=/Rutina-Gym/dieta/ OUT_DIR=./dist/dieta vite build --config vite.dieta.config.ts",
     "dev:maricarmen": "PERFIL=maricarmen vite",
     "dev:dieta": "vite --config vite.dieta.config.ts",
     "build:dieta": "tsc --noEmit && vite build --config vite.dieta.config.ts",
