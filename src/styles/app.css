@@ -323,8 +323,16 @@ body.sin-scroll { overflow: hidden; }
   border-top: 1px solid var(--line);
 }
 .tab { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; color: var(--text-3); }
-.tab.activa { color: var(--text); }
-.tab-punto { position: absolute; top: 9px; left: calc(50% + 9px); width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.tab.activa { color: var(--text); font-weight: 600; }
+.tab .pildora { display: grid; place-items: center; width: 50px; height: 30px; border-radius: 999px; }
+.tab.activa .pildora {
+  --hueco: color-mix(in srgb, var(--tab-dia, var(--accent)) 24%, var(--surface));
+  background: var(--hueco); color: var(--tab-dia, var(--accent));
+}
+.hueco-f { fill: var(--hueco, var(--surface)); }
+.hueco-s { stroke: var(--hueco, var(--surface)); }
+@media (prefers-reduced-motion: no-preference) { .tab .pildora { transition: background-color .18s; } }
+.tab-punto { position: absolute; top: 5px; left: calc(50% + 16px); width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
 
 /* ── Ficha ── */
 .cab-sub { display: flex; align-items: center; gap: 6px; margin-left: -8px; }

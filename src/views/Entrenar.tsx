@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { MapaMuscular } from '../components/MapaMuscular';
 import { Hoja } from '../components/Hoja';
 import { IcoAviso, IcoBaja, IcoCheck, IcoDcha, IcoIgual, IcoMas, IcoMenos, IcoSube, IcoX } from '../components/Iconos';
@@ -6,7 +6,7 @@ import { DIAS, PERFIL, bloqueDe, dia as getDia, duracionEstimada, ejercicio, eti
 import { conPesoCorporal } from '../lib/cargas';
 import { avisos, diaSugerido, textoSeries } from '../lib/analisis';
 import {
-  ajustes, borrador, descargaActiva, escalera, medidas, notasEjercicio, nuevoBorrador, pesoCorporal, seriesHechas, sesiones, setBorrador, type Borrador
+  ajustes, borrador, descargaActiva, diaEnPantalla, escalera, medidas, notasEjercicio, nuevoBorrador, pesoCorporal, seriesHechas, sesiones, setBorrador, type Borrador
 } from '../lib/estado';
 import { fechaCorta, fechaLarga, hoyISO, kg as fkg, lunesDe, mmss } from '../lib/formato';
 import { calentamientoGenerico, e1rm, planificar, repsCon, resolverAlt, type Plan } from '../lib/progresion';
@@ -55,6 +55,9 @@ export function Entrenar() {
   const descarga = b?.descarga ?? descargaActiva();
   const pc = pesoCorporal.value;
   const et = etiquetas(diaId);
+  useEffect(() => {
+    diaEnPantalla.value = diaId;
+  }, [diaId]);
 
   const base = useMemo(
     () => sesiones.value.filter((s) => s.id !== b?.editando && (!b || s.fecha <= b.fecha)),

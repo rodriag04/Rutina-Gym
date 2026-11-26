@@ -62,7 +62,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2,json}'],
-        globIgnores: otros.map((p) => `**/iconos/${p}/**`),
+        globIgnores: [...otros.map((p) => `**/iconos/${p}/**`), '**/portada.png'],
         navigateFallback: 'index.html',
         // La app de Rodrigo vive en la carpeta padre: no debe responder por las de los demás.
         // La app de comidas (/dieta/) tampoco: tiene su propio service worker.

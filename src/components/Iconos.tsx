@@ -31,3 +31,131 @@ export const IcoSubir = (p: { size?: number }) => <I {...p} d="M12 20V9M8 13l4-4
 export const IcoChat = (p: { size?: number }) => <I {...p} d="M4 5h16v11H9l-5 4zM8 9.5h8M8 12.5h5" />;
 export const IcoCamara = (p: { size?: number }) => <I {...p} d="M4 8h3l2-3h6l2 3h3v11H4zM12 10.5a3 3 0 1 0 0 6a3 3 0 1 0 0-6" />;
 export const IcoEnviar = (p: { size?: number }) => <I {...p} sw={2.2} d="M12 19V5M6 11l6-6 6 6" />;
+
+// Pestañas: contorno cuando no están activas, relleno cuando sí (los huecos toman el color de la píldora).
+type Tab = { size?: number; relleno?: boolean };
+const T = ({ size = 24, children }: { size?: number; children: preact.ComponentChildren }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">{children}</svg>
+);
+const LN = { fill: 'none', stroke: 'currentColor', 'stroke-width': 1.8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' } as const;
+
+export const TabEntrenar = ({ size, relleno }: Tab) => (
+  <T size={size}>
+    {relleno ? (
+      <g fill="currentColor">
+        <rect x="1.5" y="8.5" width="3.5" height="7" rx="1.2" />
+        <rect x="5" y="5.5" width="4" height="13" rx="1.4" />
+        <rect x="15" y="5.5" width="4" height="13" rx="1.4" />
+        <rect x="19" y="8.5" width="3.5" height="7" rx="1.2" />
+        <rect x="8.5" y="10.8" width="7" height="2.4" rx="1" />
+      </g>
+    ) : (
+      <g {...LN}>
+        <rect x="2" y="9" width="3" height="6" rx="1" />
+        <rect x="5" y="6.5" width="3.5" height="11" rx="1.2" />
+        <rect x="15.5" y="6.5" width="3.5" height="11" rx="1.2" />
+        <rect x="19" y="9" width="3" height="6" rx="1" />
+        <path d="M8.5 12h7" />
+      </g>
+    )}
+  </T>
+);
+
+const BOCADILLO = 'M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.3A2.5 2.5 0 0 1 4 13.5z';
+const CHISPA = 'M12 6.8l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9z';
+export const TabClaude = ({ size, relleno }: Tab) => (
+  <T size={size}>
+    {relleno ? (
+      <>
+        <path fill="currentColor" d={BOCADILLO} />
+        <path class="hueco-f" d={CHISPA} />
+      </>
+    ) : (
+      <>
+        <path {...LN} d={BOCADILLO} />
+        <path fill="currentColor" d={CHISPA} />
+      </>
+    )}
+  </T>
+);
+
+export const TabHistorial = ({ size, relleno }: Tab) => (
+  <T size={size}>
+    {relleno ? (
+      <>
+        <rect x="3" y="4.5" width="18" height="16.5" rx="2.8" fill="currentColor" />
+        <path d="M8 2.6v4M16 2.6v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        <path class="hueco-s" d="M3 10h18" stroke-width="1.6" />
+        <g class="hueco-f">
+          <circle cx="8" cy="14.5" r="1.2" />
+          <circle cx="12" cy="14.5" r="1.2" />
+          <circle cx="16" cy="14.5" r="1.2" />
+        </g>
+      </>
+    ) : (
+      <>
+        <g {...LN}>
+          <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
+          <path d="M3.5 10h17M8 3v4M16 3v4" />
+        </g>
+        <g fill="currentColor">
+          <circle cx="8" cy="14" r="1.1" />
+          <circle cx="12" cy="14" r="1.1" />
+          <circle cx="16" cy="14" r="1.1" />
+        </g>
+      </>
+    )}
+  </T>
+);
+
+export const TabProgreso = ({ size, relleno }: Tab) => (
+  <T size={size}>
+    {relleno ? (
+      <g fill="currentColor">
+        <rect x="3.5" y="12.5" width="5" height="8" rx="1.4" />
+        <rect x="9.5" y="8.5" width="5" height="12" rx="1.4" />
+        <rect x="15.5" y="3.5" width="5" height="17" rx="1.4" />
+      </g>
+    ) : (
+      <g {...LN}>
+        <rect x="4" y="13" width="4" height="7" rx="1" />
+        <rect x="10" y="9" width="4" height="11" rx="1" />
+        <rect x="16" y="4" width="4" height="16" rx="1" />
+      </g>
+    )}
+  </T>
+);
+
+export const TabNotas = ({ size, relleno }: Tab) => (
+  <T size={size}>
+    {relleno ? (
+      <>
+        <path fill="currentColor" d="M5.5 2.5h8.8l5.2 5.2V21.5H5.5z" />
+        <path class="hueco-s" d="M14 2.8v5.2h5.2M9 12.5h7M9 16.5h5" fill="none" stroke-width="1.6" stroke-linecap="round" />
+      </>
+    ) : (
+      <g {...LN}>
+        <path d="M6 3h8l5 5v13H6z" />
+        <path d="M14 3v5h5M9 12.5h7M9 16.5h5" />
+      </g>
+    )}
+  </T>
+);
+
+export const TabAjustes = ({ size, relleno }: Tab) => (
+  <T size={size}>
+    {relleno ? (
+      <>
+        <path d="M4 7h16M4 17h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+        <circle cx="9" cy="7" r="3.2" fill="currentColor" />
+        <circle cx="15" cy="17" r="3.2" fill="currentColor" />
+      </>
+    ) : (
+      <g {...LN}>
+        <path d="M4 7h16M4 17h16" />
+        <circle class="hueco-f" cx="9" cy="7" r="2.6" />
+        <circle class="hueco-f" cx="15" cy="17" r="2.6" />
+      </g>
+    )}
+  </T>
+);

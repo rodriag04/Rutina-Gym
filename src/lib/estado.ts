@@ -60,6 +60,8 @@ export const diario = signal<EntradaDiario[]>([]);
 export const medidas = signal<Medida[]>([]);
 export const notasEjercicio = signal<Record<string, string>>({});
 export const borrador = signal<Borrador | null>(null);
+/** Día de rutina que se ve en Entrenar (para el color de la pestaña activa). */
+export const diaEnPantalla = signal<DiaId | null>(null);
 export const verificacion = signal<{ sesiones: number; series: number } | null>(null);
 
 export const escalera = (c: Carga) => new Escalera(ajustes.value.escalones[c] ?? PERFIL.escalones?.[c] ?? ESCALONES_POR_DEFECTO[c]);

@@ -1,6 +1,6 @@
 // Junta una compilación de la versión de Claude en una sola página para publicarla como artifact.
 // Uso: node scripts/artifact.mjs dieta|gym  (lo llaman npm run build:claude y build:claude-gym)
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 const APPS = {
   dieta: {
@@ -14,7 +14,9 @@ const APPS = {
     dir: '../dist-claude-gym/',
     salida: 'rutina-de-rodrigo.html',
     titulo: 'Rutina de Rodrigo',
-    fuentes: 'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&display=swap'
+    fuentes: 'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&display=swap',
+    // Portada de la galería de Claude (la genera npm run iconos). Se publica como thumb.png junto a la página.
+    portada: '../public/iconos/portada.png'
   }
 };
 
@@ -29,7 +31,8 @@ const leer = (f) => readFileSync(new URL(`assets/${f}`, dir), 'utf8');
 const codigo = leer(js[0]).replace(/<\/script/gi, '<\\/script').replace(/<!--/g, '<\\!--');
 const estilos = leer(css[0]).replace(/<\/style/gi, '<\\/style');
 // Dentro de Claude la cabecera la pone el visor: sin hueco arriba.
-const pagina = `<title>${app.titulo}</title>
+if (app.portada) copyFileSync(new URL(app.portada, import.meta.url), new URL('thumb.png', dir));
+const pagina = `<title>${app.titulo}</title>${app.portada ? '\n<link rel="artifact-thumbnail" href="thumb.png">' : ''}
 <link rel="stylesheet" href="${app.fuentes}">
 <style>${estilos}
 :root{--safe-t:0px}</style>
