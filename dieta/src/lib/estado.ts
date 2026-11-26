@@ -1,7 +1,8 @@
 import { computed, effect, signal } from '@preact/signals';
 import { ALIMENTOS, registrarAlimentosExtra } from '../data/alimentos';
 import { RECETA, registrarRecetasExtra } from '../data/recetas';
-import { leerCodigo } from './claude';
+import { leerCodigo, resumenParaClaude } from './claude';
+import { recomendar } from './progreso';
 import { db, pedirPersistencia } from './db';
 import { ahoraHora, diaSemana, hoyISO, lunesDe, sumarDias } from './fechas';
 import { cfgDia, configPorDefecto, generarSemana, reparar } from './generador';
@@ -275,6 +276,25 @@ export function importar(datos: Record<string, unknown>) {
 function registrarExtras() {
   registrarAlimentosExtra(alimentosExtra.value);
   registrarRecetasExtra(recetasExtra.value);
+}
+
+/** Texto con el estado de la app para el proyecto "Dieta Rodrigo". */
+export function resumenActual(): string {
+  const lunes = lunesDe(hoy.value);
+  const sem = semanas.value[lunes];
+  const dias = sem ? sem.config.dias.map((d) => diaCalculado(d.fecha)).filter((x): x is NonNullable<typeof x> => !!x) : [];
+  const ult = ajustesLog.value.at(-1)?.fecha;
+  return resumenParaClaude({
+    hoy: hoy.value,
+    lunes,
+    objetivos: objetivos.value,
+    dias,
+    medidas: medidas.value,
+    notas: notas.value,
+    ajustes: ajustesLog.value,
+    recomendacion: recomendar(medidas.value, objetivos.value, prefs.value.pierdeFuerza, hoy.value, ult),
+    recetasExtra: recetasExtra.value
+  });
 }
 
 // ───────── Códigos de Claude ─────────

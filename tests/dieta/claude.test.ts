@@ -128,3 +128,23 @@ describe('semana a medias', () => {
     expect(despues['2026-12-03']).toEqual(antes['2026-12-03']);
   });
 });
+
+describe('resumen para el proyecto', () => {
+  test('lleva objetivos, la semana con lo apuntado, peso y notas', async () => {
+    const { resumenActual, medidas, notas } = await import('../../dieta/src/lib/estado');
+    semanas.value = {};
+    registros.value = [];
+    hoy.value = LUNES;
+    aplicarCodigo(RESPUESTA);
+    aplicarCodigo('{"rodri":1,"tipo":"comida","slot":"comida","texto":"Menú del día","kcal":1100,"p":48}');
+    medidas.value = [{ fecha: LUNES, peso: 71.8, cintura: 82.4 }];
+    notas.value = [{ id: 'a', fecha: LUNES, hora: '18:00', texto: 'gym a las 17:30', aplicado: ['Gym hoy a las 17:30'] }];
+    const t = resumenActual();
+    expect(t).toContain('gym 2.325 kcal');
+    expect(t).toContain('Menú del día (fuera del plan)');
+    expect(t).toContain('Merluza con patatas');
+    expect(t).toContain('71,8');
+    expect(t).toContain('"gym a las 17:30"');
+    expect(t.length).toBeLessThan(6000);
+  });
+});

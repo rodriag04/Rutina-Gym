@@ -313,3 +313,55 @@ function familiaDe(a: string): string {
   const m: Record<string, string> = { pollo: 'pollo', 'pollo-asado': 'pollo', pavo: 'pavo', 'pavo-fiambre': 'pavo', cinta: 'cerdo', solomillo: 'cerdo', picada: 'ternera', salmon: 'salmon', lubina: 'lubina', atun: 'atun', jamon: 'jamon', 'lomo-emb': 'lomo-emb', huevo: 'huevo', yogur: 'lacteo', whey: 'lacteo' };
   return m[a] ?? a;
 }
+
+// ───────── Resumen para el proyecto de Claude ─────────
+
+export interface DatosResumen {
+  hoy: string;
+  objetivos: Objetivos;
+  dias: import('./plan').DiaCalculado[];
+  medidas: import('./tipos').Medida[];
+  notas: import('./tipos').Nota[];
+  ajustes: import('./tipos').Ajuste[];
+  recomendacion: { titulo: string; texto: string };
+  recetasExtra: Receta[];
+  lunes: string;
+}
+
+const n0 = (x: number) => String(Math.round(x)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const coma = (x: number) => x.toFixed(1).replace('.', ',');
+
+/** Estado de la app en texto, para pegarlo en el proyecto "Dieta Rodrigo". */
+export function resumenParaClaude(d: DatosResumen): string {
+  const l: string[] = [];
+  l.push(`Resumen de mi app Comidas (${fechaCorta(d.hoy)}). Es mi estado actual: manda sobre lo que tengas guardado.`);
+  l.push(`Objetivos: gym ${n0(d.objetivos.kcalGym)} kcal · descanso ${n0(d.objetivos.kcalDescanso)} kcal · ${d.objetivos.prot} g de proteína · fútbol +${d.objetivos.futbol} kcal.`);
+  if (d.ajustes.length) l.push(`Ajustes hechos: ${d.ajustes.map((a) => `${fechaCorta(a.fecha)} ${a.texto}`).join('; ')}.`);
+  l.push('', `Semana del ${fechaCorta(d.lunes)}:`);
+  for (const dia of d.dias) {
+    const i = diaSemana(dia.fecha);
+    const cab = [`${DIAS[i]} ${fechaCorta(dia.fecha)}`, dia.cfg.gym ? `gym ${dia.cfg.gym.hora}` : 'sin gym', dia.cfg.futbol ? `fútbol ${dia.cfg.futbol.hora}` : '', dia.cfg.cabra ? 'tarde en Cabra' : '']
+      .filter(Boolean)
+      .join(', ');
+    l.push(`- ${cab}. Objetivo ${n0(dia.objetivo.kcal)} kcal; previsto ${n0(dia.total.kcal)} kcal y ${n0(dia.total.p)} g.`);
+    for (const c of dia.comidas) {
+      const r = c.registro;
+      const nombre = r?.estado === 'otro' ? `${r.texto ?? 'otra cosa'} (fuera del plan)` : r?.estado === 'saltada' ? `${c.receta?.titulo ?? ''} (saltada)` : c.hueco.libre ? 'libre (regla del plato)' : c.receta?.titulo ?? '';
+      const marca = r?.estado === 'hecho' ? ' ✓' : '';
+      l.push(`  ${c.hueco.hora} ${nombreSlot(c.hueco.slot).toLowerCase()}: ${nombre}${marca} · ${n0(c.macro.kcal)} kcal, ${n0(c.macro.p)} g`);
+    }
+  }
+  const pesos = d.medidas.filter((m) => m.peso !== undefined).slice(-9);
+  const cint = d.medidas.filter((m) => m.cintura !== undefined).slice(-4);
+  l.push('');
+  l.push(pesos.length ? `Peso: ${pesos.map((m) => `${fechaCorta(m.fecha)} ${coma(m.peso!)}`).join(' · ')} kg.` : 'Peso: sin datos todavía.');
+  if (cint.length) l.push(`Cintura: ${cint.map((m) => `${fechaCorta(m.fecha)} ${coma(m.cintura!)}`).join(' · ')} cm.`);
+  l.push(`La app dice: ${d.recomendacion.titulo}. ${d.recomendacion.texto}`);
+  const notas = d.notas.filter((x) => x.fecha >= sumarDias(d.hoy, -14));
+  if (notas.length) {
+    l.push('', 'Mis notas (14 días):');
+    for (const x of notas.slice(-20)) l.push(`- ${fechaCorta(x.fecha)} ${x.hora}: "${x.texto}"${x.aplicado.length ? ` → ${x.aplicado.join('; ')}` : ''}`);
+  }
+  if (d.recetasExtra.length) l.push('', `Recetas que me has creado: ${d.recetasExtra.map((r) => r.titulo).join(', ')}.`);
+  return l.join('\n');
+}

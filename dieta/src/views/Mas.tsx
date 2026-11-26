@@ -5,7 +5,7 @@ import { ImagenPlato } from '../components/Imagen';
 import { ALIMENTOS } from '../data/alimentos';
 import { RECETAS, VERDURAS } from '../data/recetas';
 import { db } from '../lib/db';
-import { correcciones, exportar, horas, hoy, importar, notas, objetivos, prefs, proximoLunes } from '../lib/estado';
+import { correcciones, exportar, resumenActual, horas, hoy, importar, notas, objetivos, prefs, proximoLunes } from '../lib/estado';
 
 const diaSemanaHoy = () => diaSemana(hoy.value);
 import { diaSemana, fechaCorta, lunesDe } from '../lib/fechas';
@@ -17,6 +17,16 @@ import { abrir, avisar, fmt } from '../lib/ui';
 
 const RUTINA = '/Rutina-Gym/';
 
+async function copiarResumen() {
+  const t = resumenActual();
+  try {
+    await navigator.clipboard.writeText(t);
+    avisar(['Resumen copiado. Pégalo en tu proyecto "Dieta Rodrigo" de Claude.']);
+  } catch {
+    avisar(['No se pudo copiar. Inténtalo otra vez.']);
+  }
+}
+
 export function Mas() {
   const sinCopia = !prefs.value.ultimaCopia || Date.now() - Date.parse(prefs.value.ultimaCopia) > 7 * 86400000;
   const items: [Icono, string, string, () => void][] = [
@@ -25,6 +35,7 @@ export function Mas() {
     [ICopa, 'Fin de semana', 'Regla del plato, domingo y calculadora de copas', () => abrir({ t: 'finde' })],
     [IFuego, 'Airfryer', 'Temperaturas y tiempos', () => abrir({ t: 'airfryer' })],
     [ILibro, 'Recetario', `${RECETAS.length} platos con foto y preparación`, () => abrir({ t: 'recetario' })],
+    [ICopia, 'Resumen para Claude', 'Copia tu semana, peso y notas para el proyecto "Dieta Rodrigo"', copiarResumen],
     [INota, 'Tus notas', `${notas.value.length} comentarios`, () => abrir({ t: 'notas' })],
     [IHoja, 'Alimentos', 'Tabla de kcal y proteína (editable)', () => abrir({ t: 'alimentos' })],
     [IInfo, 'Cómo se calcula', 'Objetivos, reparto y reglas del plan', () => abrir({ t: 'metodo' })],
