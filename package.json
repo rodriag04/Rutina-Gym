@@ -15,7 +15,9 @@
     "dev:dieta": "vite --config vite.dieta.config.ts",
     "build:dieta": "tsc --noEmit && vite build --config vite.dieta.config.ts",
     "iconos:dieta": "node scripts/iconos-dieta.mjs",
-    "build:claude": "tsc --noEmit && vite build --config vite.claude.config.ts && node scripts/artifact-dieta.mjs"
+    "build:claude": "tsc --noEmit && vite build --config vite.claude.config.ts && node scripts/artifact.mjs dieta",
+    "build:claude-gym": "tsc --noEmit && vite build --config vite.claude-gym.config.ts && node scripts/artifact.mjs gym",
+    "dev:claude-gym": "vite --config vite.claude-gym.config.ts"
   },
   "dependencies": {
     "@fontsource/barlow-condensed": "^5.2.6",

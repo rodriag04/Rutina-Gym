@@ -3,9 +3,20 @@ import { avisos, resumenSesion, textoSeries } from './analisis';
 import { fechaCorta, fechaLarga, hoyISO, kg as fkg, sumarDias } from './formato';
 import { ordenarSesiones } from './progresion';
 import type { Ajustes, EntradaDiario, Medida, Sesion } from './tipos';
+import { capacidad } from './nube';
 import { esVariante, nombreSustituto } from './variantes';
 
-export function descargar(nombre: string, contenido: string, tipo: string) {
+export async function descargar(nombre: string, contenido: string, tipo: string) {
+  // Dentro de Claude, la página no puede descargar por su cuenta: lo pide a Claude.
+  const descargas = await capacidad<{ save(r: { filename: string; data: string }): Promise<unknown> }>('downloads');
+  if (descargas) {
+    try {
+      await descargas.save({ filename: nombre, data: contenido });
+    } catch {
+      /* el usuario dijo que no */
+    }
+    return;
+  }
   const blob = new Blob([contenido], { type: tipo });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

@@ -28,3 +28,6 @@ export const IcoLapiz = (p: { size?: number }) => <I {...p} d="M4 20h4L19 9l-4-4
 export const IcoVideo = (p: { size?: number }) => <I {...p} d="M4 6h11v12H4zM15 10l5-3v10l-5-3" />;
 export const IcoDescarga = (p: { size?: number }) => <I {...p} d="M12 4v11M8 11l4 4 4-4M5 20h14" />;
 export const IcoSubir = (p: { size?: number }) => <I {...p} d="M12 20V9M8 13l4-4 4 4M5 4h14" />;
+export const IcoChat = (p: { size?: number }) => <I {...p} d="M4 5h16v11H9l-5 4zM8 9.5h8M8 12.5h5" />;
+export const IcoCamara = (p: { size?: number }) => <I {...p} d="M4 8h3l2-3h6l2 3h3v11H4zM12 10.5a3 3 0 1 0 0 6a3 3 0 1 0 0-6" />;
+export const IcoEnviar = (p: { size?: number }) => <I {...p} sw={2.2} d="M12 19V5M6 11l6-6 6 6" />;

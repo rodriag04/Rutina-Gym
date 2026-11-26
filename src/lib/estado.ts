@@ -40,7 +40,20 @@ export interface Borrador {
   descarga?: boolean;
 }
 
+/** Mensaje del chat con Claude (solo en la versión de Claude). */
+export interface MensajeChat {
+  rol: 'yo' | 'claude';
+  texto: string;
+  hora: string;
+  fecha: string;
+  error?: boolean;
+  /** Cambios que hizo Claude en la app al responder. */
+  cambios?: string[];
+  foto?: boolean;
+}
+
 export const cargado = signal(false);
+export const chat = signal<MensajeChat[]>([]);
 export const sesiones = signal<Sesion[]>([]);
 export const ajustes = signal<Ajustes>(AJUSTES_POR_DEFECTO);
 export const diario = signal<EntradaDiario[]>([]);
@@ -88,6 +101,7 @@ export async function iniciar() {
   medidas.value = (await db.get<Medida[]>('medidas')) ?? PERFIL.medidasIniciales;
   notasEjercicio.value = (await db.get<Record<string, string>>('notasEjercicio')) ?? notasIniciales();
   borrador.value = (await db.get<Borrador>('borrador')) ?? null;
+  if (db.nube) chat.value = (await db.get<MensajeChat[]>('chat')) ?? [];
   cargado.value = true;
 }
 
@@ -114,6 +128,10 @@ export async function setMedidas(l: Medida[]) {
 export async function setNota(exId: string, texto: string) {
   notasEjercicio.value = { ...notasEjercicio.value, [exId]: texto };
   await db.set('notasEjercicio', notasEjercicio.value);
+}
+export async function setChat(l: MensajeChat[]) {
+  chat.value = l.slice(-80);
+  await db.set('chat', chat.value);
 }
 export async function setBorrador(b: Borrador | null) {
   borrador.value = b;

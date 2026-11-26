@@ -113,7 +113,7 @@ export function planVariante(ex: Ejercicio, ctx: ContextoPlan & { escaleraDe: (e
   }
   let series = convertir(fuente, pf, exV, v.factor ?? 1, esc, ctx.pesoCorporal);
   const desde = pf.series[0];
-  const desdeTxt = `${fkg(desde.kg)} kg × ${desde.reps}`;
+  const desdeTxt = conPesoCorporal(fuente.carga) && desde.kg === 0 ? `tu peso × ${desde.reps}` : `${fkg(desde.kg)} kg × ${desde.reps}`;
   let motivo =
     fuente.id === ex.id
       ? `Calculado desde tu ${fuente.corto} de hoy (${desdeTxt}). Primera vez: si la 1.ª serie no cuadra, ajusta el peso y la app aprende.`

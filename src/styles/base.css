@@ -61,6 +61,32 @@
     color-scheme: light;
   }
 }
+/* El visor de Claude puede fijar el tema: claro aunque el sistema esté en oscuro. */
+:root[data-theme='light'] {
+  --bg: #f4f3ef;
+  --surface: #ffffff;
+  --surface-2: #f0efea;
+  --surface-3: #e6e4de;
+  --line: #e2e0d9;
+  --line-2: #d3d0c7;
+  --text: #17181a;
+  --text-2: #555a61;
+  --text-3: #868b92;
+  --accent: #e8650c;
+  --accent-2: rgba(232, 101, 12, 0.28);
+  --ok: #1f8a57;
+  --warn: #b9770e;
+  --bad: #c9363b;
+  --jue: #d9a800;
+  --fig: #3b4046;
+  --fig-lejos: #9aa0a7;
+  --eq: #a3a7ad;
+  --eq-suave: #e6e4de;
+  --cable: #8d939b;
+  --mm-base: #e3e1db;
+  --mm-n: #cfccc4;
+  color-scheme: light;
+}
 :root[data-theme='dark'] { color-scheme: dark; }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }

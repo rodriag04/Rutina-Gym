@@ -1,8 +1,10 @@
 import { Descanso } from './components/Descanso';
-import { IcoAjustes, IcoDisco, IcoGrafica, IcoLista, IcoNota } from './components/Iconos';
+import { IcoAjustes, IcoChat, IcoDisco, IcoGrafica, IcoLista, IcoNota } from './components/Iconos';
+import { errorGuardado } from './lib/db';
 import { borrador, cargado, seriesHechas } from './lib/estado';
 import { ir, ruta } from './lib/ruta';
 import { Ajustes } from './views/Ajustes';
+import { Chat } from './views/Chat';
 import { Entrenar } from './views/Entrenar';
 import { Ficha } from './views/Ficha';
 import { DetalleSesion, Historial } from './views/Historial';
@@ -11,6 +13,7 @@ import { Progreso } from './views/Progreso';
 
 const TABS = [
   { v: 'entrenar', nombre: 'Entrenar', Ico: IcoDisco },
+  ...(__CLAUDE__ ? [{ v: 'claude' as const, nombre: 'Claude', Ico: IcoChat }] : []),
   { v: 'historial', nombre: 'Historial', Ico: IcoLista },
   { v: 'progreso', nombre: 'Progreso', Ico: IcoGrafica },
   { v: 'notas', nombre: 'Notas', Ico: IcoNota },
@@ -25,7 +28,9 @@ export function App({ actualizar }: { actualizar?: () => void }) {
   return (
     <>
       <main class="principal">
+        {errorGuardado.value && <p class="aviso-nube">{errorGuardado.value}</p>}
         {r.v === 'entrenar' && <Entrenar />}
+        {__CLAUDE__ && r.v === 'claude' && <Chat />}
         {r.v === 'historial' && <Historial />}
         {r.v === 'progreso' && <Progreso />}
         {r.v === 'notas' && <Notas />}
@@ -34,7 +39,7 @@ export function App({ actualizar }: { actualizar?: () => void }) {
         {r.v === 'sesion' && <DetalleSesion id={r.id} key={r.id} />}
       </main>
       <Descanso />
-      <nav class="tabs" aria-label="Secciones">
+      <nav class={`tabs${TABS.length > 5 ? ' seis' : ''}`} aria-label="Secciones">
         {TABS.map(({ v, nombre, Ico }) => (
           <button key={v} class={`tab ${activa === v ? 'activa' : ''}`} onClick={() => ir({ v })} aria-current={activa === v ? 'page' : undefined}>
             <Ico size={22} />

@@ -1,6 +1,22 @@
 // Almacenamiento local: IndexedDB (con copia mínima en localStorage si IndexedDB falla).
+// Dentro de Claude, el mismo interfaz va a la base de datos del artifact (ver nube.ts).
+import { signal } from '@preact/signals';
 import { PERFIL } from '../data/rutina';
 import type { Sesion } from './tipos';
+
+export interface Almacen {
+  /** true dentro de Claude: los datos viven en la nube de Claude. */
+  nube: boolean;
+  sesiones(): Promise<Sesion[]>;
+  guardarSesiones(lista: Sesion[]): Promise<void>;
+  borrarSesion(id: string): Promise<void>;
+  get<T>(clave: string): Promise<T | undefined>;
+  set(clave: string, valor: unknown): Promise<void>;
+  borrarTodo(): Promise<void>;
+}
+
+/** Último fallo al guardar en la nube (se enseña arriba). */
+export const errorGuardado = signal<string | null>(null);
 
 // Una base de datos por persona: las dos apps comparten dominio (github.io).
 const NOMBRE = `rutina-${PERFIL.id}`;
@@ -52,7 +68,8 @@ const lsSet = (k: string, v: unknown) => {
   }
 };
 
-export const db = {
+export const dbLocal: Almacen = {
+  nube: false,
   async sesiones(): Promise<Sesion[]> {
     try {
       return await req((await tienda('sesiones', 'readonly')).getAll() as IDBRequest<Sesion[]>);
@@ -102,6 +119,24 @@ export const db = {
       Object.keys(localStorage).filter((k) => k.startsWith(LS)).forEach((k) => localStorage.removeItem(k));
     }
   }
+};
+
+let actual: Almacen = dbLocal;
+export const fijarAlmacen = (a: Almacen) => {
+  actual = a;
+};
+
+/** El almacén en uso (local o nube). */
+export const db: Almacen = {
+  get nube() {
+    return actual.nube;
+  },
+  sesiones: () => actual.sesiones(),
+  guardarSesiones: (l) => actual.guardarSesiones(l),
+  borrarSesion: (id) => actual.borrarSesion(id),
+  get: <T,>(k: string) => actual.get<T>(k),
+  set: (k, v) => actual.set(k, v),
+  borrarTodo: () => actual.borrarTodo()
 };
 
 /** Pide al navegador que no borre los datos (Safari los puede purgar si no). */

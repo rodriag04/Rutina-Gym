@@ -6,13 +6,14 @@ export type Ruta =
   | { v: 'progreso' }
   | { v: 'notas' }
   | { v: 'ajustes' }
+  | { v: 'claude' }
   | { v: 'ejercicio'; id: string }
   | { v: 'sesion'; id: string };
 
 function leer(): Ruta {
   const [v, id] = location.hash.replace(/^#\/?/, '').split('/');
   if ((v === 'ejercicio' || v === 'sesion') && id) return { v, id: decodeURIComponent(id) };
-  if (['historial', 'progreso', 'notas', 'ajustes'].includes(v)) return { v } as Ruta;
+  if (['historial', 'progreso', 'notas', 'ajustes', 'claude'].includes(v)) return { v } as Ruta;
   return { v: 'entrenar' };
 }
 

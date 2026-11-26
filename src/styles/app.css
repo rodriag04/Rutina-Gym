@@ -484,3 +484,55 @@ body.sin-scroll { overflow: hidden; }
 .bienvenida strong { font-size: 17px; }
 .bienvenida p { font-size: 15px; color: var(--text-2); }
 .bienvenida p:last-child { color: var(--text); }
+
+/* ── Chat con Claude (solo en la versión de Claude) ── */
+.cab-chat { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.cab-chat-sub { color: var(--text-3); font-size: 13px; }
+.cab-chat h1 { font-family: var(--font-num); font-weight: 600; font-size: 30px; line-height: 1.1; }
+.chat { display: flex; flex-direction: column; gap: 10px; }
+.chat-vacio { padding: 14px; border-radius: var(--r); background: var(--surface); color: var(--text-2); font-size: 14.5px; }
+.chat-vacio p { margin: 0 0 12px; }
+.chat-sugerencias { display: flex; flex-wrap: wrap; gap: 6px; }
+.chat-sugerencias .chip { font-size: 14px; text-align: left; }
+.burbuja {
+  position: relative; max-width: 88%; min-width: 0;
+  padding: 10px 14px 18px; border-radius: 18px;
+  font-size: 15px; line-height: 1.45; overflow-wrap: anywhere;
+}
+.burbuja p { margin: 0 0 6px; }
+.burbuja p:last-of-type { margin-bottom: 0; }
+.burbuja ul { margin: 4px 0 6px; padding-left: 18px; }
+.burbuja.yo { align-self: flex-end; background: var(--accent); color: var(--accent-ink); border-bottom-right-radius: 6px; }
+.burbuja.claude { align-self: flex-start; background: var(--surface); border-bottom-left-radius: 6px; }
+.burbuja.error { box-shadow: inset 0 0 0 1.5px var(--warn); }
+.burbuja .hora { position: absolute; right: 12px; bottom: 4px; font-size: 10.5px; opacity: 0.6; }
+.burbuja .muted { color: var(--text-3); }
+.burbuja-foto { font-size: 12px; font-weight: 600; opacity: 0.8; }
+.chat-cambios {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line);
+  font-size: 13px; font-weight: 600; color: var(--ok);
+}
+.compositor {
+  position: fixed; left: 0; right: 0; z-index: 35;
+  bottom: calc(var(--tabs-h) + var(--safe-b));
+  max-width: 640px; margin: 0 auto; padding: 8px 12px;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+.compositor-fila { display: flex; align-items: flex-end; gap: 8px; padding: 6px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+.compositor textarea {
+  flex: 1; min-width: 0; min-height: 40px; max-height: 140px; resize: none;
+  border: 0; outline: 0; background: transparent; font-size: 16px; padding: 9px 4px;
+  field-sizing: content;
+}
+.boton-foto, .boton-enviar { flex: none; width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center; cursor: pointer; }
+.boton-foto { background: var(--surface-2); color: var(--text-2); }
+.boton-enviar { background: var(--accent); color: var(--accent-ink); }
+.boton-enviar:disabled { opacity: 0.35; }
+.boton-enviar.parar span { width: 14px; height: 14px; border-radius: 3px; background: var(--accent-ink); }
+.adjunto { position: relative; width: 72px; height: 72px; margin: 0 0 8px 6px; }
+.adjunto img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+.adjunto button { position: absolute; top: -6px; right: -6px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--text); color: var(--bg); }
+.tabs.seis { grid-template-columns: repeat(6, 1fr); }
+.aviso-nube { position: sticky; top: 0; z-index: 30; margin: 0 0 8px; padding: 8px 12px; border-radius: var(--r-s); background: var(--surface-2); color: var(--warn); font-size: 13px; }
